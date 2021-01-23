@@ -1,0 +1,17 @@
+{
+	"name": "tetsuaki.hamano/responsive-spacer-block",
+  "description": "WordPress plugin to add white space between blocks and customize its height for each device.",
+	"license": "GPL-2.0-or-later",
+	"authors": [
+		{
+			"name": "Tetsuaki Hamano"
+		}
+	],
+	"require-dev": {
+		"squizlabs/php_codesniffer": "*",
+    "wp-coding-standards/wpcs": "*"
+	},
+	"scripts": {
+		"phpcs": "phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs"
+	}
+}

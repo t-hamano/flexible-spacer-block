@@ -1,0 +1,110 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Responsive Spacer Block\n"
+"POT-Creation-Date: 2021-01-23 13:58+0000\n"
+"PO-Revision-Date: 2021-01-23 12:46+0000\n"
+"Last-Translator: \n"
+"Language-Team: Tetsuaki Hamano\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: ja\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: node_modules\n"
+"X-Poedit-SearchPathExcluded-1: vendor\n"
+"X-Poedit-SearchPathExcluded-2: build\n"
+
+#: classes/class-init.php:40
+msgid "Settings"
+msgstr ""
+
+#: classes/class-options.php:27 classes/class-options.php:28
+#: classes/class-options.php:82
+msgid "Responsive Spacer Block"
+msgstr ""
+
+#: classes/class-options.php:60
+msgid "Device Setting"
+msgstr ""
+
+#: classes/class-options.php:68
+msgid "Block Editor Setting"
+msgstr ""
+
+#: classes/class-options.php:103 src/edit.js:126
+msgid "Mobile"
+msgstr ""
+
+#: classes/class-options.php:112 src/edit.js:161
+msgid "Tablet"
+msgstr ""
+
+#: classes/class-options.php:121 src/edit.js:196
+msgid "Desktop"
+msgstr ""
+
+#: classes/class-options.php:124
+msgid ""
+"Enter the screen width (breakpoint) that will be the basis for switching "
+"between each device."
+msgstr ""
+
+#: classes/class-options.php:125
+msgid ""
+"If both values are the same, The spacer setting for tablets will be "
+"disabled."
+msgstr ""
+
+#: classes/class-options.php:136
+msgid "Always show blocks in block editor editor content area"
+msgstr ""
+
+#: classes/class-options.php:160
+msgid "Fill in both fields in Device Setting."
+msgstr ""
+
+#: classes/class-options.php:170
+msgid ""
+"The Device Width Setting value in the left field must be equal to or "
+"smaller than the value in the right field."
+msgstr ""
+
+#: src/edit.js:231
+msgid "Spacer settings"
+msgstr ""
+
+#: src/edit.js:233
+msgid "Height in pixels (All)"
+msgstr ""
+
+#: src/edit.js:241
+msgid "Height in pixels (Desktop)"
+msgstr ""
+
+#: src/edit.js:250
+msgid "Height in pixels (Tablet)"
+msgstr ""
+
+#: src/edit.js:259
+msgid "Height in pixels (Mobile)"
+msgstr ""
+
+#: src/edit.js:266
+msgid "Plugin Setting"
+msgstr ""
+
+#: src/index.js:22
+msgid "Responsive Spacer"
+msgstr ""
+
+#: src/index.js:23
+msgid ""
+"Add white space between blocks and customize its height for each device."
+msgstr ""

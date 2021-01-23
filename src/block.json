@@ -1,0 +1,22 @@
+{
+	"apiVersion": 2,
+	"name": "rsb/responsive-spacer",
+	"category": "design",
+	"attributes": {
+		"heightLg": {
+			"type": "number",
+			"default": 100
+		},
+		"heightMd": {
+			"type": "number",
+			"default": 100
+		},
+		"heightSm": {
+			"type": "number",
+			"default": 100
+		}
+	},
+	"supports": {
+		"anchor": true
+	}
+}
