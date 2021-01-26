@@ -18,6 +18,11 @@ The height of the spacers can be changed individually or in batches.
 Also available to set "negative space (negative margin)" instead of the normal space.
 And this block supports transform from and to core spacer block.
 
+== About negative space ==
+"**Negative space**" narrows the margins both blocks above and below the spacer, and it is also possible to overlap the blocks.
+If unintended overlap occurs, add a CSS class named "**fsb-style-show-front**" to the block you want to show in the front.
+To apply the CSS class to the block, click on the block on WordPress editor, and check the block settings on the right for the Advanced setting ,then enter the CSS class.
+
 == Installation ==
 1. Upload the `flexible-spacer-block` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the \'Plugins\' menu in WordPress.
@@ -26,6 +31,14 @@ And this block supports transform from and to core spacer block.
 
 1. On Block Editor
 2. Setting page
+2. Negative space example
+2. Negative space example
+
+== Resources ==
+
+= Image for theme screenshot =
+License: CC0 Public Domain
+Source: https://pxhere.com/ja/photo/245
 
 == Changelog ==
 

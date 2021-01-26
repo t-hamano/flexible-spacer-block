@@ -44,6 +44,11 @@ class Enqueue {
 		$breakpoint_sm_max = $breakpoint['sm'];
 
 		$css = <<<EOM
+		.fsb-style-show-front {
+			position: relative;
+			z-index: 2;
+		}
+
 		@media screen and (min-width:{$breakpoint_lg_min}px) {
 			.fsb-flexible-spacer__device--md,
 			.fsb-flexible-spacer__device--sm {
