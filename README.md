@@ -31,7 +31,6 @@ $ npm run build
 ### Image for screenshot
 * License: CC0 Public Domain
 * Source: https://pxhere.com/ja/photo/245
-*
 ## Author
 
 [Tetsuaki Hamano (Github)](https://github.com/t-hamano)
