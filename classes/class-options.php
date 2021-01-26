@@ -5,6 +5,8 @@
  * @license GPL-2.0+
  */
 
+namespace responsive_spacer_block;
+
 class Options {
 
 	private $options;
