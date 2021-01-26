@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Flexible Spacer Block\n"
-"POT-Creation-Date: 2021-01-23 13:58+0000\n"
+"POT-Creation-Date: 2021-01-26 07:22+0000\n"
 "PO-Revision-Date: 2021-01-23 12:46+0000\n"
 "Last-Translator: \n"
 "Language-Team: Tetsuaki Hamano\n"
@@ -25,78 +25,82 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: classes/class-options.php:27 classes/class-options.php:28
-#: classes/class-options.php:82
+#: classes/class-options.php:29 classes/class-options.php:30
+#: classes/class-options.php:84
 msgid "Flexible Spacer Block"
 msgstr ""
 
-#: classes/class-options.php:60
-msgid "Device Setting"
+#: classes/class-options.php:62
+msgid "Responsive Setting"
 msgstr ""
 
-#: classes/class-options.php:68
+#: classes/class-options.php:70
 msgid "Block Editor Setting"
 msgstr ""
 
-#: classes/class-options.php:103 src/edit.js:126
+#: classes/class-options.php:105 src/edit.js:145
 msgid "Mobile"
 msgstr ""
 
-#: classes/class-options.php:112 src/edit.js:161
+#: classes/class-options.php:114 src/edit.js:181
 msgid "Tablet"
 msgstr ""
 
-#: classes/class-options.php:121 src/edit.js:196
+#: classes/class-options.php:123 src/edit.js:217
 msgid "Desktop"
 msgstr ""
 
-#: classes/class-options.php:124
+#: classes/class-options.php:126
 msgid ""
 "Enter the screen width (breakpoint) that will be the basis for switching "
 "between each device."
 msgstr ""
 
-#: classes/class-options.php:125
+#: classes/class-options.php:127
 msgid ""
 "If both values are the same, The spacer setting for tablets will be "
 "disabled."
 msgstr ""
 
-#: classes/class-options.php:136
+#: classes/class-options.php:138
 msgid "Always show blocks in block editor editor content area"
 msgstr ""
 
-#: classes/class-options.php:160
-msgid "Fill in both fields in Device Setting."
+#: classes/class-options.php:162
+msgid "Fill in both fields in Responsive Setting."
 msgstr ""
 
-#: classes/class-options.php:170
+#: classes/class-options.php:172
 msgid ""
 "The Device Width Setting value in the left field must be equal to or "
 "smaller than the value in the right field."
 msgstr ""
 
-#: src/edit.js:231
+#: src/edit.js:253
 msgid "Spacer settings"
 msgstr ""
 
-#: src/edit.js:233
+#: src/edit.js:255
 msgid "Height in pixels (All)"
 msgstr ""
 
-#: src/edit.js:241
+#: src/edit.js:264
 msgid "Height in pixels (Desktop)"
 msgstr ""
 
-#: src/edit.js:250
+#: src/edit.js:272 src/edit.js:288 src/edit.js:304
+msgid "Negative space"
+msgstr ""
+
+#: src/edit.js:280
 msgid "Height in pixels (Tablet)"
 msgstr ""
 
-#: src/edit.js:259
+#: src/edit.js:296
 msgid "Height in pixels (Mobile)"
 msgstr ""
 
-#: src/edit.js:266
+#: src/edit.js:308
 msgid "Plugin Setting"
 msgstr ""
 

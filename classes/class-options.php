@@ -59,7 +59,7 @@ class Options {
 
 		add_settings_field(
 			'flexible_spacer_block_breakpoint_field',
-			__( 'Device Setting', 'flexible-spacer-block' ),
+			__( 'Responsive Setting', 'flexible-spacer-block' ),
 			array( $this, 'flexible_spacer_block_breakpoint_display_field' ),
 			'flexible-spacer-block-group',
 			'flexible_spacer_block_section'
@@ -94,7 +94,7 @@ class Options {
 	}
 
 	/**
-	 * Display field (Device Setting)
+	 * Display field (Responsive Setting)
 	 */
 	public function flexible_spacer_block_breakpoint_display_field() {
 		$breakpoint_sm = isset( $this->options['sm'] ) ? $this->options['sm'] : FSB_BREAKPOINT_SM;
@@ -159,7 +159,7 @@ class Options {
 			add_settings_error(
 				'flexible-spacer-block-breakpoint',
 				'flexible-spacer-block-breakpoint-null',
-				__( 'Fill in both fields in Device Setting.', 'flexible-spacer-block' )
+				__( 'Fill in both fields in Responsive Setting.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
 				'md' => isset( $this->options['md'] ) ? $this->options['md'] : '',
