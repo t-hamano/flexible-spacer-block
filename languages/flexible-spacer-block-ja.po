@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Responsive Spacer Block\n"
-"POT-Creation-Date: 2021-01-23 13:58+0000\n"
-"PO-Revision-Date: 2021-01-23 14:00+0000\n"
+"Project-Id-Version: Flexible Spacer Block\n"
+"POT-Creation-Date: 2021-01-26 07:22+0000\n"
+"PO-Revision-Date: 2021-01-26 07:25+0000\n"
 "Last-Translator: \n"
 "Language-Team: Tetsuaki Hamano\n"
 "Language: ja\n"
@@ -24,52 +24,52 @@ msgstr ""
 msgid "Settings"
 msgstr "設定"
 
-#: classes/class-options.php:27 classes/class-options.php:28
-#: classes/class-options.php:82
-msgid "Responsive Spacer Block"
-msgstr "Responsive Spacer Block"
+#: classes/class-options.php:29 classes/class-options.php:30
+#: classes/class-options.php:84
+msgid "Flexible Spacer Block"
+msgstr "Flexible Spacer Block"
 
-#: classes/class-options.php:60
-msgid "Device Setting"
-msgstr "デバイスの設定"
+#: classes/class-options.php:62
+msgid "Responsive Setting"
+msgstr "レスポンシブ設定"
 
-#: classes/class-options.php:68
+#: classes/class-options.php:70
 msgid "Block Editor Setting"
 msgstr "ブロックエディターの設定"
 
-#: classes/class-options.php:103 src/edit.js:126
+#: classes/class-options.php:105 src/edit.js:145
 msgid "Mobile"
 msgstr "モバイル"
 
-#: classes/class-options.php:112 src/edit.js:161
+#: classes/class-options.php:114 src/edit.js:181
 msgid "Tablet"
 msgstr "タブレット"
 
-#: classes/class-options.php:121 src/edit.js:196
+#: classes/class-options.php:123 src/edit.js:217
 msgid "Desktop"
 msgstr "デスクトップ"
 
-#: classes/class-options.php:124
+#: classes/class-options.php:126
 msgid ""
 "Enter the screen width (breakpoint) that will be the basis for switching "
 "between each device."
 msgstr ""
 "各デバイスの切り替えの基準となる画面幅 (ブレークポイント) を入力します。"
 
-#: classes/class-options.php:125
+#: classes/class-options.php:127
 msgid ""
 "If both values are the same, The spacer setting for tablets will be disabled."
 msgstr "両方の値が同じ場合、タブレットのスペーサー設定は無効になります。"
 
-#: classes/class-options.php:136
+#: classes/class-options.php:138
 msgid "Always show blocks in block editor editor content area"
 msgstr "ブロックエディターのコンテンツエリアで、ブロックを常に可視状態にする"
 
-#: classes/class-options.php:160
-msgid "Fill in both fields in Device Setting."
-msgstr "デバイス設定の両方のフィールドを入力してください。"
+#: classes/class-options.php:162
+msgid "Fill in both fields in Responsive Setting."
+msgstr "レスポンシブ設定の両方の値を入力してください。"
 
-#: classes/class-options.php:170
+#: classes/class-options.php:172
 msgid ""
 "The Device Width Setting value in the left field must be equal to or smaller "
 "than the value in the right field."
@@ -77,33 +77,37 @@ msgstr ""
 "デバイス設定の左側のフィールドの値は、右側のフィールドの値と同じかそれ以下で"
 "なければなりません。"
 
-#: src/edit.js:231
+#: src/edit.js:253
 msgid "Spacer settings"
 msgstr "スペーサー設定"
 
-#: src/edit.js:233
+#: src/edit.js:255
 msgid "Height in pixels (All)"
 msgstr "ピクセル値での高さ (すべて)"
 
-#: src/edit.js:241
+#: src/edit.js:264
 msgid "Height in pixels (Desktop)"
 msgstr "ピクセル値での高さ (デスクトップ)"
 
-#: src/edit.js:250
+#: src/edit.js:272 src/edit.js:288 src/edit.js:304
+msgid "Negative space"
+msgstr "マイナススペース"
+
+#: src/edit.js:280
 msgid "Height in pixels (Tablet)"
 msgstr "ピクセル値での高さ (タブレット)"
 
-#: src/edit.js:259
+#: src/edit.js:296
 msgid "Height in pixels (Mobile)"
 msgstr "ピクセル値での高さ (モバイル)"
 
-#: src/edit.js:266
+#: src/edit.js:308
 msgid "Plugin Setting"
 msgstr "プラグインの設定"
 
 #: src/index.js:22
-msgid "Responsive Spacer"
-msgstr "レスポンシブスペーサー"
+msgid "Flexible Spacer"
+msgstr "フレキシブルスペーサー"
 
 #: src/index.js:23
 msgid ""

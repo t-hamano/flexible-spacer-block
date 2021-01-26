@@ -1,11 +1,11 @@
 <?php
 /**
- * @package responsive-spacer-block
+ * @package flexible-spacer-block
  * @author Tetsuaki Hamano
  * @license GPL-2.0+
  */
 
-namespace responsive_spacer_block;
+namespace flexible_spacer_block;
 
 class Enqueue {
 
@@ -32,11 +32,11 @@ class Enqueue {
 	public function enqueue_scripts() {
 		// Generate media query breakpoints.
 		$defaults = array(
-			'md' => RSB_BREAKPOINT_MD,
-			'sm' => RSB_BREAKPOINT_SM,
+			'md' => FSB_BREAKPOINT_MD,
+			'sm' => FSB_BREAKPOINT_SM,
 		);
 
-		$breakpoint = get_option( 'responsive_spacer_block_breakpoint', $defaults );
+		$breakpoint = get_option( 'flexible_spacer_block_breakpoint', $defaults );
 
 		$breakpoint_lg_min = $breakpoint['md'] + 1;
 		$breakpoint_md_max = $breakpoint['md'];
@@ -44,9 +44,14 @@ class Enqueue {
 		$breakpoint_sm_max = $breakpoint['sm'];
 
 		$css = <<<EOM
+		.fsb-style-show-front {
+			position: relative;
+			z-index: 2;
+		}
+
 		@media screen and (min-width:{$breakpoint_lg_min}px) {
-			.rsb-responsive-spacer__device--md,
-			.rsb-responsive-spacer__device--sm {
+			.fsb-flexible-spacer__device--md,
+			.fsb-flexible-spacer__device--sm {
 				display: none;
 			}
 		}
@@ -55,8 +60,8 @@ class Enqueue {
 		if ( $breakpoint['md'] !== $breakpoint['sm'] ) {
 			$css .= <<<EOM
 			@media screen and (min-width:{$breakpoint_md_min}px) and (max-width:{$breakpoint_md_max}px) {
-				.rsb-responsive-spacer__device--lg,
-				.rsb-responsive-spacer__device--sm {
+				.fsb-flexible-spacer__device--lg,
+				.fsb-flexible-spacer__device--sm {
 					display: none;
 				}
 			}
@@ -65,51 +70,51 @@ class Enqueue {
 
 		$css .= <<<EOM
 		@media screen and (max-width:{$breakpoint_sm_max}px) {
-			.rsb-responsive-spacer__device--lg,
-			.rsb-responsive-spacer__device--md {
+			.fsb-flexible-spacer__device--lg,
+			.fsb-flexible-spacer__device--md {
 				display: none;
 			}
 		}
 		EOM;
 
-		wp_register_style( 'responsive-spacer-block-style', false );
-		wp_enqueue_style( 'responsive-spacer-block-style' );
-		wp_add_inline_style( 'responsive-spacer-block-style', $css );
+		wp_register_style( 'flexible-spacer-block-style', false );
+		wp_enqueue_style( 'flexible-spacer-block-style' );
+		wp_add_inline_style( 'flexible-spacer-block-style', $css );
 	}
 
 	/**
 	 * Enqueue block editor scripts
 	 */
 	public function enqueue_editor_scripts() {
-		$asset_file = include( RSB_PATH . '/build/js/index.asset.php' );
+		$asset_file = include( FSB_PATH . '/build/js/index.asset.php' );
 
 		wp_enqueue_style(
-			'responsive-spacer-block-editor-style',
-			RSB_URL . '/build/css/editor-style.css',
+			'flexible-spacer-block-editor-style',
+			FSB_URL . '/build/css/editor-style.css',
 			array(),
-			filemtime( RSB_PATH . '/build/css/editor-style.css' )
+			filemtime( FSB_PATH . '/build/css/editor-style.css' )
 		);
 
 		wp_enqueue_script(
-			'responsive-spacer-block-editor',
-			RSB_URL . '/build/js/index.js',
+			'flexible-spacer-block-editor',
+			FSB_URL . '/build/js/index.js',
 			$asset_file['dependencies'],
-			filemtime( RSB_PATH . '/build/js/index.js' )
+			filemtime( FSB_PATH . '/build/js/index.js' )
 		);
 
-		wp_localize_script( 'responsive-spacer-block-editor', 'rsbConf', $this->create_editor_config() );
+		wp_localize_script( 'flexible-spacer-block-editor', 'fsbConf', $this->create_editor_config() );
 
-		wp_set_script_translations( 'responsive-spacer-block-editor', 'responsive-spacer-block', RSB_PATH . '/languages' );
+		wp_set_script_translations( 'flexible-spacer-block-editor', 'flexible-spacer-block', FSB_PATH . '/languages' );
 	}
 
 	/**
 	 * Enqueue admin option page scripts
 	 */
 	public function admin_enqueue_scripts( $hook ) {
-		if ( false === strpos( $hook, 'responsive-spacer-block' ) ) {
+		if ( false === strpos( $hook, 'flexible-spacer-block' ) ) {
 			return;
 		}
-		wp_enqueue_style( 'responsive-spacer-block-option', RSB_URL . '/build/css/admin-style.css' );
+		wp_enqueue_style( 'flexible-spacer-block-option', FSB_URL . '/build/css/admin-style.css' );
 	}
 
 	/**
@@ -117,10 +122,10 @@ class Enqueue {
 	 */
 	public function register_block() {
 		register_block_type_from_metadata(
-			RSB_PATH . '/src/block.json',
+			FSB_PATH . '/src/block.json',
 			array(
-				'editor_script' => 'responsive-spacer-block-script',
-				'editor_style'  => 'responsive-spacer-block-editor-style',
+				'editor_script' => 'flexible-spacer-block-script',
+				'editor_style'  => 'flexible-spacer-block-editor-style',
 			)
 		);
 	}
@@ -132,12 +137,12 @@ class Enqueue {
 	 */
 	private function create_editor_config() {
 		$breakpoint_defaults = array(
-			'md' => RSB_BREAKPOINT_MD,
-			'sm' => RSB_BREAKPOINT_SM,
+			'md' => FSB_BREAKPOINT_MD,
+			'sm' => FSB_BREAKPOINT_SM,
 		);
 
-		$breakpoint = get_option( 'responsive_spacer_block_breakpoint', $breakpoint_defaults );
-		$show_block = get_option( 'responsive_spacer_block_show_block', false );
+		$breakpoint = get_option( 'flexible_spacer_block_breakpoint', $breakpoint_defaults );
+		$show_block = get_option( 'flexible_spacer_block_show_block', false );
 
 		$config = array(
 			'breakpoint' => $breakpoint,

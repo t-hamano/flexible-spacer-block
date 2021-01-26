@@ -8,7 +8,14 @@ import classnames from 'classnames';
  */
 import { __ } from '@wordpress/i18n';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, ResizableBox, RangeControl, Dashicon } from '@wordpress/components';
+import {
+	PanelBody,
+	ResizableBox,
+	RangeControl,
+	Dashicon,
+	ToggleControl,
+	HorizontalRule
+} from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { View } from '@wordpress/primitives';
 
@@ -32,22 +39,25 @@ export default function edit({
 	const [ isResizingMd, setIsResizingMd ] = useState( false );
 	const [ isResizingSm, setIsResizingSm ] = useState( false );
 
-	const isEnableMd = parseInt( rsbConf.breakpoint.md ) !== parseInt( rsbConf.breakpoint.sm );
-	const isShowBlock  = rsbConf.showBlock;
+	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
+	const isShowBlock  = fsbConf.showBlock;
 
 	const {
 		heightLg,
 		heightMd,
-		heightSm
+		heightSm,
+		isNegativeLg,
+		isNegativeMd,
+		isNegativeSm
 	} = attributes;
 
 	const settingUrl = getWPAdminURL( 'options-general.php', {
-		page: 'responsive-spacer-block-option'
+		page: 'flexible-spacer-block-option'
 	});
 
 	const blockProps = useBlockProps({
-		className: classnames( 'rsb-responsive-spacer', {
-			[ 'rsb-responsive-spacer--is-show-block' ]: !! isShowBlock
+		className: classnames( 'fsb-flexible-spacer', {
+			[ 'fsb-flexible-spacer--is-show-block' ]: !! isShowBlock
 		})
 	});
 
@@ -68,6 +78,15 @@ export default function edit({
 	};
 	const updateHeightMd = ( value ) => setAttributes({ heightMd: value });
 	const updateHeightSm = ( value ) => setAttributes({ heightSm: value });
+
+	const updateIsNegativeLg = ( value ) => {
+		setAttributes({ isNegativeLg: value });
+		if ( ! isEnableMd ) {
+			setAttributes({ isNegativeMd: value });
+		}
+	};
+	const updateIsNegativeMd = ( value ) => setAttributes({ isNegativeMd: value });
+	const updateIsNegativeSm = ( value ) => setAttributes({ isNegativeSm: value });
 
 	const handleOnResizeStartLg = ( ...args ) => {
 		setIsResizingLg( true );
@@ -114,22 +133,23 @@ export default function edit({
 	return (
 		<>
 			<View { ...blockProps }>
-				<div className="rsb-responsive-spacer__inner">
-					<div className="rsb-responsive-spacer__breakpoint">
-						<div className=" rsb-responsive-spacer__breakpoint-item">&le; { rsbConf.breakpoint.sm }px &lt;</div>
+				<div className="fsb-flexible-spacer__inner">
+					<div className="fsb-flexible-spacer__breakpoint">
+						<div className=" fsb-flexible-spacer__breakpoint-item">&le; { fsbConf.breakpoint.sm }px &lt;</div>
 						{ isEnableMd && (
-							<div className=" rsb-responsive-spacer__breakpoint-item">&le; { rsbConf.breakpoint.md }px &lt;</div>
+							<div className=" fsb-flexible-spacer__breakpoint-item">&le; { fsbConf.breakpoint.md }px &lt;</div>
 						) }
 					</div>
-					<div className="rsb-responsive-spacer__device">
-						<div className="rsb-responsive-spacer__device-ttl">
-							<Dashicon icon="smartphone" />{ __( 'Mobile', 'responsive-spacer-block' ) }
+					<div className="fsb-flexible-spacer__device">
+						<div className="fsb-flexible-spacer__device-ttl">
+							<Dashicon icon="smartphone" />{ __( 'Mobile', 'flexible-spacer-block' ) }
 						</div>
 						<ResizableBox
 							className={ classnames(
 								'block-library-spacer__resize-container',
 								{
-									'is-selected': isSelected
+									'is-selected': isSelected,
+									'is-negative': !! isNegativeSm
 								}
 							) }
 							size={ { height: heightSm } }
@@ -156,15 +176,16 @@ export default function edit({
 						/>
 					</div>
 					{ isEnableMd && (
-						<div className="rsb-responsive-spacer__device">
-							<div className="rsb-responsive-spacer__device-ttl">
-								<Dashicon icon="tablet" />{ __( 'Tablet', 'responsive-spacer-block' ) }
+						<div className="fsb-flexible-spacer__device">
+							<div className="fsb-flexible-spacer__device-ttl">
+								<Dashicon icon="tablet" />{ __( 'Tablet', 'flexible-spacer-block' ) }
 							</div>
 							<ResizableBox
 								className={ classnames(
 									'block-library-spacer__resize-container',
 									{
-										'is-selected': isSelected
+										'is-selected': isSelected,
+										'is-negative': !! isNegativeMd
 									}
 								) }
 								size={ { height: heightMd } }
@@ -191,15 +212,16 @@ export default function edit({
 							/>
 						</div>
 					) }
-					<div className="rsb-responsive-spacer__device">
-						<div className="rsb-responsive-spacer__device-ttl">
-							<Dashicon icon="desktop" />{ __( 'Desktop', 'responsive-spacer-block' ) }
+					<div className="fsb-flexible-spacer__device">
+						<div className="fsb-flexible-spacer__device-ttl">
+							<Dashicon icon="desktop" />{ __( 'Desktop', 'flexible-spacer-block' ) }
 						</div>
 						<ResizableBox
 							className={ classnames(
 								'block-library-spacer__resize-container',
 								{
-									'is-selected': isSelected
+									'is-selected': isSelected,
+									'is-negative': !! isNegativeLg
 								}
 							) }
 							size={ { height: heightLg } }
@@ -228,42 +250,62 @@ export default function edit({
 				</div>
 			</View>
 			<InspectorControls>
-				<PanelBody title={ __( 'Spacer settings', 'responsive-spacer-block' ) }>
+				<PanelBody title={ __( 'Spacer settings', 'flexible-spacer-block' ) }>
 					<RangeControl
-						label={ __( 'Height in pixels (All)', 'responsive-spacer-block' ) }
+						label={ __( 'Height in pixels (All)', 'flexible-spacer-block' ) }
 						beforeIcon="editor-ul"
 						min={ MIN_SPACER_HEIGHT }
 						max={ Math.max( MAX_SPACER_HEIGHT, heightAll ) }
 						value={ heightAll }
 						onChange={ updateHeightAll }
 					/>
+					<HorizontalRule />
 					<RangeControl
-						label={ __( 'Height in pixels (Desktop)', 'responsive-spacer-block' ) }
+						label={ __( 'Height in pixels (Desktop)', 'flexible-spacer-block' ) }
 						beforeIcon="desktop"
 						min={ MIN_SPACER_HEIGHT }
 						max={ Math.max( MAX_SPACER_HEIGHT, heightLg ) }
 						value={ heightLg }
 						onChange={ updateHeightLg }
 					/>
+					<ToggleControl
+						label={ __( 'Negative space', 'flexible-spacer-block' ) }
+						checked={ isNegativeLg }
+						onChange={ updateIsNegativeLg }
+					/>
+					<HorizontalRule />
 					{ isEnableMd && (
-						<RangeControl
-							label={ __( 'Height in pixels (Tablet)', 'responsive-spacer-block' ) }
-							beforeIcon="tablet"
-							min={ MIN_SPACER_HEIGHT }
-							max={ Math.max( MAX_SPACER_HEIGHT, heightMd ) }
-							value={ heightMd }
-							onChange={ updateHeightMd }
-						/>
-					) }
+						<>
+							<RangeControl
+								label={ __( 'Height in pixels (Tablet)', 'flexible-spacer-block' ) }
+								beforeIcon="tablet"
+								min={ MIN_SPACER_HEIGHT }
+								max={ Math.max( MAX_SPACER_HEIGHT, heightMd ) }
+								value={ heightMd }
+								onChange={ updateHeightMd }
+							/>
+							<ToggleControl
+								label={ __( 'Negative space', 'flexible-spacer-block' ) }
+								checked={ isNegativeMd }
+								onChange={ updateIsNegativeMd }
+							/>
+							<HorizontalRule />
+						</>
+						) }
 					<RangeControl
-						label={ __( 'Height in pixels (Mobile)', 'responsive-spacer-block' ) }
+						label={ __( 'Height in pixels (Mobile)', 'flexible-spacer-block' ) }
 						beforeIcon="smartphone"
 						min={ MIN_SPACER_HEIGHT }
 						max={ Math.max( MAX_SPACER_HEIGHT, heightSm ) }
 						value={ heightSm }
 						onChange={ updateHeightSm }
 					/>
-					<a href={ settingUrl }>{ __( 'Plugin Setting', 'responsive-spacer-block' ) }</a>
+					<ToggleControl
+						label={ __( 'Negative space', 'flexible-spacer-block' ) }
+						checked={ isNegativeSm }
+						onChange={ updateIsNegativeSm }
+					/>
+					<a href={ settingUrl }>{ __( 'Plugin Setting', 'flexible-spacer-block' ) }</a>
 				</PanelBody>
 			</InspectorControls>
 		</>

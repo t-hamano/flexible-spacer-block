@@ -2,7 +2,7 @@
 node_modules/
 vendor/
 build/
-responsive-spacer-block/
+flexible-spacer-block/
 languages/*.json
 .wp-env.override.json
 *.zip

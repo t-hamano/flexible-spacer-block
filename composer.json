@@ -1,5 +1,5 @@
 {
-	"name": "tetsuaki.hamano/responsive-spacer-block",
+	"name": "tetsuaki.hamano/flexible-spacer-block",
   "description": "WordPress plugin to add white space between blocks and customize its height for each device.",
 	"license": "GPL-2.0-or-later",
 	"authors": [
