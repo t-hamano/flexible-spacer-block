@@ -4,7 +4,7 @@ Tags: gutenberg,rich text,highlighter,formatting
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.6
 Tested up to: 5.6
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -28,6 +28,9 @@ And this block supports transform from and to core spacer block.
 2. Setting page
 
 == Changelog ==
+
+= 1.1.0 =
+* Add: Negative space setting
 
 = 1.0.0 =
 * Initial release
