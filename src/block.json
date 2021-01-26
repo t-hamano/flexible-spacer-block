@@ -14,6 +14,18 @@
 		"heightSm": {
 			"type": "number",
 			"default": 100
+		},
+		"isNegativeLg": {
+			"type": "boolean",
+			"default": false
+		},
+		"isNegativeMd": {
+			"type": "boolean",
+			"default": false
+		},
+		"isNegativeSm": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"supports": {

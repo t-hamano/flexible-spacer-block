@@ -15,8 +15,15 @@ export default function save({
 	const {
 		heightLg,
 		heightMd,
-		heightSm
+		heightSm,
+		isNegativeLg,
+		isNegativeMd,
+		isNegativeSm
 	} = attributes;
+
+	const styleLg = isNegativeLg ? {marginBottom: -heightLg } : { height: heightLg};
+	const styleMd = isNegativeMd ? {marginBottom: -heightMd } : { height: heightMd};
+	const styleSm = isNegativeSm ? {marginBottom: -heightSm } : { height: heightSm};
 
 	const blockProps = useBlockProps.save({
 		'aria-hidden': true,
@@ -26,16 +33,16 @@ export default function save({
 	return (
 		<div { ...blockProps } >
 			<div
-				className="rsb-responsive-spacer__device rsb-responsive-spacer__device--sm"
-				style={{ height: heightSm }}
+				className="rsb-responsive-spacer__device rsb-responsive-spacer__device--lg"
+				style={ styleLg }
 			/>
 			<div
 				className="rsb-responsive-spacer__device rsb-responsive-spacer__device--md"
-				style={{ height: heightMd }}
+				style={ styleMd }
 			/>
 			<div
-				className="rsb-responsive-spacer__device rsb-responsive-spacer__device--lg"
-				style={{ height: heightLg }}
+				className="rsb-responsive-spacer__device rsb-responsive-spacer__device--sm"
+				style={ styleSm }
 			/>
 		</div>
 	);

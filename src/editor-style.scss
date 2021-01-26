@@ -74,6 +74,10 @@
 
 		.block-library-spacer__resize-container {
 			background: #f0f0f0;
+
+			&.is-negative {
+				background: #f6b9b9;
+			}
 		}
 	}
 }

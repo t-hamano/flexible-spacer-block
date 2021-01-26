@@ -8,7 +8,14 @@ import classnames from 'classnames';
  */
 import { __ } from '@wordpress/i18n';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, ResizableBox, RangeControl, Dashicon } from '@wordpress/components';
+import {
+	PanelBody,
+	ResizableBox,
+	RangeControl,
+	Dashicon,
+	ToggleControl,
+	HorizontalRule
+} from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { View } from '@wordpress/primitives';
 
@@ -38,7 +45,10 @@ export default function edit({
 	const {
 		heightLg,
 		heightMd,
-		heightSm
+		heightSm,
+		isNegativeLg,
+		isNegativeMd,
+		isNegativeSm
 	} = attributes;
 
 	const settingUrl = getWPAdminURL( 'options-general.php', {
@@ -68,6 +78,15 @@ export default function edit({
 	};
 	const updateHeightMd = ( value ) => setAttributes({ heightMd: value });
 	const updateHeightSm = ( value ) => setAttributes({ heightSm: value });
+
+	const updateIsNegativeLg = ( value ) => {
+		setAttributes({ isNegativeLg: value });
+		if ( ! isEnableMd ) {
+			setAttributes({ isNegativeMd: value });
+		}
+	};
+	const updateIsNegativeMd = ( value ) => setAttributes({ isNegativeMd: value });
+	const updateIsNegativeSm = ( value ) => setAttributes({ isNegativeSm: value });
 
 	const handleOnResizeStartLg = ( ...args ) => {
 		setIsResizingLg( true );
@@ -129,7 +148,8 @@ export default function edit({
 							className={ classnames(
 								'block-library-spacer__resize-container',
 								{
-									'is-selected': isSelected
+									'is-selected': isSelected,
+									'is-negative': !! isNegativeSm
 								}
 							) }
 							size={ { height: heightSm } }
@@ -164,7 +184,8 @@ export default function edit({
 								className={ classnames(
 									'block-library-spacer__resize-container',
 									{
-										'is-selected': isSelected
+										'is-selected': isSelected,
+										'is-negative': !! isNegativeMd
 									}
 								) }
 								size={ { height: heightMd } }
@@ -199,7 +220,8 @@ export default function edit({
 							className={ classnames(
 								'block-library-spacer__resize-container',
 								{
-									'is-selected': isSelected
+									'is-selected': isSelected,
+									'is-negative': !! isNegativeLg
 								}
 							) }
 							size={ { height: heightLg } }
@@ -237,6 +259,7 @@ export default function edit({
 						value={ heightAll }
 						onChange={ updateHeightAll }
 					/>
+					<HorizontalRule />
 					<RangeControl
 						label={ __( 'Height in pixels (Desktop)', 'responsive-spacer-block' ) }
 						beforeIcon="desktop"
@@ -245,16 +268,30 @@ export default function edit({
 						value={ heightLg }
 						onChange={ updateHeightLg }
 					/>
+					<ToggleControl
+						label={ __( 'Negative space', 'responsive-spacer-block' ) }
+						checked={ isNegativeLg }
+						onChange={ updateIsNegativeLg }
+					/>
+					<HorizontalRule />
 					{ isEnableMd && (
-						<RangeControl
-							label={ __( 'Height in pixels (Tablet)', 'responsive-spacer-block' ) }
-							beforeIcon="tablet"
-							min={ MIN_SPACER_HEIGHT }
-							max={ Math.max( MAX_SPACER_HEIGHT, heightMd ) }
-							value={ heightMd }
-							onChange={ updateHeightMd }
-						/>
-					) }
+						<>
+							<RangeControl
+								label={ __( 'Height in pixels (Tablet)', 'responsive-spacer-block' ) }
+								beforeIcon="tablet"
+								min={ MIN_SPACER_HEIGHT }
+								max={ Math.max( MAX_SPACER_HEIGHT, heightMd ) }
+								value={ heightMd }
+								onChange={ updateHeightMd }
+							/>
+							<ToggleControl
+								label={ __( 'Negative space', 'responsive-spacer-block' ) }
+								checked={ isNegativeMd }
+								onChange={ updateIsNegativeMd }
+							/>
+							<HorizontalRule />
+						</>
+						) }
 					<RangeControl
 						label={ __( 'Height in pixels (Mobile)', 'responsive-spacer-block' ) }
 						beforeIcon="smartphone"
@@ -262,6 +299,11 @@ export default function edit({
 						max={ Math.max( MAX_SPACER_HEIGHT, heightSm ) }
 						value={ heightSm }
 						onChange={ updateHeightSm }
+					/>
+					<ToggleControl
+						label={ __( 'Negative space', 'responsive-spacer-block' ) }
+						checked={ isNegativeSm }
+						onChange={ updateIsNegativeSm }
 					/>
 					<a href={ settingUrl }>{ __( 'Plugin Setting', 'responsive-spacer-block' ) }</a>
 				</PanelBody>
