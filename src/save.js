@@ -27,21 +27,21 @@ export default function save({
 
 	const blockProps = useBlockProps.save({
 		'aria-hidden': true,
-		className: classnames( 'rsb-responsive-spacer', className )
+		className: classnames( 'fsb-flexible-spacer', className )
 	});
 
 	return (
 		<div { ...blockProps } >
 			<div
-				className="rsb-responsive-spacer__device rsb-responsive-spacer__device--lg"
+				className="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg"
 				style={ styleLg }
 			/>
 			<div
-				className="rsb-responsive-spacer__device rsb-responsive-spacer__device--md"
+				className="fsb-flexible-spacer__device fsb-flexible-spacer__device--md"
 				style={ styleMd }
 			/>
 			<div
-				className="rsb-responsive-spacer__device rsb-responsive-spacer__device--sm"
+				className="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm"
 				style={ styleSm }
 			/>
 		</div>

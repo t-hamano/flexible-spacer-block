@@ -39,8 +39,8 @@ export default function edit({
 	const [ isResizingMd, setIsResizingMd ] = useState( false );
 	const [ isResizingSm, setIsResizingSm ] = useState( false );
 
-	const isEnableMd = parseInt( rsbConf.breakpoint.md ) !== parseInt( rsbConf.breakpoint.sm );
-	const isShowBlock  = rsbConf.showBlock;
+	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
+	const isShowBlock  = fsbConf.showBlock;
 
 	const {
 		heightLg,
@@ -52,12 +52,12 @@ export default function edit({
 	} = attributes;
 
 	const settingUrl = getWPAdminURL( 'options-general.php', {
-		page: 'responsive-spacer-block-option'
+		page: 'flexible-spacer-block-option'
 	});
 
 	const blockProps = useBlockProps({
-		className: classnames( 'rsb-responsive-spacer', {
-			[ 'rsb-responsive-spacer--is-show-block' ]: !! isShowBlock
+		className: classnames( 'fsb-flexible-spacer', {
+			[ 'fsb-flexible-spacer--is-show-block' ]: !! isShowBlock
 		})
 	});
 
@@ -133,16 +133,16 @@ export default function edit({
 	return (
 		<>
 			<View { ...blockProps }>
-				<div className="rsb-responsive-spacer__inner">
-					<div className="rsb-responsive-spacer__breakpoint">
-						<div className=" rsb-responsive-spacer__breakpoint-item">&le; { rsbConf.breakpoint.sm }px &lt;</div>
+				<div className="fsb-flexible-spacer__inner">
+					<div className="fsb-flexible-spacer__breakpoint">
+						<div className=" fsb-flexible-spacer__breakpoint-item">&le; { fsbConf.breakpoint.sm }px &lt;</div>
 						{ isEnableMd && (
-							<div className=" rsb-responsive-spacer__breakpoint-item">&le; { rsbConf.breakpoint.md }px &lt;</div>
+							<div className=" fsb-flexible-spacer__breakpoint-item">&le; { fsbConf.breakpoint.md }px &lt;</div>
 						) }
 					</div>
-					<div className="rsb-responsive-spacer__device">
-						<div className="rsb-responsive-spacer__device-ttl">
-							<Dashicon icon="smartphone" />{ __( 'Mobile', 'responsive-spacer-block' ) }
+					<div className="fsb-flexible-spacer__device">
+						<div className="fsb-flexible-spacer__device-ttl">
+							<Dashicon icon="smartphone" />{ __( 'Mobile', 'flexible-spacer-block' ) }
 						</div>
 						<ResizableBox
 							className={ classnames(
@@ -176,9 +176,9 @@ export default function edit({
 						/>
 					</div>
 					{ isEnableMd && (
-						<div className="rsb-responsive-spacer__device">
-							<div className="rsb-responsive-spacer__device-ttl">
-								<Dashicon icon="tablet" />{ __( 'Tablet', 'responsive-spacer-block' ) }
+						<div className="fsb-flexible-spacer__device">
+							<div className="fsb-flexible-spacer__device-ttl">
+								<Dashicon icon="tablet" />{ __( 'Tablet', 'flexible-spacer-block' ) }
 							</div>
 							<ResizableBox
 								className={ classnames(
@@ -212,9 +212,9 @@ export default function edit({
 							/>
 						</div>
 					) }
-					<div className="rsb-responsive-spacer__device">
-						<div className="rsb-responsive-spacer__device-ttl">
-							<Dashicon icon="desktop" />{ __( 'Desktop', 'responsive-spacer-block' ) }
+					<div className="fsb-flexible-spacer__device">
+						<div className="fsb-flexible-spacer__device-ttl">
+							<Dashicon icon="desktop" />{ __( 'Desktop', 'flexible-spacer-block' ) }
 						</div>
 						<ResizableBox
 							className={ classnames(
@@ -250,9 +250,9 @@ export default function edit({
 				</div>
 			</View>
 			<InspectorControls>
-				<PanelBody title={ __( 'Spacer settings', 'responsive-spacer-block' ) }>
+				<PanelBody title={ __( 'Spacer settings', 'flexible-spacer-block' ) }>
 					<RangeControl
-						label={ __( 'Height in pixels (All)', 'responsive-spacer-block' ) }
+						label={ __( 'Height in pixels (All)', 'flexible-spacer-block' ) }
 						beforeIcon="editor-ul"
 						min={ MIN_SPACER_HEIGHT }
 						max={ Math.max( MAX_SPACER_HEIGHT, heightAll ) }
@@ -261,7 +261,7 @@ export default function edit({
 					/>
 					<HorizontalRule />
 					<RangeControl
-						label={ __( 'Height in pixels (Desktop)', 'responsive-spacer-block' ) }
+						label={ __( 'Height in pixels (Desktop)', 'flexible-spacer-block' ) }
 						beforeIcon="desktop"
 						min={ MIN_SPACER_HEIGHT }
 						max={ Math.max( MAX_SPACER_HEIGHT, heightLg ) }
@@ -269,7 +269,7 @@ export default function edit({
 						onChange={ updateHeightLg }
 					/>
 					<ToggleControl
-						label={ __( 'Negative space', 'responsive-spacer-block' ) }
+						label={ __( 'Negative space', 'flexible-spacer-block' ) }
 						checked={ isNegativeLg }
 						onChange={ updateIsNegativeLg }
 					/>
@@ -277,7 +277,7 @@ export default function edit({
 					{ isEnableMd && (
 						<>
 							<RangeControl
-								label={ __( 'Height in pixels (Tablet)', 'responsive-spacer-block' ) }
+								label={ __( 'Height in pixels (Tablet)', 'flexible-spacer-block' ) }
 								beforeIcon="tablet"
 								min={ MIN_SPACER_HEIGHT }
 								max={ Math.max( MAX_SPACER_HEIGHT, heightMd ) }
@@ -285,7 +285,7 @@ export default function edit({
 								onChange={ updateHeightMd }
 							/>
 							<ToggleControl
-								label={ __( 'Negative space', 'responsive-spacer-block' ) }
+								label={ __( 'Negative space', 'flexible-spacer-block' ) }
 								checked={ isNegativeMd }
 								onChange={ updateIsNegativeMd }
 							/>
@@ -293,7 +293,7 @@ export default function edit({
 						</>
 						) }
 					<RangeControl
-						label={ __( 'Height in pixels (Mobile)', 'responsive-spacer-block' ) }
+						label={ __( 'Height in pixels (Mobile)', 'flexible-spacer-block' ) }
 						beforeIcon="smartphone"
 						min={ MIN_SPACER_HEIGHT }
 						max={ Math.max( MAX_SPACER_HEIGHT, heightSm ) }
@@ -301,11 +301,11 @@ export default function edit({
 						onChange={ updateHeightSm }
 					/>
 					<ToggleControl
-						label={ __( 'Negative space', 'responsive-spacer-block' ) }
+						label={ __( 'Negative space', 'flexible-spacer-block' ) }
 						checked={ isNegativeSm }
 						onChange={ updateIsNegativeSm }
 					/>
-					<a href={ settingUrl }>{ __( 'Plugin Setting', 'responsive-spacer-block' ) }</a>
+					<a href={ settingUrl }>{ __( 'Plugin Setting', 'flexible-spacer-block' ) }</a>
 				</PanelBody>
 			</InspectorControls>
 		</>

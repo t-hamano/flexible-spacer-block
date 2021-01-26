@@ -1,6 +1,6 @@
 {
 	"apiVersion": 2,
-	"name": "rsb/responsive-spacer",
+	"name": "fsb/flexible-spacer",
 	"category": "design",
 	"attributes": {
 		"heightLg": {

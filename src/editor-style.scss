@@ -1,4 +1,4 @@
-.rsb-responsive-spacer {
+.fsb-flexible-spacer {
 
 	&__inner {
 		display: flex;
@@ -67,8 +67,8 @@
 	&.is-selected,
 	&--is-show-block {
 
-		.rsb-responsive-spacer__device-ttl,
-		.rsb-responsive-spacer__breakpoint {
+		.fsb-flexible-spacer__device-ttl,
+		.fsb-flexible-spacer__breakpoint {
 			opacity: 1;
 		}
 

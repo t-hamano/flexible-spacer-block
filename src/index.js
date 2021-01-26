@@ -19,8 +19,8 @@ import transforms from './transforms';
 const { name } = metadata;
 
 const settings = {
-	title: __( 'Responsive Spacer', 'responsive-spacer-block' ),
-	description: __( 'Add white space between blocks and customize its height for each device.', 'responsive-spacer-block' ),
+	title: __( 'Flexible Spacer', 'flexible-spacer-block' ),
+	description: __( 'Add white space between blocks and customize its height for each device.', 'flexible-spacer-block' ),
 	icon,
 	edit,
 	save,
