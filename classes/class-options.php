@@ -86,8 +86,14 @@ class Options {
 				<?php
 				settings_fields( 'flexible-spacer-block-group' );
 				do_settings_sections( 'flexible-spacer-block-group' );
-				submit_button();
 				?>
+				<h2><?php _e( 'About Negative Space', 'flexible-spacer-block' ); ?></h2>
+				<p>
+					<?php _e( '"<strong>Negative space</strong>" narrows the margins both blocks above and below the spacer, and it is also possible to overlap the blocks.', 'flexible-spacer-block' ); ?><br>
+					<?php _e( 'If unintended overlap occurs, <strong>add a CSS class</strong> named <code>fsb-style-show-front</code> to the block you want to show in the front.', 'flexible-spacer-block' ); ?><br>
+					<?php _e( 'To apply the CSS class to the block, click on the block on WordPress editor, and check the block settings on the right for the Advanced setting ,then enter the CSS class.', 'flexible-spacer-block' ); ?>
+				</p>
+				<?php submit_button(); ?>
 			</form>
 		</div>
 		<?php
