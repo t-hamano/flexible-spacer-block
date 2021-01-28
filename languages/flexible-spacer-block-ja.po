@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Flexible Spacer Block\n"
-"POT-Creation-Date: 2021-01-26 07:22+0000\n"
-"PO-Revision-Date: 2021-01-26 07:25+0000\n"
+"POT-Creation-Date: 2021-01-28 02:49+0000\n"
+"PO-Revision-Date: 2021-01-28 02:53+0000\n"
 "Last-Translator: \n"
 "Language-Team: Tetsuaki Hamano\n"
 "Language: ja\n"
@@ -37,39 +37,68 @@ msgstr "レスポンシブ設定"
 msgid "Block Editor Setting"
 msgstr "ブロックエディターの設定"
 
-#: classes/class-options.php:105 src/edit.js:145
+#: classes/class-options.php:90
+msgid "About Negative Space"
+msgstr "マイナススペースについて"
+
+#: classes/class-options.php:92
+msgid ""
+"\"<strong>Negative space</strong>\" narrows the margins both blocks above "
+"and below the spacer, and it is also possible to overlap the blocks."
+msgstr ""
+"\"<strong>マイナススペース</strong>\"は、スペーサーの上下にあるブロックの余白"
+"を狭くし、ブロックを重ねることも可能です。"
+
+#: classes/class-options.php:93
+msgid ""
+"If unintended overlap occurs, <strong>add a CSS class</strong> named "
+"<code>fsb-style-show-front</code> to the block you want to show in the front."
+msgstr ""
+"意図しない重なりが起こった場合は、前面に表示したいブロックに<code>fsb-style-"
+"show-front</code>という名前の<strong>CSSクラスを追加</strong>してください。"
+
+#: classes/class-options.php:94
+msgid ""
+"To apply the CSS class to the block, click on the block on WordPress editor, "
+"and check the block settings on the right for the Advanced setting ,then "
+"enter the CSS class."
+msgstr ""
+"ブロックにCSSクラスを適用するには、WordPressのエディタでブロックをクリック"
+"し、右側のブロック設定の高度な設定にチェックを入れ、CSSクラスを入力します。"
+
+#: classes/class-options.php:111 src/edit.js:145
 msgid "Mobile"
 msgstr "モバイル"
 
-#: classes/class-options.php:114 src/edit.js:181
+#: classes/class-options.php:120 src/edit.js:181
 msgid "Tablet"
 msgstr "タブレット"
 
-#: classes/class-options.php:123 src/edit.js:217
+#: classes/class-options.php:129 src/edit.js:217
 msgid "Desktop"
 msgstr "デスクトップ"
 
-#: classes/class-options.php:126
+#: classes/class-options.php:132
 msgid ""
 "Enter the screen width (breakpoint) that will be the basis for switching "
 "between each device."
 msgstr ""
 "各デバイスの切り替えの基準となる画面幅 (ブレークポイント) を入力します。"
 
-#: classes/class-options.php:127
+#: classes/class-options.php:133
 msgid ""
 "If both values are the same, The spacer setting for tablets will be disabled."
 msgstr "両方の値が同じ場合、タブレットのスペーサー設定は無効になります。"
 
-#: classes/class-options.php:138
+#: classes/class-options.php:144
 msgid "Always show blocks in block editor editor content area"
 msgstr "ブロックエディターのコンテンツエリアで、ブロックを常に可視状態にする"
 
-#: classes/class-options.php:162
+#: classes/class-options.php:168
 msgid "Fill in both fields in Responsive Setting."
 msgstr "レスポンシブ設定の両方の値を入力してください。"
 
-#: classes/class-options.php:172
+#: classes/class-options.php:178
 msgid ""
 "The Device Width Setting value in the left field must be equal to or smaller "
 "than the value in the right field."
