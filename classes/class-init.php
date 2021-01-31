@@ -16,7 +16,7 @@ class Init {
 		load_plugin_textdomain( 'flexible-spacer-block', false, dirname( FSB_BASENAME ) . '/languages' );
 
 		// Uninstallation process
-		register_uninstall_hook( FSB_BASENAME, 'flexible_spacer_block\Main::uninstall_flexible_spacer_block' );
+		register_uninstall_hook( FSB_BASENAME, 'flexible_spacer_block\Init::uninstall_flexible_spacer_block' );
 
 		// Add a link to this plugin settings page in plugin list
 		add_filter( 'plugin_action_links_' . FSB_BASENAME, array( $this, 'add_action_links' ) );
