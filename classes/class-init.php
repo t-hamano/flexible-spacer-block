@@ -46,9 +46,7 @@ class Init {
 	 * Uninstallation process
 	 */
 	public static function uninstall_flexible_spacer_block() {
-		foreach ( $options as $key ) {
-			delete_option( 'flexible_spacer_block_breakpoint' );
-			delete_option( 'flexible_spacer_block_show_block' );
-		}
+		delete_option( 'flexible_spacer_block_breakpoint' );
+		delete_option( 'flexible_spacer_block_show_block' );
 	}
 }
