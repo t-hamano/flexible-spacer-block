@@ -3,11 +3,6 @@ module.exports = {
 		'stylelint-config-rational-order',
 		'stylelint-config-wordpress/scss',
 	],
-  ignoreFiles: [
-		'node_modules/**/*.css',
-		'build/**/*.css',
-		'src/**/*.js'
-  ],
 	rules: {
 		'no-descending-specificity': null,
 		'font-weight-notation': null,
