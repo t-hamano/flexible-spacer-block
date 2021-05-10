@@ -7,7 +7,7 @@
 		"open": "wp-env start && opener http://localhost:8888",
 		"stop": "wp-env stop",
 		"start": "chokidar \"src/**/*\" -c \"npm-run-all -p js:sourcemap sass:sourcemap\" --initial",
-		"build": "npm-run-all -s clean js:compressed:* sass:compressed po2json",
+		"build": "npm-run-all -s clean js:compressed sass:compressed po2json",
 		"sass:sourcemap": "node-sass src --output build/css --source-map true",
 		"sass:compressed": "node-sass src --output build/css --output-style compressed",
 		"js:sourcemap": "cross-env NODE_ENV=development wp-scripts build src/index --output-path build/js",
