@@ -1,3 +1,5 @@
+*.svg
+*.js
 node_modules/
 vendor/
 build/
