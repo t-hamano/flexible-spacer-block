@@ -14,10 +14,10 @@ If unintended overlap occurs, add a CSS class named "**fsb-style-show-front**" t
 To apply the CSS class to the block, click on the block on WordPress editor, and check the block settings on the right for the Advanced setting ,then enter the CSS class.
 
 ## Screenshot
-![On Block Editor](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/wp-assets/screenshot-1.png "On Block Editor")
-![Setting page](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/wp-assets/screenshot-2.png "Setting page")
-![Negative space example](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/wp-assets/screenshot-3.png "Negative space example")
-![Negative space example](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/wp-assets/screenshot-4.png "Negative space example")
+![On Block Editor](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/screenshot-1.png "On Block Editor")
+![Setting page](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/screenshot-2.png "Setting page")
+![Negative space example](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/screenshot-3.png "Negative space example")
+![Negative space example](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/screenshot-4.png "Negative space example")
 
 ## How to build
 
