@@ -3,8 +3,8 @@ Contributors: wildworks
 Tags: gutenberg,rich text,highlighter,formatting
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.6
-Tested up to: 5.6
-Stable tag: 1.1.6
+Tested up to: 5.8
+Stable tag: 1.1.7
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -42,6 +42,10 @@ Source: https://pxhere.com/ja/photo/245
 
 == Changelog ==
 
+= 1.1.7 =
+* Tested to WordPress 5.8
+* Clean: Update npm packages
+
 = 1.1.6 =
 * Fix: build script error
 * Fix: README.md screenshot
@@ -49,7 +53,7 @@ Source: https://pxhere.com/ja/photo/245
 = 1.1.5 =
 * Tested to WordPress 5.7
 * Clean: Update deploy flow (github actions)
-* Clean: update npm packages and organize development env
+* Clean: Update npm packages and organize development env
 
 = 1.1.4 =
 * Tested to PHP 8
