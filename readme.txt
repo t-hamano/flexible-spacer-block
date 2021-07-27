@@ -4,7 +4,7 @@ Tags: gutenberg,rich text,highlighter,formatting
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.6
 Tested up to: 5.8
-Stable tag: 1.1.7
+Stable tag: 1.1.8
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,10 @@ License: CC0 Public Domain
 Source: https://pxhere.com/ja/photo/245
 
 == Changelog ==
+
+= 1.1.8 =
+* Clean: Update npm packages
+* Remove: Bundled language files
 
 = 1.1.7 =
 * Tested to WordPress 5.8
