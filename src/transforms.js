@@ -28,7 +28,7 @@ export default {
 		{
 			type: 'block',
 			blocks: [ 'core/spacer' ],
-			transform: ({ anchor, heightLg  }) => {
+			transform: ({ anchor, heightLg }) => {
 				return createBlock( 'core/spacer', {
 						anchor,
 						height: heightLg
