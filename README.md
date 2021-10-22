@@ -1,5 +1,7 @@
 # Flexible Spacer Block
 
+[![Deploy to WordPress.org](https://github.com/t-hamano/flexible-spacer-block/actions/workflows/wp-plugin-deploy.yml/badge.svg)](https://github.com/t-hamano/flexible-spacer-block/actions/workflows/wp-plugin-deploy.yml)
+
 ![Header](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/banner-1544x500.png)
 
 Flexible Spacer Block switches the height of the spacer according to the device screen width (breakpoints).
