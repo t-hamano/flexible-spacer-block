@@ -115,16 +115,16 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 			<View { ...blockProps }>
 				<div className="fsb-flexible-spacer__inner">
 					<div className="fsb-flexible-spacer__breakpoint">
-						<div className=" fsb-flexible-spacer__breakpoint-item">
+						<div className="fsb-flexible-spacer__breakpoint-item">
 							&le; { fsbConf.breakpoint.sm }px &lt;
 						</div>
 						{ isEnableMd && (
-							<div className=" fsb-flexible-spacer__breakpoint-item">
+							<div className="fsb-flexible-spacer__breakpoint-item">
 								&le; { fsbConf.breakpoint.md }px &lt;
 							</div>
 						) }
 					</div>
-					<div className="fsb-flexible-spacer__device">
+					<div className="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm">
 						<div className="fsb-flexible-spacer__device-ttl">
 							<Dashicon icon="smartphone" />
 							{ __( 'Mobile', 'flexible-spacer-block' ) }
@@ -158,7 +158,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 						/>
 					</div>
 					{ isEnableMd && (
-						<div className="fsb-flexible-spacer__device">
+						<div className="fsb-flexible-spacer__device fsb-flexible-spacer__device--md">
 							<div className="fsb-flexible-spacer__device-ttl">
 								<Dashicon icon="tablet" />
 								{ __( 'Tablet', 'flexible-spacer-block' ) }
@@ -192,7 +192,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 							/>
 						</div>
 					) }
-					<div className="fsb-flexible-spacer__device">
+					<div className="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg">
 						<div className="fsb-flexible-spacer__device-ttl">
 							<Dashicon icon="desktop" />
 							{ __( 'Desktop', 'flexible-spacer-block' ) }

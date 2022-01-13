@@ -27,9 +27,69 @@ class Enqueue {
 	}
 
 	/**
-	 * Enqueue front-end inline styles
+	 * Enqueue front-end scripts
 	 */
 	public function enqueue_scripts() {
+		wp_register_style( 'fsb-flexible-spacer-style', false );
+		wp_enqueue_style( 'fsb-flexible-spacer-style' );
+		wp_add_inline_style( 'fsb-flexible-spacer-style', $this->create_inline_style( false ) );
+	}
+
+	/**
+	 * Enqueue block editor scripts
+	 */
+	public function enqueue_editor_scripts() {
+		$asset_file = include( FSB_PATH . '/build/js/index.asset.php' );
+		wp_localize_script( 'fsb-flexible-spacer-editor-script', 'fsbConf', $this->create_editor_config() );
+		wp_set_script_translations( 'fsb-flexible-spacer-editor-script', 'flexible-spacer-block' );
+		wp_add_inline_style( 'fsb-flexible-spacer-editor-style', $this->create_inline_style( true ) );
+	}
+
+	/**
+	 * Enqueue admin option page scripts
+	 */
+	public function admin_enqueue_scripts( $hook ) {
+		if ( false === strpos( $hook, 'flexible-spacer-block' ) ) {
+			return;
+		}
+		wp_enqueue_style( 'flexible-spacer-block-option', FSB_URL . '/build/css/admin-style.css' );
+	}
+
+	/**
+	 * Register block
+	 */
+	public function register_block() {
+		register_block_type( FSB_PATH . '/src/' );
+	}
+
+	/**
+	 * Generate settings to be passed to the block editor
+	 *
+	 * @return array
+	 */
+	private function create_editor_config() {
+		$breakpoint_defaults = array(
+			'md' => FSB_BREAKPOINT_MD,
+			'sm' => FSB_BREAKPOINT_SM,
+		);
+
+		$breakpoint = get_option( 'flexible_spacer_block_breakpoint', $breakpoint_defaults );
+		$show_block = get_option( 'flexible_spacer_block_show_block', false );
+
+		$config = array(
+			'breakpoint' => $breakpoint,
+			'showBlock'  => $show_block,
+		);
+
+		return $config;
+	}
+
+	/**
+	 * Generate inline styles to be passed to the block editor and front-end
+	 *
+	 * @return string
+	 */
+	private function create_inline_style( $is_block_editor = true ) {
 		// Generate media query breakpoints.
 		$defaults = array(
 			'md' => FSB_BREAKPOINT_MD,
@@ -77,57 +137,15 @@ class Enqueue {
 		}
 		EOM;
 
-		wp_register_style( 'flexible-spacer-block-style', false );
-		wp_enqueue_style( 'flexible-spacer-block-style' );
-		wp_add_inline_style( 'flexible-spacer-block-style', $css );
-	}
-
-	/**
-	 * Enqueue block editor scripts
-	 */
-	public function enqueue_editor_scripts() {
-		$asset_file = include( FSB_PATH . '/build/js/index.asset.php' );
-		wp_localize_script( 'fsb-flexible-spacer-editor-script', 'fsbConf', $this->create_editor_config() );
-		wp_set_script_translations( 'fsb-flexible-spacer-editor-script', 'flexible-spacer-block' );
-	}
-
-	/**
-	 * Enqueue admin option page scripts
-	 */
-	public function admin_enqueue_scripts( $hook ) {
-		if ( false === strpos( $hook, 'flexible-spacer-block' ) ) {
-			return;
+		if ( $is_block_editor ) {
+			$css .= <<<EOM
+			.fsb-flexible-spacer__breakpoint {
+				display: none;
+			}
+			EOM;
 		}
-		wp_enqueue_style( 'flexible-spacer-block-option', FSB_URL . '/build/css/admin-style.css' );
-	}
 
-	/**
-	 * Register block
-	 */
-	public function register_block() {
-		register_block_type( FSB_PATH . '/src/' );
-	}
-
-	/**
-	 * Generate settings to be passed to the block editor
-	 *
-	 * @return array
-	 */
-	private function create_editor_config() {
-		$breakpoint_defaults = array(
-			'md' => FSB_BREAKPOINT_MD,
-			'sm' => FSB_BREAKPOINT_SM,
-		);
-
-		$breakpoint = get_option( 'flexible_spacer_block_breakpoint', $breakpoint_defaults );
-		$show_block = get_option( 'flexible_spacer_block_show_block', false );
-
-		$config = array(
-			'breakpoint' => $breakpoint,
-			'showBlock'  => $show_block,
-		);
-
-		return $config;
+		return $css;
 	}
 }
 

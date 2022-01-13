@@ -3,13 +3,13 @@
 	&__inner {
 		display: flex;
 		justify-content: space-between;
-		padding-top: 5px;
+		margin: 0 -4px;
 	}
 
 	&__device {
 		position: relative;
 		flex: 1;
-		margin: 0 5px;
+		margin: 0 4px;
 	}
 
 	&__device-ttl {
@@ -37,7 +37,7 @@
 
 	&__breakpoint {
 		position: absolute;
-		top: -10px;
+		top: -12px;
 		left: 0;
 		z-index: 2;
 		display: flex;
@@ -50,10 +50,12 @@
 	}
 
 	&__breakpoint-item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		width: 70px;
-		padding: 4px 0;
+		height: 24px;
 		font-size: 12px;
-		line-height: 1.4;
 		color: #fff;
 		text-align: center;
 		background: #757575;
