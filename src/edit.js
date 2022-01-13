@@ -15,6 +15,7 @@ import {
 	Dashicon,
 	ToggleControl,
 	HorizontalRule,
+	ExternalLink,
 } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { View } from '@wordpress/primitives';
@@ -282,7 +283,9 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 						checked={ isNegativeSm }
 						onChange={ updateIsNegativeSm }
 					/>
-					<a href={ settingUrl }>{ __( 'Plugin Setting', 'flexible-spacer-block' ) }</a>
+					<ExternalLink href={ settingUrl }>
+						{ __( 'Plugin Setting', 'flexible-spacer-block' ) }
+					</ExternalLink>
 				</PanelBody>
 			</InspectorControls>
 		</>
