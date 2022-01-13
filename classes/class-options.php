@@ -50,6 +50,12 @@ class Options {
 			array( $this, 'sanitize_checkbox' )
 		);
 
+		register_setting(
+			'flexible-spacer-block-group',
+			'flexible_spacer_block_enable_responsive_on_editor',
+			array( $this, 'sanitize_checkbox' )
+		);
+
 		add_settings_section(
 			'flexible_spacer_block_section',
 			'',
@@ -141,8 +147,15 @@ class Options {
 		?>
 		<fieldset>
 			<label>
-				<input type="checkbox" name="flexible_spacer_block_show_block" value="1" <?php checked( get_option( 'flexible_spacer_block_show_block', false ) ); ?>><?php _e( 'Always show blocks in block editor editor content area', 'flexible-spacer-block' ); ?>
+				<input type="checkbox" name="flexible_spacer_block_show_block" value="1" <?php checked( get_option( 'flexible_spacer_block_show_block', false ) ); ?>><?php _e( 'Always show blocks in block editor', 'flexible-spacer-block' ); ?>
 			</label>
+			<p class="description"><?php _e( 'The block will always be visible even when it is not selected.', 'flexible-spacer-block' ); ?></p>
+		</fieldset>
+		<fieldset>
+			<label>
+				<input type="checkbox" name="flexible_spacer_block_enable_responsive_on_editor" value="1" <?php checked( get_option( 'flexible_spacer_block_enable_responsive_on_editor', false ) ); ?>><?php _e( 'Enabe responsive setting in block editor', 'flexible-spacer-block' ); ?>
+			</label>
+			<p class="description"><?php _e( 'The spacers displayed will switch depending on the width of the device preview.', 'flexible-spacer-block' ); ?></p>
 		</fieldset>
 		<?php
 	}

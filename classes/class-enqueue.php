@@ -39,10 +39,13 @@ class Enqueue {
 	 * Enqueue block editor scripts
 	 */
 	public function enqueue_editor_scripts() {
-		$asset_file = include( FSB_PATH . '/build/js/index.asset.php' );
 		wp_localize_script( 'fsb-flexible-spacer-editor-script', 'fsbConf', $this->create_editor_config() );
 		wp_set_script_translations( 'fsb-flexible-spacer-editor-script', 'flexible-spacer-block' );
-		wp_add_inline_style( 'fsb-flexible-spacer-editor-style', $this->create_inline_style( true ) );
+
+		$enable_responsive = get_option( 'flexible_spacer_block_enable_responsive_on_editor', false );
+		if ( $enable_responsive ) {
+			wp_add_inline_style( 'fsb-flexible-spacer-editor-style', $this->create_inline_style( true ) );
+		}
 	}
 
 	/**
@@ -73,12 +76,9 @@ class Enqueue {
 			'sm' => FSB_BREAKPOINT_SM,
 		);
 
-		$breakpoint = get_option( 'flexible_spacer_block_breakpoint', $breakpoint_defaults );
-		$show_block = get_option( 'flexible_spacer_block_show_block', false );
-
 		$config = array(
-			'breakpoint' => $breakpoint,
-			'showBlock'  => $show_block,
+			'breakpoint' => get_option( 'flexible_spacer_block_breakpoint', $breakpoint_defaults ),
+			'showBlock'  => get_option( 'flexible_spacer_block_show_block', false ),
 		);
 
 		return $config;
