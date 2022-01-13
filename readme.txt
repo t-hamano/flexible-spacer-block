@@ -31,8 +31,8 @@ To apply the CSS class to the block, click on the block on WordPress editor, and
 
 1. On Block Editor
 2. Setting page
-2. Negative space example
-2. Negative space example
+3. Negative space example
+4. Negative space example
 
 == Resources ==
 
