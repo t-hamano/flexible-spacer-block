@@ -8,7 +8,7 @@
  * License: GPL2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: flexible-spacer-block
- * @package flexible-spacer-block
+ * @package Flexible_Spacer_Block
  * @author Tetsuaki Hamano
  * @license GPL-2.0+
  */
@@ -30,4 +30,4 @@ const FSB_BREAKPOINT_MIN = 200;
 const FSB_BREAKPOINT_MAX = 2000;
 
 require_once __DIR__ . '/classes/class-init.php';
-new flexible_spacer_block\Init();
+new Flexible_Spacer_Block\Init();

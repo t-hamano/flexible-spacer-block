@@ -1,11 +1,11 @@
 <?php
 /**
- * @package flexible-spacer-block
+ * @package Flexible_Spacer_Block
  * @author Tetsuaki Hamano
  * @license GPL-2.0+
  */
 
-namespace flexible_spacer_block;
+namespace Flexible_Spacer_Block;
 
 class Enqueue {
 
