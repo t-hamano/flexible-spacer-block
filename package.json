@@ -23,7 +23,7 @@
 		"@wordpress/scripts": "^19.2.2",
 		"opener": "^1.5.2",
 		"rimraf": "^3.0.2",
-		"stylelint": "^14.2.0",
+		"stylelint": "^13.13.1",
 		"stylelint-config-recess-order": "^3.0.0",
 		"stylelint-order": "^5.0.0"
 	},

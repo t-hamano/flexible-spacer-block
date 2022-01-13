@@ -21,14 +21,14 @@
 		align-items: center;
 		justify-content: center;
 		width: 100%;
-		color: #757575;
-		font-weight: bold;
 		font-size: 12px;
+		font-weight: bold;
+		color: #757575;
 		text-align: center;
+		pointer-events: none;
+		user-select: none;
 		opacity: 0;
 		transition: opacity 120ms ease 0s;
-		user-select: none;
-		pointer-events: none;
 
 		.dashicons {
 			margin-right: 5px;
@@ -43,18 +43,18 @@
 		display: flex;
 		justify-content: center;
 		width: 100%;
+		pointer-events: none;
+		user-select: none;
 		opacity: 0;
 		transition: opacity 120ms ease 0s;
-		user-select: none;
-		pointer-events: none;
 	}
 
 	&__breakpoint-item {
 		width: 70px;
 		padding: 4px 0;
-		color: #fff;
 		font-size: 12px;
 		line-height: 1.4;
+		color: #fff;
 		text-align: center;
 		background: #757575;
 		border-radius: 2px;

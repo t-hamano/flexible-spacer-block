@@ -14,7 +14,7 @@ import {
 	RangeControl,
 	Dashicon,
 	ToggleControl,
-	HorizontalRule
+	HorizontalRule,
 } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { View } from '@wordpress/primitives';
@@ -28,104 +28,83 @@ const MIN_SPACER_HEIGHT = 1;
 const MAX_SPACER_HEIGHT = 500;
 const SPACER_HEIGHT_ALL = 100;
 
-export default function edit({
-	attributes,
-	isSelected,
-	setAttributes,
-	toggleSelection
-}) {
+export default function Edit( { attributes, isSelected, setAttributes, toggleSelection } ) {
 	const [ heightAll, setHeightAll ] = useState( SPACER_HEIGHT_ALL );
 	const [ isResizingLg, setIsResizingLg ] = useState( false );
 	const [ isResizingMd, setIsResizingMd ] = useState( false );
 	const [ isResizingSm, setIsResizingSm ] = useState( false );
 
 	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
-	const isShowBlock  = fsbConf.showBlock;
+	const isShowBlock = fsbConf.showBlock;
 
-	const {
-		heightLg,
-		heightMd,
-		heightSm,
-		isNegativeLg,
-		isNegativeMd,
-		isNegativeSm
-	} = attributes;
+	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
 
 	const settingUrl = getWPAdminURL( 'options-general.php', {
-		page: 'flexible-spacer-block-option'
-	});
+		page: 'flexible-spacer-block-option',
+	} );
 
-	const blockProps = useBlockProps({
+	const blockProps = useBlockProps( {
 		className: classnames( 'fsb-flexible-spacer', {
-			[ 'fsb-flexible-spacer--is-show-block' ]: !! isShowBlock
-		})
-	});
+			'fsb-flexible-spacer--is-show-block': !! isShowBlock,
+		} ),
+	} );
 
 	const updateHeightAll = ( value ) => {
-		setAttributes({
+		setAttributes( {
 			heightLg: value,
 			heightMd: value,
-			heightSm: value
-		});
+			heightSm: value,
+		} );
 		setHeightAll( value );
 	};
 
 	const updateHeightLg = ( value ) => {
-		setAttributes({ heightLg: value });
+		setAttributes( { heightLg: value } );
 		if ( ! isEnableMd ) {
-			setAttributes({ heightMd: value });
+			setAttributes( { heightMd: value } );
 		}
 	};
-	const updateHeightMd = ( value ) => setAttributes({ heightMd: value });
-	const updateHeightSm = ( value ) => setAttributes({ heightSm: value });
+	const updateHeightMd = ( value ) => setAttributes( { heightMd: value } );
+	const updateHeightSm = ( value ) => setAttributes( { heightSm: value } );
 
 	const updateIsNegativeLg = ( value ) => {
-		setAttributes({ isNegativeLg: value });
+		setAttributes( { isNegativeLg: value } );
 		if ( ! isEnableMd ) {
-			setAttributes({ isNegativeMd: value });
+			setAttributes( { isNegativeMd: value } );
 		}
 	};
-	const updateIsNegativeMd = ( value ) => setAttributes({ isNegativeMd: value });
-	const updateIsNegativeSm = ( value ) => setAttributes({ isNegativeSm: value });
+	const updateIsNegativeMd = ( value ) => setAttributes( { isNegativeMd: value } );
+	const updateIsNegativeSm = ( value ) => setAttributes( { isNegativeSm: value } );
 
-	const handleOnResizeStartLg = ( ...args ) => {
+	const handleOnResizeStartLg = () => {
 		setIsResizingLg( true );
 		toggleSelection( false );
 	};
 
-	const handleOnResizeStartMd = ( ...args ) => {
+	const handleOnResizeStartMd = () => {
 		setIsResizingMd( true );
 		toggleSelection( false );
 	};
 
-	const handleOnResizeStartSm = ( ...args ) => {
+	const handleOnResizeStartSm = () => {
 		setIsResizingSm( true );
 		toggleSelection( false );
 	};
 
 	const handleOnResizeStopLg = ( event, direction, elt, delta ) => {
-		const spacerHeightLg = Math.min(
-			parseInt( heightLg + delta.height, 10 ),
-			MAX_SPACER_HEIGHT
-		);
+		const spacerHeightLg = Math.min( parseInt( heightLg + delta.height, 10 ), MAX_SPACER_HEIGHT );
 		updateHeightLg( spacerHeightLg );
 		setIsResizingLg( false );
 	};
 
 	const handleOnResizeStopMd = ( event, direction, elt, delta ) => {
-		const spacerHeightMd = Math.min(
-			parseInt( heightMd + delta.height, 10 ),
-			MAX_SPACER_HEIGHT
-		);
+		const spacerHeightMd = Math.min( parseInt( heightMd + delta.height, 10 ), MAX_SPACER_HEIGHT );
 		updateHeightMd( spacerHeightMd );
 		setIsResizingMd( false );
 	};
 
 	const handleOnResizeStopSm = ( event, direction, elt, delta ) => {
-		const spacerHeightSm = Math.min(
-			parseInt( heightSm + delta.height, 10 ),
-			MAX_SPACER_HEIGHT
-		);
+		const spacerHeightSm = Math.min( parseInt( heightSm + delta.height, 10 ), MAX_SPACER_HEIGHT );
 		updateHeightSm( spacerHeightSm );
 		setIsResizingSm( false );
 	};
@@ -135,23 +114,25 @@ export default function edit({
 			<View { ...blockProps }>
 				<div className="fsb-flexible-spacer__inner">
 					<div className="fsb-flexible-spacer__breakpoint">
-						<div className=" fsb-flexible-spacer__breakpoint-item">&le; { fsbConf.breakpoint.sm }px &lt;</div>
+						<div className=" fsb-flexible-spacer__breakpoint-item">
+							&le; { fsbConf.breakpoint.sm }px &lt;
+						</div>
 						{ isEnableMd && (
-							<div className=" fsb-flexible-spacer__breakpoint-item">&le; { fsbConf.breakpoint.md }px &lt;</div>
+							<div className=" fsb-flexible-spacer__breakpoint-item">
+								&le; { fsbConf.breakpoint.md }px &lt;
+							</div>
 						) }
 					</div>
 					<div className="fsb-flexible-spacer__device">
 						<div className="fsb-flexible-spacer__device-ttl">
-							<Dashicon icon="smartphone" />{ __( 'Mobile', 'flexible-spacer-block' ) }
+							<Dashicon icon="smartphone" />
+							{ __( 'Mobile', 'flexible-spacer-block' ) }
 						</div>
 						<ResizableBox
-							className={ classnames(
-								'block-library-spacer__resize-container',
-								{
-									'is-selected': isSelected,
-									'is-negative': !! isNegativeSm
-								}
-							) }
+							className={ classnames( 'block-library-spacer__resize-container', {
+								'is-selected': isSelected,
+								'is-negative': !! isNegativeSm,
+							} ) }
 							size={ { height: heightSm } }
 							minHeight={ MIN_SPACER_HEIGHT }
 							enable={ {
@@ -162,7 +143,7 @@ export default function edit({
 								topRight: false,
 								bottomRight: false,
 								bottomLeft: false,
-								topLeft: false
+								topLeft: false,
 							} }
 							onResizeStart={ handleOnResizeStartSm }
 							onResizeStop={ handleOnResizeStopSm }
@@ -171,23 +152,21 @@ export default function edit({
 							__experimentalTooltipProps={ {
 								axis: 'y',
 								position: 'bottom',
-								isVisible: isResizingSm
+								isVisible: isResizingSm,
 							} }
 						/>
 					</div>
 					{ isEnableMd && (
 						<div className="fsb-flexible-spacer__device">
 							<div className="fsb-flexible-spacer__device-ttl">
-								<Dashicon icon="tablet" />{ __( 'Tablet', 'flexible-spacer-block' ) }
+								<Dashicon icon="tablet" />
+								{ __( 'Tablet', 'flexible-spacer-block' ) }
 							</div>
 							<ResizableBox
-								className={ classnames(
-									'block-library-spacer__resize-container',
-									{
-										'is-selected': isSelected,
-										'is-negative': !! isNegativeMd
-									}
-								) }
+								className={ classnames( 'block-library-spacer__resize-container', {
+									'is-selected': isSelected,
+									'is-negative': !! isNegativeMd,
+								} ) }
 								size={ { height: heightMd } }
 								minHeight={ MIN_SPACER_HEIGHT }
 								enable={ {
@@ -198,7 +177,7 @@ export default function edit({
 									topRight: false,
 									bottomRight: false,
 									bottomLeft: false,
-									topLeft: false
+									topLeft: false,
 								} }
 								onResizeStart={ handleOnResizeStartMd }
 								onResizeStop={ handleOnResizeStopMd }
@@ -207,23 +186,21 @@ export default function edit({
 								__experimentalTooltipProps={ {
 									axis: 'y',
 									position: 'bottom',
-									isVisible: isResizingMd
+									isVisible: isResizingMd,
 								} }
 							/>
 						</div>
 					) }
 					<div className="fsb-flexible-spacer__device">
 						<div className="fsb-flexible-spacer__device-ttl">
-							<Dashicon icon="desktop" />{ __( 'Desktop', 'flexible-spacer-block' ) }
+							<Dashicon icon="desktop" />
+							{ __( 'Desktop', 'flexible-spacer-block' ) }
 						</div>
 						<ResizableBox
-							className={ classnames(
-								'block-library-spacer__resize-container',
-								{
-									'is-selected': isSelected,
-									'is-negative': !! isNegativeLg
-								}
-							) }
+							className={ classnames( 'block-library-spacer__resize-container', {
+								'is-selected': isSelected,
+								'is-negative': !! isNegativeLg,
+							} ) }
 							size={ { height: heightLg } }
 							minHeight={ MIN_SPACER_HEIGHT }
 							enable={ {
@@ -234,7 +211,7 @@ export default function edit({
 								topRight: false,
 								bottomRight: false,
 								bottomLeft: false,
-								topLeft: false
+								topLeft: false,
 							} }
 							onResizeStart={ handleOnResizeStartLg }
 							onResizeStop={ handleOnResizeStopLg }
@@ -243,7 +220,7 @@ export default function edit({
 							__experimentalTooltipProps={ {
 								axis: 'y',
 								position: 'bottom',
-								isVisible: isResizingLg
+								isVisible: isResizingLg,
 							} }
 						/>
 					</div>
@@ -291,7 +268,7 @@ export default function edit({
 							/>
 							<HorizontalRule />
 						</>
-						) }
+					) }
 					<RangeControl
 						label={ __( 'Height in pixels (Mobile)', 'flexible-spacer-block' ) }
 						beforeIcon="smartphone"
