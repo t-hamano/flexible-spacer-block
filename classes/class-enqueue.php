@@ -87,24 +87,8 @@ class Enqueue {
 	 */
 	public function enqueue_editor_scripts() {
 		$asset_file = include( FSB_PATH . '/build/js/index.asset.php' );
-
-		wp_enqueue_style(
-			'flexible-spacer-block-editor-style',
-			FSB_URL . '/build/css/editor-style.css',
-			array(),
-			filemtime( FSB_PATH . '/build/css/editor-style.css' )
-		);
-
-		wp_enqueue_script(
-			'flexible-spacer-block-editor',
-			FSB_URL . '/build/js/index.js',
-			$asset_file['dependencies'],
-			filemtime( FSB_PATH . '/build/js/index.js' )
-		);
-
-		wp_localize_script( 'flexible-spacer-block-editor', 'fsbConf', $this->create_editor_config() );
-
-		wp_set_script_translations( 'flexible-spacer-block-editor', 'flexible-spacer-block', FSB_PATH . '/languages' );
+		wp_localize_script( 'fsb-flexible-spacer-editor-script', 'fsbConf', $this->create_editor_config() );
+		wp_set_script_translations( 'fsb-flexible-spacer-editor-script', 'flexible-spacer-block' );
 	}
 
 	/**
@@ -121,13 +105,7 @@ class Enqueue {
 	 * Register block
 	 */
 	public function register_block() {
-		register_block_type_from_metadata(
-			FSB_PATH . '/src/block.json',
-			array(
-				'editor_script' => 'flexible-spacer-block-script',
-				'editor_style'  => 'flexible-spacer-block-editor-style',
-			)
-		);
+		register_block_type( FSB_PATH . '/src/' );
 	}
 
 	/**
