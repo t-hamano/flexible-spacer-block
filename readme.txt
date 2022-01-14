@@ -1,6 +1,6 @@
 === Flexible Spacer Block ===
 Contributors: wildworks
-Tags: gutenberg,rich text,highlighter,formatting
+Tags: gutenberg, block, spacer, responsive
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.6
 Tested up to: 5.8
