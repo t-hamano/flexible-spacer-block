@@ -156,9 +156,12 @@ class Options {
 		</fieldset>
 		<fieldset>
 			<label>
-				<input type="checkbox" name="flexible_spacer_block_enable_responsive_on_editor" value="1" <?php checked( get_option( 'flexible_spacer_block_enable_responsive_on_editor', false ) ); ?>><?php _e( 'Enabe responsive setting in block editor', 'flexible-spacer-block' ); ?>
+				<input type="checkbox" name="flexible_spacer_block_enable_responsive_on_editor" value="1" <?php checked( get_option( 'flexible_spacer_block_enable_responsive_on_editor', false ) ); ?>><?php _e( 'Enabe responsive setting in block editor device preview', 'flexible-spacer-block' ); ?>
 			</label>
-			<p class="description"><?php _e( 'The spacers displayed will switch depending on the width of the device preview.', 'flexible-spacer-block' ); ?></p>
+			<p class="description">
+				<?php _e( 'The spacers displayed will switch depending on the width of the device preview.', 'flexible-spacer-block' ); ?><br>
+				<?php _e( 'This feature is enable in WordPress 5.9 or later.', 'flexible-spacer-block' ); ?><br>
+			</p>
 		</fieldset>
 		<?php
 	}
