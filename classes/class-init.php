@@ -12,9 +12,6 @@ class Init {
 	 * Constructor
 	 */
 	public function __construct() {
-		// Load translated strings
-		load_plugin_textdomain( 'flexible-spacer-block', false, dirname( FSB_BASENAME ) . '/languages' );
-
 		// Uninstallation process
 		register_uninstall_hook( FSB_BASENAME, 'Flexible_Spacer_Block\Init::uninstall_flexible_spacer_block' );
 
