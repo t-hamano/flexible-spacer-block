@@ -22,10 +22,8 @@
 		flex-flow: column;
 		align-items: center;
 
-		.dashicons {
-			width: 32px;
-			height: 32px;
-			font-size: 32px;
+		svg {
+			fill: #646970;
 		}
 	}
 

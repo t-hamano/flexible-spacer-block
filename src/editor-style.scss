@@ -30,14 +30,14 @@
 		opacity: 0;
 		transition: opacity 120ms ease 0s;
 
-		.dashicons {
-			margin-right: 5px;
+		svg {
+			margin-right: 2px;
 		}
 	}
 
 	&__breakpoint {
 		position: absolute;
-		top: -12px;
+		top: -15px;
 		left: 0;
 		z-index: 2;
 		display: flex;
@@ -54,8 +54,8 @@
 		align-items: center;
 		justify-content: center;
 		width: 70px;
-		height: 24px;
-		font-size: 12px;
+		height: 20px;
+		font-size: 11px;
 		color: #fff;
 		text-align: center;
 		background: #757575;

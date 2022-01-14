@@ -12,13 +12,13 @@ import {
 	PanelBody,
 	ResizableBox,
 	RangeControl,
-	Dashicon,
 	ToggleControl,
 	HorizontalRule,
 	ExternalLink,
 } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { View } from '@wordpress/primitives';
+import { Icon, settings, mobile, tablet, desktop } from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -126,7 +126,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 					</div>
 					<div className="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm">
 						<div className="fsb-flexible-spacer__device-ttl">
-							<Dashicon icon="smartphone" />
+							<Icon icon={ mobile } />
 							{ __( 'Mobile', 'flexible-spacer-block' ) }
 						</div>
 						<ResizableBox
@@ -160,7 +160,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 					{ isEnableMd && (
 						<div className="fsb-flexible-spacer__device fsb-flexible-spacer__device--md">
 							<div className="fsb-flexible-spacer__device-ttl">
-								<Dashicon icon="tablet" />
+								<Icon icon={ tablet } />
 								{ __( 'Tablet', 'flexible-spacer-block' ) }
 							</div>
 							<ResizableBox
@@ -194,7 +194,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 					) }
 					<div className="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg">
 						<div className="fsb-flexible-spacer__device-ttl">
-							<Dashicon icon="desktop" />
+							<Icon icon={ desktop } />
 							{ __( 'Desktop', 'flexible-spacer-block' ) }
 						</div>
 						<ResizableBox
@@ -231,7 +231,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 				<PanelBody title={ __( 'Spacer settings', 'flexible-spacer-block' ) }>
 					<RangeControl
 						label={ __( 'Height in pixels (All)', 'flexible-spacer-block' ) }
-						beforeIcon="editor-ul"
+						beforeIcon={ <Icon icon={ settings } /> }
 						min={ MIN_SPACER_HEIGHT }
 						max={ Math.max( MAX_SPACER_HEIGHT, heightAll ) }
 						value={ heightAll }
@@ -240,7 +240,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 					<HorizontalRule />
 					<RangeControl
 						label={ __( 'Height in pixels (Desktop)', 'flexible-spacer-block' ) }
-						beforeIcon="desktop"
+						beforeIcon={ <Icon icon={ desktop } /> }
 						min={ MIN_SPACER_HEIGHT }
 						max={ Math.max( MAX_SPACER_HEIGHT, heightLg ) }
 						value={ heightLg }
@@ -256,7 +256,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 						<>
 							<RangeControl
 								label={ __( 'Height in pixels (Tablet)', 'flexible-spacer-block' ) }
-								beforeIcon="tablet"
+								beforeIcon={ <Icon icon={ tablet } /> }
 								min={ MIN_SPACER_HEIGHT }
 								max={ Math.max( MAX_SPACER_HEIGHT, heightMd ) }
 								value={ heightMd }
@@ -272,7 +272,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 					) }
 					<RangeControl
 						label={ __( 'Height in pixels (Mobile)', 'flexible-spacer-block' ) }
-						beforeIcon="smartphone"
+						beforeIcon={ <Icon icon={ mobile } /> }
 						min={ MIN_SPACER_HEIGHT }
 						max={ Math.max( MAX_SPACER_HEIGHT, heightSm ) }
 						value={ heightSm }
