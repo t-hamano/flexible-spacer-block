@@ -30,21 +30,37 @@ class Enqueue {
 	 * Enqueue front-end scripts
 	 */
 	public function enqueue_scripts() {
-		wp_register_style( 'fsb-flexible-spacer-style', false );
-		wp_enqueue_style( 'fsb-flexible-spacer-style' );
-		wp_add_inline_style( 'fsb-flexible-spacer-style', $this->create_inline_style( false ) );
+		wp_register_style( FSB_HANDLE, false );
+		wp_enqueue_style( FSB_HANDLE );
+		wp_add_inline_style( FSB_HANDLE, $this->create_inline_style( false ) );
 	}
 
 	/**
 	 * Enqueue block editor scripts
 	 */
 	public function enqueue_editor_scripts() {
-		wp_localize_script( 'fsb-flexible-spacer-editor-script', 'fsbConf', $this->create_editor_config() );
-		wp_set_script_translations( 'fsb-flexible-spacer-editor-script', 'flexible-spacer-block' );
+		$asset_file = include( FSB_PATH . '/build/js/index.asset.php' );
+
+		wp_enqueue_style(
+			FSB_HANDLE,
+			FSB_URL . '/build/css/editor-style.css',
+			array(),
+			filemtime( FSB_PATH . '/build/css/editor-style.css' )
+		);
+
+		wp_enqueue_script(
+			FSB_HANDLE,
+			FSB_URL . '/build/js/index.js',
+			$asset_file['dependencies'],
+			filemtime( FSB_PATH . '/build/js/index.js' )
+		);
+
+		wp_localize_script( FSB_HANDLE, 'fsbConf', $this->create_editor_config() );
+		wp_set_script_translations( FSB_HANDLE, 'flexible-spacer-block' );
 
 		$enable_responsive = get_option( 'flexible_spacer_block_enable_responsive_on_editor', false );
 		if ( $enable_responsive ) {
-			wp_add_inline_style( 'fsb-flexible-spacer-editor-style', $this->create_inline_style( true ) );
+			wp_add_inline_style( FSB_HANDLE, $this->create_inline_style( true ) );
 		}
 	}
 
