@@ -30,9 +30,9 @@ class Enqueue {
 	 * Enqueue front-end scripts
 	 */
 	public function enqueue_scripts() {
-		wp_register_style( FSB_HANDLE, false );
-		wp_enqueue_style( FSB_HANDLE );
-		wp_add_inline_style( FSB_HANDLE, $this->create_inline_style( false ) );
+		wp_register_style( 'fsb-flexible-spacer-style', false );
+		wp_enqueue_style( 'fsb-flexible-spacer-style' );
+		wp_add_inline_style( 'fsb-flexible-spacer-style', $this->create_inline_style( false ) );
 	}
 
 	/**
@@ -42,26 +42,23 @@ class Enqueue {
 		$asset_file = include( FSB_PATH . '/build/js/index.asset.php' );
 
 		wp_enqueue_style(
-			FSB_HANDLE,
+			'fsb-flexible-spacer-editor-style',
 			FSB_URL . '/build/css/editor-style.css',
 			array(),
 			filemtime( FSB_PATH . '/build/css/editor-style.css' )
 		);
 
+		wp_add_inline_style( 'fsb-flexible-spacer-editor-style', $this->create_inline_style( true ) );
+
 		wp_enqueue_script(
-			FSB_HANDLE,
+			'fsb-flexible-spacer-editor-script',
 			FSB_URL . '/build/js/index.js',
 			$asset_file['dependencies'],
 			filemtime( FSB_PATH . '/build/js/index.js' )
 		);
 
-		wp_localize_script( FSB_HANDLE, 'fsbConf', $this->create_editor_config() );
-		wp_set_script_translations( FSB_HANDLE, 'flexible-spacer-block' );
-
-		$enable_responsive = get_option( 'flexible_spacer_block_enable_responsive_on_editor', false );
-		if ( $enable_responsive ) {
-			wp_add_inline_style( FSB_HANDLE, $this->create_inline_style( true ) );
-		}
+		wp_localize_script( 'fsb-flexible-spacer-editor-script', 'fsbConf', $this->create_editor_config() );
+		wp_set_script_translations( 'fsb-flexible-spacer-editor-script', 'flexible-spacer-block' );
 	}
 
 	/**
@@ -105,58 +102,85 @@ class Enqueue {
 	 *
 	 * @return string
 	 */
-	private function create_inline_style( $is_block_editor = true ) {
+	private function create_inline_style( $is_editor = true ) {
 		// Generate media query breakpoints.
 		$defaults = array(
 			'md' => FSB_BREAKPOINT_MD,
 			'sm' => FSB_BREAKPOINT_SM,
 		);
 
-		$breakpoint = get_option( 'flexible_spacer_block_breakpoint', $defaults );
-
+		$breakpoint        = get_option( 'flexible_spacer_block_breakpoint', $defaults );
 		$breakpoint_lg_min = $breakpoint['md'] + 1;
 		$breakpoint_md_max = $breakpoint['md'];
 		$breakpoint_md_min = $breakpoint['sm'] + 1;
 		$breakpoint_sm_max = $breakpoint['sm'];
 
-		$css = <<<EOM
-		.fsb-style-show-front {
-			position: relative;
-			z-index: 2;
-		}
+		$css = '';
 
-		@media screen and (min-width:{$breakpoint_lg_min}px) {
-			.fsb-flexible-spacer__device--md,
-			.fsb-flexible-spacer__device--sm {
-				display: none;
-			}
-		}
-		EOM;
-
-		if ( $breakpoint['md'] !== $breakpoint['sm'] ) {
+		if ( $is_editor ) {
 			$css .= <<<EOM
-			@media screen and (min-width:{$breakpoint_md_min}px) and (max-width:{$breakpoint_md_max}px) {
-				.fsb-flexible-spacer__device--lg,
+			@media screen and (min-width:{$breakpoint_lg_min}px) {
+				.fsb-flexible-spacer--enable-device-preview .fsb-flexible-spacer__device--md,
+				.fsb-flexible-spacer--enable-device-preview .fsb-flexible-spacer__device--sm {
+					display: none;
+				}
+			}
+			EOM;
+
+			if ( $breakpoint['md'] !== $breakpoint['sm'] ) {
+				$css .= <<<EOM
+				@media screen and (min-width:{$breakpoint_md_min}px) and (max-width:{$breakpoint_md_max}px) {
+					.fsb-flexible-spacer--enable-device-preview .fsb-flexible-spacer__device--lg,
+					.fsb-flexible-spacer--enable-device-preview .fsb-flexible-spacer__device--sm {
+						display: none;
+					}
+				}
+				EOM;
+			}
+
+			$css .= <<<EOM
+			@media screen and (max-width:{$breakpoint_sm_max}px) {
+				.fsb-flexible-spacer--enable-device-preview .fsb-flexible-spacer__device--lg,
+				.fsb-flexible-spacer--enable-device-preview .fsb-flexible-spacer__device--md {
+					display: none;
+				}
+			}
+			EOM;
+		} else {
+			// Fonrt-end inline styles.
+			$css .= <<<EOM
+			.fsb-style-show-front {
+				position: relative;
+				z-index: 2;
+			}
+			EOM;
+
+			$css .= <<<EOM
+			@media screen and (min-width:{$breakpoint_lg_min}px) {
+				.fsb-flexible-spacer__device--md,
 				.fsb-flexible-spacer__device--sm {
 					display: none;
 				}
 			}
 			EOM;
-		}
 
-		$css .= <<<EOM
-		@media screen and (max-width:{$breakpoint_sm_max}px) {
-			.fsb-flexible-spacer__device--lg,
-			.fsb-flexible-spacer__device--md {
-				display: none;
+			if ( $breakpoint['md'] !== $breakpoint['sm'] ) {
+				$css .= <<<EOM
+				@media screen and (min-width:{$breakpoint_md_min}px) and (max-width:{$breakpoint_md_max}px) {
+					.fsb-flexible-spacer__device--lg,
+					.fsb-flexible-spacer__device--sm {
+						display: none;
+					}
+				}
+				EOM;
 			}
-		}
-		EOM;
 
-		if ( $is_block_editor ) {
 			$css .= <<<EOM
-			.fsb-flexible-spacer__breakpoint {
-				display: none;
+			@media screen and (max-width:{$breakpoint_sm_max}px) {
+				.fsb-flexible-spacer__device--lg,
+				.fsb-flexible-spacer__device--md {
+					display: none;
+				}
 			}
 			EOM;
 		}

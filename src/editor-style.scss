@@ -82,4 +82,11 @@
 			}
 		}
 	}
+
+	&--enable-device-preview {
+
+		.fsb-flexible-spacer__breakpoint {
+			display: none;
+		}
+	}
 }
