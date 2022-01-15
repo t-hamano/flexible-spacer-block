@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { createReduxStore, register } from '@wordpress/data';
+import { registerStore } from '@wordpress/data';
 
 const DEFAULT_STATE = {
 	isResponsive: false,
@@ -33,10 +33,8 @@ const selectors = {
 	},
 };
 
-const store = createReduxStore( 'flexible-spacer-block', {
+registerStore( 'flexible-spacer-block', {
 	reducer,
 	actions,
 	selectors,
 } );
-
-register( store );
