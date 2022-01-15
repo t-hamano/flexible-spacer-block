@@ -23,6 +23,7 @@
 		width: 100%;
 		font-size: 12px;
 		font-weight: bold;
+		line-height: 1.2;
 		color: #757575;
 		text-align: center;
 		pointer-events: none;
@@ -83,7 +84,7 @@
 		}
 	}
 
-	&--enable-device-preview {
+	&--is-responsive {
 
 		.fsb-flexible-spacer__breakpoint {
 			display: none;

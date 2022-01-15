@@ -5,7 +5,7 @@
 	"category": "design",
 	"keywords": [ "space", "responsive"],
 	"description": "Add white space between blocks and customize its height for each device.",
-	"textdomain": "fsb",
+	"textdomain": "flexible-spacer-block",
 	"attributes": {
 		"heightLg": {
 			"type": "number",
