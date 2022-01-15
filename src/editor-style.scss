@@ -3,13 +3,13 @@
 	&__inner {
 		display: flex;
 		justify-content: space-between;
-		padding-top: 5px;
+		margin: 0 -4px;
 	}
 
 	&__device {
 		position: relative;
 		flex: 1;
-		margin: 0 5px;
+		margin: 0 4px;
 	}
 
 	&__device-ttl {
@@ -21,40 +21,43 @@
 		align-items: center;
 		justify-content: center;
 		width: 100%;
-		color: #757575;
-		font-weight: bold;
 		font-size: 12px;
+		font-weight: bold;
+		line-height: 1.2;
+		color: #757575;
 		text-align: center;
+		pointer-events: none;
+		user-select: none;
 		opacity: 0;
 		transition: opacity 120ms ease 0s;
-		user-select: none;
-		pointer-events: none;
 
-		.dashicons {
-			margin-right: 5px;
+		svg {
+			margin-right: 2px;
 		}
 	}
 
 	&__breakpoint {
 		position: absolute;
-		top: -10px;
+		top: -15px;
 		left: 0;
 		z-index: 2;
 		display: flex;
 		justify-content: center;
 		width: 100%;
+		pointer-events: none;
+		user-select: none;
 		opacity: 0;
 		transition: opacity 120ms ease 0s;
-		user-select: none;
-		pointer-events: none;
 	}
 
 	&__breakpoint-item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		width: 70px;
-		padding: 4px 0;
+		height: 20px;
+		font-size: 11px;
 		color: #fff;
-		font-size: 12px;
-		line-height: 1.4;
 		text-align: center;
 		background: #757575;
 		border-radius: 2px;
@@ -78,6 +81,13 @@
 			&.is-negative {
 				background: #f6b9b9;
 			}
+		}
+	}
+
+	&--is-responsive {
+
+		.fsb-flexible-spacer__breakpoint {
+			display: none;
 		}
 	}
 }

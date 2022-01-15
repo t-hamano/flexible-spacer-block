@@ -1,10 +1,10 @@
 === Flexible Spacer Block ===
 Contributors: wildworks
-Tags: gutenberg,rich text,highlighter,formatting
+Tags: gutenberg, block, spacer, responsive
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.6
-Tested up to: 5.8
-Stable tag: 1.1.9
+Tested up to: 5.9
+Stable tag: 1.2.0
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -31,8 +31,8 @@ To apply the CSS class to the block, click on the block on WordPress editor, and
 
 1. On Block Editor
 2. Setting page
-2. Negative space example
-2. Negative space example
+3. Negative space example
+4. Negative space example
 
 == Resources ==
 
@@ -41,6 +41,13 @@ License: CC0 Public Domain
 Source: https://pxhere.com/ja/photo/245
 
 == Changelog ==
+
+= 1.2.0 =
+* Tested to WordPress 5.9
+* Add: Block control to change responsive view
+* Change: Scripts handle name
+* Change: dashicons to @wordpress/icons
+* Remove: load_plugin_textdomain function
 
 = 1.1.9 =
 * Clean: Update npm packages and run a lint check

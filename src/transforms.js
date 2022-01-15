@@ -10,30 +10,26 @@ export default {
 		{
 			type: 'block',
 			blocks: [ 'core/spacer' ],
-			transform: ({ anchor, height }) => {
-
-				return createBlock(
-					metadata.name,
-					{
-						anchor,
-						heightLg: height,
-						heightMd: height,
-						heightSm: height
-					}
-				);
-			}
-		}
+			transform: ( { anchor, height } ) => {
+				return createBlock( metadata.name, {
+					anchor,
+					heightLg: height,
+					heightMd: height,
+					heightSm: height,
+				} );
+			},
+		},
 	],
 	to: [
 		{
 			type: 'block',
 			blocks: [ 'core/spacer' ],
-			transform: ({ anchor, heightLg }) => {
+			transform: ( { anchor, heightLg } ) => {
 				return createBlock( 'core/spacer', {
-						anchor,
-						height: heightLg
-				});
-			}
-		}
-	]
+					anchor,
+					height: heightLg,
+				} );
+			},
+		},
+	],
 };

@@ -1,11 +1,11 @@
 <?php
 /**
- * @package flexible-spacer-block
+ * @package Flexible_Spacer_Block
  * @author Tetsuaki Hamano
  * @license GPL-2.0+
  */
 
-namespace flexible_spacer_block;
+namespace Flexible_Spacer_Block;
 
 class Options {
 
@@ -108,7 +108,8 @@ class Options {
 		?>
 		<div class="fsb-option-breakpoint">
 			<div class="fsb-option-breakpoint__device">
-				<span class="dashicons dashicons-smartphone"></span><?php _e( 'Mobile', 'flexible-spacer-block' ); ?>
+				<svg viewBox="0 0 24 24" width="48" height="48"><path d="M15 4H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm.5 14c0 .3-.2.5-.5.5H9c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h6c.3 0 .5.2.5.5v12zm-4.5-.5h2V16h-2v1.5z"></path></svg>
+				<?php _e( 'Mobile', 'flexible-spacer-block' ); ?>
 			</div>
 			<span class="fsb-option-breakpoint__sign">&le;</span>
 			<div class="fsb-option-breakpoint__input">
@@ -117,7 +118,8 @@ class Options {
 			</div>
 			<span class="fsb-option-breakpoint__sign">&lt;</span>
 			<div class="fsb-option-breakpoint__device">
-				<span class="dashicons dashicons-tablet"></span><?php _e( 'Tablet', 'flexible-spacer-block' ); ?>
+				<svg viewBox="0 0 24 24" width="48" height="48"><path d="M17 4H7c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm.5 14c0 .3-.2.5-.5.5H7c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h10c.3 0 .5.2.5.5v12zm-7.5-.5h4V16h-4v1.5z"></path></svg>
+				<?php _e( 'Tablet', 'flexible-spacer-block' ); ?>
 			</div>
 			<span class="fsb-option-breakpoint__sign">&le;</span>
 			<div class="fsb-option-breakpoint__input">
@@ -126,7 +128,8 @@ class Options {
 			</div>
 			<span class="fsb-option-breakpoint__sign">&lt;</span>
 			<div class="fsb-option-breakpoint__device">
-				<span class="dashicons dashicons-desktop"></span><?php _e( 'Desktop', 'flexible-spacer-block' ); ?>
+				<svg viewBox="0 0 24 24" width="48" height="48"><path d="M20.5 16h-.7V8c0-1.1-.9-2-2-2H6.2c-1.1 0-2 .9-2 2v8h-.7c-.8 0-1.5.7-1.5 1.5h20c0-.8-.7-1.5-1.5-1.5zM5.7 8c0-.3.2-.5.5-.5h11.6c.3 0 .5.2.5.5v7.6H5.7V8z"></path></svg>
+				<?php _e( 'Desktop', 'flexible-spacer-block' ); ?>
 			</div>
 		</div>
 		<p><?php _e( 'Enter the screen width (breakpoint) that will be the basis for switching between each device.', 'flexible-spacer-block' ); ?></p>
@@ -141,8 +144,9 @@ class Options {
 		?>
 		<fieldset>
 			<label>
-				<input type="checkbox" name="flexible_spacer_block_show_block" value="1" <?php checked( get_option( 'flexible_spacer_block_show_block', false ) ); ?>><?php _e( 'Always show blocks in block editor editor content area', 'flexible-spacer-block' ); ?>
+				<input type="checkbox" name="flexible_spacer_block_show_block" value="1" <?php checked( get_option( 'flexible_spacer_block_show_block', false ) ); ?>><?php _e( 'Always show blocks in block editor', 'flexible-spacer-block' ); ?>
 			</label>
+			<p class="description"><?php _e( 'The block will always be visible even when it is not selected.', 'flexible-spacer-block' ); ?></p>
 		</fieldset>
 		<?php
 	}

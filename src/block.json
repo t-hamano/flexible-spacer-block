@@ -1,7 +1,11 @@
 {
 	"apiVersion": 2,
 	"name": "fsb/flexible-spacer",
+	"title": "Flexible Spacer",
 	"category": "design",
+	"keywords": [ "space", "responsive"],
+	"description": "Add white space between blocks and customize its height for each device.",
+	"textdomain": "flexible-spacer-block",
 	"attributes": {
 		"heightLg": {
 			"type": "number",
@@ -30,5 +34,7 @@
 	},
 	"supports": {
 		"anchor": true
-	}
+	},
+	"editorScript": "fsb-flexible-spacer-editor-script",
+	"editorStyle": "fsb-flexible-spacer-editor-style"
 }
