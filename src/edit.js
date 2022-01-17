@@ -129,8 +129,8 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 						isPressed={ isResponsive }
 						label={
 							isResponsive
-								? __( 'Disable responsive view', 'custom-html-block-extension' )
-								: __( 'Enable responsive view', 'custom-html-block-extension' )
+								? __( 'Disable responsive view', 'flexible-spacer-block' )
+								: __( 'Enable responsive view', 'flexible-spacer-block' )
 						}
 						onClick={ () => setIsResponsive( ! isResponsive ) }
 					/>

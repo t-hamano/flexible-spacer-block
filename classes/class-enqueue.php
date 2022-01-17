@@ -41,24 +41,24 @@ class Enqueue {
 	public function enqueue_editor_scripts() {
 		$asset_file = include( FSB_PATH . '/build/js/index.asset.php' );
 
-		wp_enqueue_style(
-			'fsb-flexible-spacer-editor-style',
+		wp_register_style(
+			'fsb-flexible-spacer-editor',
 			FSB_URL . '/build/css/editor-style.css',
 			array(),
 			filemtime( FSB_PATH . '/build/css/editor-style.css' )
 		);
 
-		wp_add_inline_style( 'fsb-flexible-spacer-editor-style', $this->create_inline_style( true ) );
+		wp_add_inline_style( 'fsb-flexible-spacer-editor', $this->create_inline_style( true ) );
 
-		wp_enqueue_script(
-			'fsb-flexible-spacer-editor-script',
+		wp_register_script(
+			'fsb-flexible-spacer-editor',
 			FSB_URL . '/build/js/index.js',
 			$asset_file['dependencies'],
 			filemtime( FSB_PATH . '/build/js/index.js' )
 		);
 
-		wp_localize_script( 'fsb-flexible-spacer-editor-script', 'fsbConf', $this->create_editor_config() );
-		wp_set_script_translations( 'fsb-flexible-spacer-editor-script', 'flexible-spacer-block' );
+		wp_localize_script( 'fsb-flexible-spacer-editor', 'fsbConf', $this->create_editor_config() );
+		wp_set_script_translations( 'fsb-flexible-spacer-editor', 'flexible-spacer-block' );
 	}
 
 	/**
