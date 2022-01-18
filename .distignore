@@ -8,6 +8,7 @@
 .eslintignore
 .eslintrc.js
 .gitignore
+.prettierrc.js
 .stylelintignore
 .stylelintrc.js
 .wp-env.json
