@@ -29,7 +29,7 @@ import { addQueryArgs } from '@wordpress/url';
  */
 import { responsive } from './icon';
 
-const MIN_SPACER_HEIGHT = 1;
+const MIN_SPACER_HEIGHT = 0;
 const MAX_SPACER_HEIGHT = 500;
 const SPACER_HEIGHT_ALL = 100;
 
