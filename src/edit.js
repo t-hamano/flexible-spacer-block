@@ -29,7 +29,7 @@ import { addQueryArgs } from '@wordpress/url';
  */
 import { responsive } from './icon';
 
-const MIN_SPACER_HEIGHT = 1;
+const MIN_SPACER_HEIGHT = 0;
 const MAX_SPACER_HEIGHT = 500;
 const SPACER_HEIGHT_ALL = 100;
 
@@ -215,7 +215,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 							{ __( 'Mobile', 'flexible-spacer-block' ) }
 						</div>
 						<ResizableBox
-							className={ classnames( 'block-library-spacer__resize-container', {
+							className={ classnames( {
 								'is-selected': isSelected,
 								'is-negative': !! isNegativeSm,
 							} ) }
@@ -249,7 +249,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 								{ __( 'Tablet', 'flexible-spacer-block' ) }
 							</div>
 							<ResizableBox
-								className={ classnames( 'block-library-spacer__resize-container', {
+								className={ classnames( {
 									'is-selected': isSelected,
 									'is-negative': !! isNegativeMd,
 								} ) }
@@ -283,7 +283,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 							{ __( 'Desktop', 'flexible-spacer-block' ) }
 						</div>
 						<ResizableBox
-							className={ classnames( 'block-library-spacer__resize-container', {
+							className={ classnames( {
 								'is-selected': isSelected,
 								'is-negative': !! isNegativeLg,
 							} ) }

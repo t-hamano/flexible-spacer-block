@@ -3,6 +3,7 @@
 	&__inner {
 		display: flex;
 		justify-content: space-between;
+		min-height: 20px;
 		margin: 0 -4px;
 	}
 
@@ -75,7 +76,7 @@
 			opacity: 1;
 		}
 
-		.block-library-spacer__resize-container {
+		.components-resizable-box__container {
 			background: #f0f0f0;
 
 			&.is-negative {
