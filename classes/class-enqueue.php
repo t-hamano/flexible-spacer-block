@@ -75,7 +75,7 @@ class Enqueue {
 	 * Register block
 	 */
 	public function register_block() {
-		register_block_type_from_metadata( FSB_PATH . '/src/' );
+		register_block_type_from_metadata( FSB_PATH . '/build/js' );
 	}
 
 	/**
