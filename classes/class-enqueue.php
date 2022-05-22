@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Flexible_Spacer_Block
- * @author Tetsuaki Hamano
+ * @author Aki Hamano
  * @license GPL-2.0+
  */
 
@@ -75,7 +75,7 @@ class Enqueue {
 	 * Register block
 	 */
 	public function register_block() {
-		register_block_type_from_metadata( FSB_PATH . '/src/' );
+		register_block_type_from_metadata( FSB_PATH . '/build/js' );
 	}
 
 	/**
@@ -109,7 +109,18 @@ class Enqueue {
 			'sm' => FSB_BREAKPOINT_SM,
 		);
 
-		$breakpoint        = get_option( 'flexible_spacer_block_breakpoint', $defaults );
+		$breakpoint = get_option( 'flexible_spacer_block_breakpoint', $defaults );
+
+		/**
+		 * Filters media query breakpoints.
+		 *
+		 * @since 1.3.0
+		 *
+		 * @param array $breakpoint media query breakpoints.
+		 * @param bool $is_editor Whether it is rendered on the editor.
+		 */
+		$breakpoint = apply_filters( 'flexible_spacer_block_breakpoint', $breakpoint, $is_editor );
+
 		$breakpoint_lg_min = $breakpoint['md'] + 1;
 		$breakpoint_md_max = $breakpoint['md'];
 		$breakpoint_md_min = $breakpoint['sm'] + 1;
@@ -186,6 +197,36 @@ class Enqueue {
 			EOM;
 		}
 
+		$css = self::minify_css( $css );
+
+		/**
+		 * Filters Generated inline styles.
+		 *
+		 * @since 1.3.0
+		 *
+		 * @param string $css Generated inline styles.
+		 * @param bool $is_editor Whether it is rendered on the editor.
+		 */
+		return apply_filters( 'flexible_spacer_block_inline_css', $css, $is_editor );
+	}
+
+	/**
+	 * Minify CSS
+	 *
+	 * @return string
+	 */
+	private function minify_css( $css ) {
+		$replaces = array();
+
+    // phpcs:disable Generic.Formatting.MultipleStatementAlignment
+		$replaces['/@charset [^;]+;/'] = '';
+		$replaces['/([\s:]url\()[\"\']([^\"\']+)[\"\'](\)[\s;}])/'] = '${1}${2}${3}';
+		$replaces['/(\/\*(?=[!]).*?\*\/|\"(?:(?!(?<!\\\)\").)*\"|\'(?:(?!(?<!\\\)\').)*\')|\s+/'] = '${1} ';
+		$replaces['/(\/\*(?=[!]).*?\*\/|\"(?:(?!(?<!\\\)\").)*\"|\'(?:(?!(?<!\\\)\').)*\')|\/\*.*?\*\/|\s+([:])\s+|\s+([)])|([(:])\s+/s'] = '${1}${2}${3}${4}';
+		$replaces['/\s*(\/\*(?=[!]).*?\*\/|\"(?:(?!(?<!\\\)\").)*\"|\'(?:(?!(?<!\\\)\').)*\'|[ :]calc\([^;}]+\)[ ;}]|[!$&+,\/;<=>?@^_{|}~]|\A|\z)\s*/s'] = '${1}';
+    // phpcs:enable
+
+		$css = preg_replace( array_keys( $replaces ), array_values( $replaces ), $css );
 		return $css;
 	}
 }

@@ -1,7 +1,6 @@
 /**
  * WordPress dependencies
  */
-import { resizeCornerNE as icon } from '@wordpress/icons';
 import { registerBlockType } from '@wordpress/blocks';
 
 /**
@@ -12,6 +11,7 @@ import edit from './edit';
 import save from './save';
 import transforms from './transforms';
 import './store';
+import { blockIcon as icon } from './icons';
 
 const config = {
 	icon,

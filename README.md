@@ -28,6 +28,70 @@ $ npm install
 $ npm run build
 ```
 
+## Filters
+
+### `flexible_spacer_block_breakpoint( $breakpoint, $is_editor )`
+
+Filters media query breakpoints.
+
+#### Parameters
+
+- `$breakpoint`
+
+  *(array)* media query breakpoints ( `md` / `sm` ).
+
+- `$is_editor`
+
+  *(bool)* Whether it is rendered on the editor.
+
+#### Return
+
+*(array)* New media query breakpoints.
+
+#### Example
+
+```php
+function custom_flexible_spacer_block_breakpoint( $breakpoint, $is_editor ) {
+	// Override media query breakpoints.
+	return array(
+		'md' => 1000,
+		'sm' => 500,
+	);
+}
+add_filter( 'flexible_spacer_block_breakpoint', 'custom_flexible_spacer_block_breakpoint', 10, 2 );
+```
+
+### `flexible_spacer_block_inline_css( $css, $is_editor )`
+
+Filters Generated inline styles.
+
+#### Parameters
+
+- `$css`
+
+  *(string)* Generated inline styles.
+
+- `$is_editor`
+
+  *(bool)* Whether it is rendered on the editor.
+
+#### Return
+
+*(string)* New inline styles.
+
+#### Example
+
+```php
+function custom_flexible_spacer_block_inline_css( $css, $is_editor ) {
+	// Override z-index value for negative space on the front-end.
+	if ( ! $is_editor ) {
+		return str_replace( 'z-index:2;', 'z-index:5;', $css );
+	}
+	return $css;
+}
+add_filter( 'flexible_spacer_block_inline_css', 'custom_flexible_spacer_block_inline_css', 10, 2 );
+```
+
 ## Resources
 
 ### Image for screenshot
@@ -35,4 +99,4 @@ $ npm run build
 * Source: https://pxhere.com/ja/photo/245
 ## Author
 
-[Tetsuaki Hamano (Github)](https://github.com/t-hamano)
+[Aki Hamano (Github)](https://github.com/t-hamano)

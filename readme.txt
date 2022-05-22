@@ -3,8 +3,8 @@ Contributors: wildworks
 Tags: gutenberg, block, spacer, responsive
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.6
-Tested up to: 5.9
-Stable tag: 1.2.3
+Tested up to: 6.0
+Stable tag: 1.3.0
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -27,6 +27,12 @@ To apply the CSS class to the block, click on the block on WordPress editor, and
 1. Upload the `flexible-spacer-block` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the \'Plugins\' menu in WordPress.
 
+== Frequently Asked Questions ==
+
+= What filters can I use? =
+
+You can find a list of the available filters in the [Github readme](https://github.com/t-hamano/flexible-spacer-block#filters).
+
 == Screenshots ==
 
 1. On Block Editor
@@ -41,6 +47,14 @@ License: CC0 Public Domain
 Source: https://pxhere.com/ja/photo/245
 
 == Changelog ==
+
+= 1.3.0 =
+* Tested to WordPress 6.0
+* Update: Minify inline styles
+* Add: filter hooks
+* Update: block icon
+* Update: author name
+* Fix: CSS files are not loaded in the iframe editor on WordPress 6.0
 
 = 1.2.3 =
 * Change: Ensure minimum height of the block

@@ -27,7 +27,7 @@ import { addQueryArgs } from '@wordpress/url';
 /**
  * Internal dependencies
  */
-import { responsive } from './icon';
+import { responsive } from './icons';
 
 const MIN_SPACER_HEIGHT = 0;
 const MAX_SPACER_HEIGHT = 500;

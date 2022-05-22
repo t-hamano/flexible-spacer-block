@@ -1,7 +1,14 @@
 /**
  * WordPress dependencies
  */
-import { Path, SVG } from '@wordpress/components';
+import { Path, SVG, Polygon } from '@wordpress/components';
+
+export const blockIcon = (
+	<SVG viewBox="0 0 24 24">
+		<Polygon points="17.5,1.5 7.8,6.1 10.8,6.5 6.5,10.5 16.5,6 13.4,5.5 " />
+		<Path d="M13.5,10.2v1.6h3.7L5.8,19.2V15H4.2v6.8H11v-1.6H6.8l11.4-7.4v3.7h1.6v-6.3H13.5z" />
+	</SVG>
+);
 
 export const responsive = (
 	<SVG viewBox="0 0 24 24">
