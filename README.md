@@ -85,7 +85,7 @@ Filters Generated inline styles.
 function custom_flexible_spacer_block_inline_css( $css, $is_editor ) {
 	// Override z-index value for negative space on the front-end.
 	if ( ! $is_editor ) {
-		return str_replace( 'z-index: 2;', 'z-index: 5;', $css );
+		return str_replace( 'z-index:2;', 'z-index:5;', $css );
 	}
 	return $css;
 }
