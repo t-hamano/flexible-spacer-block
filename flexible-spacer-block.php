@@ -3,13 +3,13 @@
  * Plugin Name: Flexible Spacer Block
  * Description: Add white space between blocks and customize its height for each device.
  * Version: 1.2.3
- * Author: Tetsuaki Hamano
+ * Author: Aki Hamano
  * Author URI: https://github.com/t-hamano
  * License: GPL2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: flexible-spacer-block
  * @package Flexible_Spacer_Block
- * @author Tetsuaki Hamano
+ * @author Aki Hamano
  * @license GPL-2.0+
  */
 

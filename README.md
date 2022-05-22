@@ -35,4 +35,4 @@ $ npm run build
 * Source: https://pxhere.com/ja/photo/245
 ## Author
 
-[Tetsuaki Hamano (Github)](https://github.com/t-hamano)
+[Aki Hamano (Github)](https://github.com/t-hamano)
