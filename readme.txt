@@ -27,6 +27,12 @@ To apply the CSS class to the block, click on the block on WordPress editor, and
 1. Upload the `flexible-spacer-block` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the \'Plugins\' menu in WordPress.
 
+== Frequently Asked Questions ==
+
+= What filters can I use? =
+
+You can find a list of the available filters in the [Github readme](https://github.com/t-hamano/flexible-spacer-block#filters).
+
 == Screenshots ==
 
 1. On Block Editor

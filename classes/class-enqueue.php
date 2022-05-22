@@ -109,7 +109,18 @@ class Enqueue {
 			'sm' => FSB_BREAKPOINT_SM,
 		);
 
-		$breakpoint        = get_option( 'flexible_spacer_block_breakpoint', $defaults );
+		$breakpoint = get_option( 'flexible_spacer_block_breakpoint', $defaults );
+
+		/**
+		 * Filters media query breakpoints.
+		 *
+		 * @since 1.3.0
+		 *
+		 * @param array $breakpoint media query breakpoints.
+		 * @param bool $is_editor Whether it is rendered on the editor.
+		 */
+		$breakpoint = apply_filters( 'flexible_spacer_block_breakpoint', $breakpoint, $is_editor );
+
 		$breakpoint_lg_min = $breakpoint['md'] + 1;
 		$breakpoint_md_max = $breakpoint['md'];
 		$breakpoint_md_min = $breakpoint['sm'] + 1;
@@ -186,7 +197,15 @@ class Enqueue {
 			EOM;
 		}
 
-		return $css;
+		/**
+		 * Filters Generated inline styles.
+		 *
+		 * @since 1.3.0
+		 *
+		 * @param string $css Generated inline styles.
+		 * @param bool $is_editor Whether it is rendered on the editor.
+		 */
+		return apply_filters( 'flexible_spacer_block_inline_css', $css, $is_editor );
 	}
 }
 
