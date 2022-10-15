@@ -88,11 +88,11 @@ class Options {
 				do_settings_sections( 'flexible-spacer-block-group' );
 				?>
 				<h2><?php _e( 'About Negative Space', 'flexible-spacer-block' ); ?></h2>
-				<p>
-					<?php _e( '"<strong>Negative space</strong>" narrows the margins both blocks above and below the spacer, and it is also possible to overlap the blocks.', 'flexible-spacer-block' ); ?><br>
-					<?php _e( 'If unintended overlap occurs, <strong>add a CSS class</strong> named <code>fsb-style-show-front</code> to the block you want to show in the front.', 'flexible-spacer-block' ); ?><br>
-					<?php _e( 'To apply the CSS class to the block, click on the block on WordPress editor, and check the block settings on the right for the Advanced setting ,then enter the CSS class.', 'flexible-spacer-block' ); ?>
-				</p>
+				<ul>
+					<li><?php _e( '"<strong>Negative space</strong>" narrows the margins both blocks above and below the spacer, and it is also possible to overlap the blocks.', 'flexible-spacer-block' ); ?></li>
+					<li><?php _e( 'If unintended overlap occurs, <strong>add a CSS class</strong> named <code>fsb-style-show-front</code> to the block you want to show in the front.', 'flexible-spacer-block' ); ?></li>
+					<li><?php _e( 'To apply the CSS class to the block, click on the block on WordPress editor, and check the block settings on the right for the Advanced setting ,then enter the CSS class.', 'flexible-spacer-block' ); ?></li>
+				</ul>
 				<?php submit_button(); ?>
 			</form>
 		</div>
@@ -114,7 +114,7 @@ class Options {
 			<span class="fsb-option-breakpoint__sign">&le;</span>
 			<div class="fsb-option-breakpoint__input">
 				<input type="number" name="flexible_spacer_block_breakpoint[sm]" min="<?php echo FSB_BREAKPOINT_MIN; ?>" max="<?php echo FSB_BREAKPOINT_MAX; ?>" value="<?php echo esc_attr( $breakpoint_sm ); ?>">
-				<span class="fsb-option-breakpoint__unit">px</span>
+				<span>px</span>
 			</div>
 			<span class="fsb-option-breakpoint__sign">&lt;</span>
 			<div class="fsb-option-breakpoint__device">
@@ -124,7 +124,7 @@ class Options {
 			<span class="fsb-option-breakpoint__sign">&le;</span>
 			<div class="fsb-option-breakpoint__input">
 				<input type="number" name="flexible_spacer_block_breakpoint[md]" min="<?php echo FSB_BREAKPOINT_MIN; ?>" max="<?php echo FSB_BREAKPOINT_MAX; ?>" value="<?php echo esc_attr( $breakpoint_md ); ?>">
-				<span class="fsb-option-breakpoint__unit">px</span>
+				<span>px</span>
 			</div>
 			<span class="fsb-option-breakpoint__sign">&lt;</span>
 			<div class="fsb-option-breakpoint__device">
@@ -132,8 +132,10 @@ class Options {
 				<?php _e( 'Desktop', 'flexible-spacer-block' ); ?>
 			</div>
 		</div>
-		<p><?php _e( 'Enter the screen width (breakpoint) that will be the basis for switching between each device.', 'flexible-spacer-block' ); ?></p>
-		<p><?php _e( 'If both values are the same, The spacer setting for tablets will be disabled.', 'flexible-spacer-block' ); ?></p>
+		<ul>
+			<li><?php _e( 'Enter the screen width (breakpoint) that will be the basis for switching between each device.', 'flexible-spacer-block' ); ?></li>
+			<li><?php _e( 'If both values are the same, The spacer setting for tablets will be disabled.', 'flexible-spacer-block' ); ?></li>
+		</ul>
 		<?php
 	}
 
