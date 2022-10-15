@@ -18,11 +18,11 @@
 		"lint:style": "wp-scripts lint-style"
 	},
 	"devDependencies": {
-		"@wordpress/env": "^4.7.0",
-		"@wordpress/icons": "^9.0.0",
-		"@wordpress/scripts": "^23.1.0",
+		"@wordpress/env": "^5.4.0",
+		"@wordpress/icons": "^9.10.0",
+		"@wordpress/scripts": "^24.3.0",
 		"opener": "^1.5.2",
-		"prettier": "npm:wp-prettier@2.6.2-beta-1",
+		"prettier": "npm:wp-prettier@2.6.2",
 		"rimraf": "^3.0.2",
 		"stylelint-config-recess-order": "^3.0.0",
 		"stylelint-order": "^5.0.0"
