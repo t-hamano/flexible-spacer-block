@@ -13,6 +13,9 @@ class Enqueue {
 	 * Constructor
 	 */
 	function __construct() {
+		// Register block
+		add_action( 'init', array( $this, 'register_block' ) );
+
 		// Enqueue front-end inline styles
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
@@ -21,44 +24,31 @@ class Enqueue {
 
 		// Enqueue admin option page scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+	}
 
-		// Register block
-		add_action( 'init', array( $this, 'register_block' ) );
+	/**
+	 * Register block
+	 */
+	public function register_block() {
+		register_block_type( FSB_PATH . '/build' );
 	}
 
 	/**
 	 * Enqueue front-end scripts
 	 */
 	public function enqueue_scripts() {
-		wp_register_style( 'fsb-flexible-spacer-style', false );
-		wp_enqueue_style( 'fsb-flexible-spacer-style' );
-		wp_add_inline_style( 'fsb-flexible-spacer-style', $this->create_inline_style( false ) );
+		wp_register_style( FSB_HANDLE, false );
+		wp_enqueue_style( FSB_HANDLE );
+		wp_add_inline_style( FSB_HANDLE, $this->create_inline_style( false ) );
 	}
 
 	/**
 	 * Enqueue block editor scripts
 	 */
 	public function enqueue_editor_scripts() {
-		$asset_file = include( FSB_PATH . '/build/js/index.asset.php' );
-
-		wp_register_style(
-			'fsb-flexible-spacer-editor',
-			FSB_URL . '/build/css/editor-style.css',
-			array(),
-			filemtime( FSB_PATH . '/build/css/editor-style.css' )
-		);
-
-		wp_add_inline_style( 'fsb-flexible-spacer-editor', $this->create_inline_style( true ) );
-
-		wp_register_script(
-			'fsb-flexible-spacer-editor',
-			FSB_URL . '/build/js/index.js',
-			$asset_file['dependencies'],
-			filemtime( FSB_PATH . '/build/js/index.js' )
-		);
-
-		wp_localize_script( 'fsb-flexible-spacer-editor', 'fsbConf', $this->create_editor_config() );
-		wp_set_script_translations( 'fsb-flexible-spacer-editor', 'flexible-spacer-block' );
+		wp_add_inline_style( FSB_HANDLE, $this->create_inline_style( true ) );
+		wp_localize_script( FSB_HANDLE . '-editor-script', 'fsbConf', $this->create_editor_config() );
+		wp_set_script_translations( FSB_HANDLE, FSB_HANDLE );
 	}
 
 	/**
@@ -68,14 +58,7 @@ class Enqueue {
 		if ( false === strpos( $hook, 'flexible-spacer-block' ) ) {
 			return;
 		}
-		wp_enqueue_style( 'flexible-spacer-block-option', FSB_URL . '/build/css/admin-style.css' );
-	}
-
-	/**
-	 * Register block
-	 */
-	public function register_block() {
-		register_block_type_from_metadata( FSB_PATH . '/build/js' );
+		wp_enqueue_style( FSB_HANDLE, FSB_URL . '/build/admin.css' );
 	}
 
 	/**

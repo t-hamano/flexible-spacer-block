@@ -19,10 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 defined( 'ABSPATH' ) || exit;
 
+define( 'FSB_HANDLE', 'fsb-flexible-spacer' );
 define( 'FSB_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'FSB_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 define( 'FSB_BASENAME', plugin_basename( __FILE__ ) );
-define( 'FSB_HANDLE', 'fsb-flexible-spacer' );
 
 // Default Breakpoint setting values
 const FSB_BREAKPOINT_MD  = 1024;

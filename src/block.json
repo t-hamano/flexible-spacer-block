@@ -35,6 +35,6 @@
 	"supports": {
 		"anchor": true
 	},
-	"editorScript": "fsb-flexible-spacer-editor",
-	"editorStyle": "fsb-flexible-spacer-editor"
+	"editorScript": "file:index.js",
+	"editorStyle": "file:index.css"
 }
