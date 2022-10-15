@@ -6,8 +6,11 @@
 		"wp-env": "wp-env",
 		"open": "wp-env start && opener http://localhost:8888",
 		"stop": "wp-env stop",
-		"start": "wp-scripts start src/admin src/index.js",
-		"build": "npm run clean && wp-scripts build src/admin src/index.js",
+		"watch:sass": "sass src/admin-style.scss:build/css/admin-style.css src/editor-style.scss:build/css/editor-style.css --watch",
+		"watch:js": "wp-scripts start --output-path=build/js",
+		"build:js": "wp-scripts build --output-path=build/js",
+		"build:sass": "sass src/admin-style.scss:build/css/admin-style.css src/editor-style.scss:build/css/editor-style.css --no-source-map --style compressed",
+		"build": "npm run clean && npm run build:js && npm run build:sass",
 		"clean": "rimraf build",
 		"lint": "npm run lint:php && npm run lint:js && npm run lint:style",
 		"lint:php": "composer lint",
@@ -20,10 +23,11 @@
 		"@wordpress/scripts": "^24.3.0",
 		"opener": "^1.5.2",
 		"prettier": "npm:wp-prettier@2.6.2",
-		"rimraf": "3.0.2",
+		"rimraf": "^3.0.2",
 		"stylelint-config-recess-order": "^3.0.0",
 		"stylelint-order": "^5.0.0"
 	},
+	"dependencies": {},
 	"engines": {
 		"node": ">=16.0.0",
 		"npm": ">=8.0.0"
