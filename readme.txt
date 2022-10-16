@@ -2,9 +2,9 @@
 Contributors: wildworks
 Tags: gutenberg, block, spacer, responsive
 Donate link: https://www.paypal.me/thamanoJP
-Requires at least: 5.6
-Tested up to: 6.0
-Stable tag: 1.3.0
+Requires at least: 5.9
+Tested up to: 6.1
+Stable tag: 1.4.0
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -47,6 +47,12 @@ License: CC0 Public Domain
 Source: https://pxhere.com/ja/photo/245
 
 == Changelog ==
+
+= 1.4.0 =
+* Tested to WordPress 6.1
+* Drop support for WordPress 5.6 through 5.8
+* Fix: Not converting correctly from core spacer block
+* Enhancement: Polish style in the setting page
 
 = 1.3.0 =
 * Tested to WordPress 6.0

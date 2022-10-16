@@ -1,6 +1,7 @@
 # Flexible Spacer Block
 
-[![Deploy to WordPress.org](https://github.com/t-hamano/flexible-spacer-block/actions/workflows/wp-plugin-deploy.yml/badge.svg)](https://github.com/t-hamano/flexible-spacer-block/actions/workflows/wp-plugin-deploy.yml)
+[![Test](https://github.com/t-hamano/flexible-spacer-block/actions/workflows/run-test.yml/badge.svg)](https://github.com/t-hamano/flexible-spacer-block/actions/workflows/run-test.yml)
+[![Test and Deploy](https://github.com/t-hamano/flexible-spacer-block/actions/workflows/run-test-and-deploy.yml/badge.svg)](https://github.com/t-hamano/flexible-spacer-block/actions/workflows/run-test-and-deploy.yml)
 
 ![Header](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/banner-1544x500.png)
 
