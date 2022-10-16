@@ -11,7 +11,7 @@ export default {
 			type: 'block',
 			blocks: [ 'core/spacer' ],
 			transform: ( { anchor, height } ) => {
-				const parsedHeight = parseInt( height.trim(), 10 );
+				const parsedHeight = parseInt( height, 10 );
 				return createBlock( metadata.name, {
 					anchor,
 					heightLg: parsedHeight,

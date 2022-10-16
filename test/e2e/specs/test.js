@@ -13,14 +13,7 @@ import {
 /**
  * Internal dependencies
  */
-import {
-	changeHeight,
-	inputValue,
-	inputValueFromLabel,
-	openSidebar,
-	selectOptionFromAriaLabel,
-	toggleNegativeSpace,
-} from '../helper';
+import { changeHeight, inputValue, openSidebar, toggleNegativeSpace } from '../helper';
 
 const page = global.page;
 
@@ -81,7 +74,9 @@ describe( 'Block', () => {
 	it( 'should be converted to flexible spacer block by keeping height', async () => {
 		await insertBlock( 'Spacer' );
 		await openSidebar();
-		await inputValueFromLabel( 'Height', '200' );
+		const inputSelector = '.block-editor-block-inspector input[type="number"]';
+
+		await inputValue( inputSelector, '200' );
 		await transformBlockTo( 'Flexible Spacer' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
@@ -90,7 +85,15 @@ describe( 'Block', () => {
 	it( 'should be converted to flexible spacer block by converting height to px', async () => {
 		await insertBlock( 'Spacer' );
 		await openSidebar();
-		await selectOptionFromAriaLabel( 'Select unit', 'em' );
+		const inputSelector = '.block-editor-block-inspector input[type="number"]';
+
+		// WordPress 5.9 has no units for spacer block.
+		try {
+			const unitSelector = `select[aria-label="Select unit"]`;
+			await page.select( unitSelector, 'em' );
+		} catch {}
+
+		await inputValue( inputSelector, '50' );
 		await transformBlockTo( 'Flexible Spacer' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
