@@ -11,11 +11,12 @@ export default {
 			type: 'block',
 			blocks: [ 'core/spacer' ],
 			transform: ( { anchor, height } ) => {
+				const parsedHeight = parseInt( height.trim(), 10 );
 				return createBlock( metadata.name, {
 					anchor,
-					heightLg: height,
-					heightMd: height,
-					heightSm: height,
+					heightLg: parsedHeight,
+					heightMd: parsedHeight,
+					heightSm: parsedHeight,
 				} );
 			},
 		},

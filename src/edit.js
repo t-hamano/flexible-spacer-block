@@ -19,7 +19,7 @@ import {
 	ToolbarGroup,
 	ToolbarButton,
 } from '@wordpress/components';
-import { useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { View } from '@wordpress/primitives';
 import { Icon, settings, mobile, tablet, desktop } from '@wordpress/icons';
 import { addQueryArgs } from '@wordpress/url';
@@ -48,6 +48,12 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 	const isShowBlock = fsbConf.showBlock;
 
 	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
+
+	useEffect( () => {
+		if ( heightLg === heightMd && heightMd === heightSm ) {
+			setHeightAll( heightLg );
+		}
+	}, [ heightLg, heightMd, heightSm ] );
 
 	const settingUrl = addQueryArgs( 'options-general.php', {
 		page: 'flexible-spacer-block-option',
@@ -147,22 +153,24 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 						onChange={ updateHeightAll }
 					/>
 					<HorizontalRule />
-					<RangeControl
-						label={ __( 'Height in pixels (Desktop)', 'flexible-spacer-block' ) }
-						beforeIcon={ <Icon icon={ desktop } /> }
-						min={ MIN_SPACER_HEIGHT }
-						max={ Math.max( MAX_SPACER_HEIGHT, heightLg ) }
-						value={ heightLg }
-						onChange={ updateHeightLg }
-					/>
-					<ToggleControl
-						label={ __( 'Negative space', 'flexible-spacer-block' ) }
-						checked={ isNegativeLg }
-						onChange={ updateIsNegativeLg }
-					/>
+					<div id="flexible_spacer_block_height_desktop">
+						<RangeControl
+							label={ __( 'Height in pixels (Desktop)', 'flexible-spacer-block' ) }
+							beforeIcon={ <Icon icon={ desktop } /> }
+							min={ MIN_SPACER_HEIGHT }
+							max={ Math.max( MAX_SPACER_HEIGHT, heightLg ) }
+							value={ heightLg }
+							onChange={ updateHeightLg }
+						/>
+						<ToggleControl
+							label={ __( 'Negative space', 'flexible-spacer-block' ) }
+							checked={ isNegativeLg }
+							onChange={ updateIsNegativeLg }
+						/>
+					</div>
 					<HorizontalRule />
 					{ isEnableMd && (
-						<>
+						<div id="flexible_spacer_block_height_tablet">
 							<RangeControl
 								label={ __( 'Height in pixels (Tablet)', 'flexible-spacer-block' ) }
 								beforeIcon={ <Icon icon={ tablet } /> }
@@ -177,21 +185,23 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 								onChange={ updateIsNegativeMd }
 							/>
 							<HorizontalRule />
-						</>
+						</div>
 					) }
-					<RangeControl
-						label={ __( 'Height in pixels (Mobile)', 'flexible-spacer-block' ) }
-						beforeIcon={ <Icon icon={ mobile } /> }
-						min={ MIN_SPACER_HEIGHT }
-						max={ Math.max( MAX_SPACER_HEIGHT, heightSm ) }
-						value={ heightSm }
-						onChange={ updateHeightSm }
-					/>
-					<ToggleControl
-						label={ __( 'Negative space', 'flexible-spacer-block' ) }
-						checked={ isNegativeSm }
-						onChange={ updateIsNegativeSm }
-					/>
+					<div id="flexible_spacer_block_height_mobile">
+						<RangeControl
+							label={ __( 'Height in pixels (Mobile)', 'flexible-spacer-block' ) }
+							beforeIcon={ <Icon icon={ mobile } /> }
+							min={ MIN_SPACER_HEIGHT }
+							max={ Math.max( MAX_SPACER_HEIGHT, heightSm ) }
+							value={ heightSm }
+							onChange={ updateHeightSm }
+						/>
+						<ToggleControl
+							label={ __( 'Negative space', 'flexible-spacer-block' ) }
+							checked={ isNegativeSm }
+							onChange={ updateIsNegativeSm }
+						/>
+					</div>
 					<ExternalLink href={ settingUrl }>
 						{ __( 'Plugin Setting', 'flexible-spacer-block' ) }
 					</ExternalLink>
