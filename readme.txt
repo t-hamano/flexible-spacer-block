@@ -4,7 +4,7 @@ Tags: gutenberg, block, spacer, responsive
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.9
 Tested up to: 6.1
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -47,6 +47,9 @@ License: CC0 Public Domain
 Source: https://pxhere.com/ja/photo/245
 
 == Changelog ==
+
+= 1.4.1 =
+* Clean: Remove files not needed for the release
 
 = 1.4.0 =
 * Tested to WordPress 6.1
