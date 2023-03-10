@@ -171,7 +171,7 @@ class Options {
 			add_settings_error(
 				'flexible-spacer-block-breakpoint',
 				'flexible-spacer-block-breakpoint-null',
-				__( 'Fill in both fields in Responsive Setting.', 'flexible-spacer-block' )
+				__( 'Responsive Setting: Fill in both fields.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
 				'md' => isset( $this->options['md'] ) ? $this->options['md'] : '',
@@ -181,7 +181,7 @@ class Options {
 			add_settings_error(
 				'flexible-spacer-block-breakpoint',
 				'flexible-spacer-block-breakpoint-compare',
-				__( 'The Device Width Setting value in the left field must be equal to or smaller than the value in the right field.', 'flexible-spacer-block' )
+				__( 'Responsive Setting: the screen width value in the left field must be equal to or smaller than the value in the right field.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
 				'md' => isset( $this->options['md'] ) ? $this->options['md'] : '',
