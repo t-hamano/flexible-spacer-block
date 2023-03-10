@@ -21,14 +21,14 @@
 		"test:e2e:debug": "wp-scripts test-e2e --config test/e2e/jest.config.js --puppeteer-devtools"
 	},
 	"devDependencies": {
-		"@wordpress/e2e-test-utils": "8.3.0",
-		"@wordpress/env": "^5.4.0",
-		"@wordpress/icons": "^9.10.0",
+		"@wordpress/e2e-test-utils": "9.5.0",
+		"@wordpress/env": "^5.13.0",
+		"@wordpress/icons": "^9.19.0",
 		"@wordpress/scripts": "^24.3.0",
-		"concurrently": "7.4.0",
+		"concurrently": "7.6.0",
 		"opener": "^1.5.2",
 		"prettier": "npm:wp-prettier@2.6.2",
-		"rimraf": "^3.0.2",
+		"rimraf": "^4.4.0",
 		"stylelint-config-recess-order": "^3.0.0",
 		"stylelint-order": "^5.0.0"
 	},
