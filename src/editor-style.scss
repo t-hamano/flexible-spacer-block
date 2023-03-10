@@ -1,100 +1,103 @@
-// Hack to load css files into iframe editor instancees on WordPress 6.0.
+// Hack to load css files into iframe editor instances on WordPress 6.0.
 // https://github.com/WordPress/gutenberg/pull/40842
 .wp-block-fsb-flexible-spacer {
 	background: transparent;
 }
 
-.fsb-flexible-spacer {
+.fsb-flexible-spacer__inner {
+	display: flex;
+	gap: 8px;
+	justify-content: space-between;
+	min-height: 20px;
+}
 
-	&__inner {
-		display: flex;
-		justify-content: space-between;
-		min-height: 20px;
-		margin: 0 -4px;
+.fsb-flexible-spacer__device {
+	position: relative;
+	flex: 1;
+}
+
+.fsb-flexible-spacer__device-ttl {
+	position: absolute;
+	top: 2px;
+	left: 0;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 1.2;
+	color: #757575;
+	text-align: center;
+	pointer-events: none;
+	user-select: none;
+	opacity: 0;
+	transition: opacity 120ms ease 0s;
+
+	svg {
+		margin-right: 2px;
+	}
+}
+
+.fsb-flexible-spacer__breakpoint {
+	position: absolute;
+	top: -15px;
+	left: 0;
+	z-index: 2;
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	pointer-events: none;
+	user-select: none;
+	opacity: 0;
+	transition: opacity 120ms ease 0s;
+}
+
+.fsb-flexible-spacer__breakpoint-item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 70px;
+	height: 20px;
+	font-size: 11px;
+	color: #fff;
+	text-align: center;
+	background: #757575;
+	border-radius: 2px;
+
+	&:last-child:not(:first-child) {
+		margin-left: calc(33.3% - 70px);
+	}
+}
+
+.fsb-flexible-spacer.is-selected,
+.fsb-flexible-spacer--is-show-block {
+
+	.fsb-flexible-spacer__device-ttl,
+	.fsb-flexible-spacer__breakpoint {
+		opacity: 1;
 	}
 
-	&__device {
-		position: relative;
-		flex: 1;
-		margin: 0 4px;
-	}
+	.components-resizable-box__container {
+		background: #f0f0f0;
 
-	&__device-ttl {
-		position: absolute;
-		top: 2px;
-		left: 0;
-		z-index: 1;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-		font-size: 12px;
-		font-weight: bold;
-		line-height: 1.2;
-		color: #757575;
-		text-align: center;
-		pointer-events: none;
-		user-select: none;
-		opacity: 0;
-		transition: opacity 120ms ease 0s;
-
-		svg {
-			margin-right: 2px;
+		&.is-negative {
+			background: #f6b9b9;
 		}
 	}
+}
 
-	&__breakpoint {
-		position: absolute;
-		top: -15px;
-		left: 0;
-		z-index: 2;
-		display: flex;
-		justify-content: center;
-		width: 100%;
-		pointer-events: none;
-		user-select: none;
-		opacity: 0;
-		transition: opacity 120ms ease 0s;
+.fsb-flexible-spacer--is-responsive {
+
+	.fsb-flexible-spacer__breakpoint {
+		display: none;
 	}
+}
 
-	&__breakpoint-item {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 70px;
-		height: 20px;
-		font-size: 11px;
-		color: #fff;
-		text-align: center;
-		background: #757575;
-		border-radius: 2px;
+.fsb-flexible-spacer__sidebar {
 
-		&:last-child:not(:first-child) {
-			margin-left: calc(33.3% - 70px);
-		}
-	}
-
-	&.is-selected,
-	&--is-show-block {
-
-		.fsb-flexible-spacer__device-ttl,
-		.fsb-flexible-spacer__breakpoint {
-			opacity: 1;
-		}
-
-		.components-resizable-box__container {
-			background: #f0f0f0;
-
-			&.is-negative {
-				background: #f6b9b9;
-			}
-		}
-	}
-
-	&--is-responsive {
-
-		.fsb-flexible-spacer__breakpoint {
-			display: none;
-		}
+	.components-range-control .components-input-control {
+		margin-bottom: 0;
 	}
 }

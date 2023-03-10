@@ -31,10 +31,10 @@ import { responsive } from './icons';
 
 const MIN_SPACER_HEIGHT = 0;
 const MAX_SPACER_HEIGHT = 500;
-const SPACER_HEIGHT_ALL = 100;
+const DEFAULT_SPACER_HEIGHT = 100;
 
 export default function Edit( { attributes, isSelected, setAttributes, toggleSelection } ) {
-	const [ heightAll, setHeightAll ] = useState( SPACER_HEIGHT_ALL );
+	const [ heightAll, setHeightAll ] = useState( DEFAULT_SPACER_HEIGHT );
 	const [ isResizingLg, setIsResizingLg ] = useState( false );
 	const [ isResizingMd, setIsResizingMd ] = useState( false );
 	const [ isResizingSm, setIsResizingSm ] = useState( false );
@@ -46,8 +46,23 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 
 	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
 	const isShowBlock = fsbConf.showBlock;
+	const defaultValue = fsbConf.defaultValue;
 
 	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
+
+	useEffect( () => {
+		if (
+			heightLg === DEFAULT_SPACER_HEIGHT &&
+			heightMd === DEFAULT_SPACER_HEIGHT &&
+			heightSm === DEFAULT_SPACER_HEIGHT
+		) {
+			setAttributes( {
+				heightLg: defaultValue?.lg ?? DEFAULT_SPACER_HEIGHT,
+				heightMd: defaultValue?.md ?? DEFAULT_SPACER_HEIGHT,
+				heightSm: defaultValue?.sm ?? DEFAULT_SPACER_HEIGHT,
+			} );
+		}
+	}, [] );
 
 	useEffect( () => {
 		if ( heightLg === heightMd && heightMd === heightSm ) {
@@ -143,7 +158,10 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 				</ToolbarGroup>
 			</BlockControls>
 			<InspectorControls>
-				<PanelBody title={ __( 'Spacer settings', 'flexible-spacer-block' ) }>
+				<PanelBody
+					title={ __( 'Spacer settings', 'flexible-spacer-block' ) }
+					className="fsb-flexible-spacer__sidebar"
+				>
 					<RangeControl
 						label={ __( 'Height in pixels (All)', 'flexible-spacer-block' ) }
 						beforeIcon={ <Icon icon={ settings } /> }
@@ -202,6 +220,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 							onChange={ updateIsNegativeSm }
 						/>
 					</div>
+					<HorizontalRule />
 					<ExternalLink href={ settingUrl }>
 						{ __( 'Plugin Setting', 'flexible-spacer-block' ) }
 					</ExternalLink>

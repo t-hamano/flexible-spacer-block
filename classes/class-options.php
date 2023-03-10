@@ -9,7 +9,8 @@ namespace Flexible_Spacer_Block;
 
 class Options {
 
-	private $options;
+	private $breakpoints;
+	private $default_value;
 
 	/**
 	 * Constructor
@@ -46,6 +47,12 @@ class Options {
 
 		register_setting(
 			'flexible-spacer-block-group',
+			'flexible_spacer_block_default_value',
+			array( $this, 'sanitize_default_value' )
+		);
+
+		register_setting(
+			'flexible-spacer-block-group',
 			'flexible_spacer_block_show_block',
 			array( $this, 'sanitize_checkbox' )
 		);
@@ -66,6 +73,14 @@ class Options {
 		);
 
 		add_settings_field(
+			'flexible_spacer_block_default_value_field',
+			__( 'Default Values', 'flexible-spacer-block' ),
+			array( $this, 'flexible_spacer_block_default_value_display_field' ),
+			'flexible-spacer-block-group',
+			'flexible_spacer_block_section'
+		);
+
+		add_settings_field(
 			'flexible_spacer_block_editor_field',
 			__( 'Block Editor Setting', 'flexible-spacer-block' ),
 			array( $this, 'flexible_spacer_block_editor_display_field' ),
@@ -78,7 +93,8 @@ class Options {
 	 * Create option page
 	 */
 	public function create_options_page() {
-		$this->options = get_option( 'flexible_spacer_block_breakpoint' );
+		$this->breakpoints   = get_option( 'flexible_spacer_block_breakpoint' );
+		$this->default_value = get_option( 'flexible_spacer_block_default_value' );
 		?>
 		<div class="wrap">
 			<h1><?php _e( 'Flexible Spacer Block', 'flexible-spacer-block' ); ?></h1>
@@ -103,8 +119,8 @@ class Options {
 	 * Display field (Responsive Setting)
 	 */
 	public function flexible_spacer_block_breakpoint_display_field() {
-		$breakpoint_sm = isset( $this->options['sm'] ) ? $this->options['sm'] : FSB_BREAKPOINT_SM;
-		$breakpoint_md = isset( $this->options['md'] ) ? $this->options['md'] : FSB_BREAKPOINT_MD;
+		$breakpoint_sm = isset( $this->breakpoints['sm'] ) ? $this->breakpoints['sm'] : FSB_BREAKPOINT_SM;
+		$breakpoint_md = isset( $this->breakpoints['md'] ) ? $this->breakpoints['md'] : FSB_BREAKPOINT_MD;
 		?>
 		<div class="fsb-option-breakpoint">
 			<div class="fsb-option-breakpoint__device">
@@ -139,6 +155,51 @@ class Options {
 		<?php
 	}
 
+
+	/**
+	 * Display field (Default Values)
+	 */
+	public function flexible_spacer_block_default_value_display_field() {
+		$default_value_sm = isset( $this->default_value['sm'] ) ? $this->default_value['sm'] : FSB_DEFAULT_SPACER_HEIGHT;
+		$default_value_md = isset( $this->default_value['md'] ) ? $this->default_value['md'] : FSB_DEFAULT_SPACER_HEIGHT;
+		$default_value_lg = isset( $this->default_value['lg'] ) ? $this->default_value['lg'] : FSB_DEFAULT_SPACER_HEIGHT;
+		?>
+		<div class="fsb-option-default-values">
+			<div class="fsb-option-default-values__col">
+				<div class="fsb-option-default-values__device">
+					<svg viewBox="0 0 24 24" width="48" height="48"><path d="M15 4H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm.5 14c0 .3-.2.5-.5.5H9c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h6c.3 0 .5.2.5.5v12zm-4.5-.5h2V16h-2v1.5z"></path></svg>
+					<?php _e( 'Mobile', 'flexible-spacer-block' ); ?>
+				</div>
+				<div class="fsb-option-default-values__input">
+					<input type="number" name="flexible_spacer_block_default_value[sm]" min="<?php echo FSB_MIN_SPACER_HEIGHT; ?>" max="<?php echo FSB_MAX_SPACER_HEIGHT; ?>" value="<?php echo esc_attr( $default_value_sm ); ?>">
+					<span>px</span>
+				</div>
+			</div>
+			<div class="fsb-option-default-values__col">
+				<div class="fsb-option-breakpoint__device">
+					<svg viewBox="0 0 24 24" width="48" height="48"><path d="M17 4H7c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm.5 14c0 .3-.2.5-.5.5H7c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h10c.3 0 .5.2.5.5v12zm-7.5-.5h4V16h-4v1.5z"></path></svg>
+					<?php _e( 'Tablet', 'flexible-spacer-block' ); ?>
+				</div>
+				<div class="fsb-option-default-values__input">
+					<input type="number" name="flexible_spacer_block_default_value[md]" min="<?php echo FSB_MIN_SPACER_HEIGHT; ?>" max="<?php echo FSB_MAX_SPACER_HEIGHT; ?>" value="<?php echo esc_attr( $default_value_md ); ?>">
+					<span>px</span>
+				</div>
+			</div>
+			<div class="fsb-option-default-values__col">
+				<div class="fsb-option-breakpoint__device">
+					<svg viewBox="0 0 24 24" width="48" height="48"><path d="M20.5 16h-.7V8c0-1.1-.9-2-2-2H6.2c-1.1 0-2 .9-2 2v8h-.7c-.8 0-1.5.7-1.5 1.5h20c0-.8-.7-1.5-1.5-1.5zM5.7 8c0-.3.2-.5.5-.5h11.6c.3 0 .5.2.5.5v7.6H5.7V8z"></path></svg>
+					<?php _e( 'Desktop', 'flexible-spacer-block' ); ?>
+				</div>
+				<div class="fsb-option-default-values__input">
+					<input type="number" name="flexible_spacer_block_default_value[lg]" min="<?php echo FSB_MIN_SPACER_HEIGHT; ?>" max="<?php echo FSB_MAX_SPACER_HEIGHT; ?>" value="<?php echo esc_attr( $default_value_lg ); ?>">
+					<span>px</span>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+
 	/**
 	 * Display field (Block Editor Setting)
 	 */
@@ -146,7 +207,7 @@ class Options {
 		?>
 		<fieldset>
 			<label>
-				<input type="checkbox" name="flexible_spacer_block_show_block" value="1" <?php checked( get_option( 'flexible_spacer_block_show_block', false ) ); ?>><?php _e( 'Always show blocks in block editor', 'flexible-spacer-block' ); ?>
+				<input type="checkbox" name="flexible_spacer_block_show_block" value="1" <?php checked( get_option( 'flexible_spacer_block_show_block', false ) ); ?>><?php _e( 'Always show blocks in the block editor', 'flexible-spacer-block' ); ?>
 			</label>
 			<p class="description"><?php _e( 'The block will always be visible even when it is not selected.', 'flexible-spacer-block' ); ?></p>
 		</fieldset>
@@ -160,7 +221,7 @@ class Options {
 	 * @return array
 	 */
 	public function sanitize_breakpoint( $input ) {
-		$this->options = get_option( 'flexible_spacer_block_breakpoint' );
+		$this->breakpoints = get_option( 'flexible_spacer_block_breakpoint' );
 
 		$new_input = array();
 
@@ -171,26 +232,62 @@ class Options {
 			add_settings_error(
 				'flexible-spacer-block-breakpoint',
 				'flexible-spacer-block-breakpoint-null',
-				__( 'Fill in both fields in Responsive Setting.', 'flexible-spacer-block' )
+				__( 'Responsive Setting: Fill in both fields.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
-				'md' => isset( $this->options['md'] ) ? $this->options['md'] : '',
-				'sm' => isset( $this->options['sm'] ) ? $this->options['sm'] : '',
+				'md' => isset( $this->breakpoints['md'] ) ? $this->breakpoints['md'] : FSB_BREAKPOINT_MD,
+				'sm' => isset( $this->breakpoints['sm'] ) ? $this->breakpoints['sm'] : FSB_BREAKPOINT_SM,
 			);
 		} elseif ( $breakpoint_md < $breakpoint_sm ) {
 			add_settings_error(
 				'flexible-spacer-block-breakpoint',
 				'flexible-spacer-block-breakpoint-compare',
-				__( 'The Device Width Setting value in the left field must be equal to or smaller than the value in the right field.', 'flexible-spacer-block' )
+				__( 'Responsive Setting: the screen width value in the left field must be equal to or smaller than the value in the right field.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
-				'md' => isset( $this->options['md'] ) ? $this->options['md'] : '',
-				'sm' => isset( $this->options['sm'] ) ? $this->options['sm'] : '',
+				'md' => isset( $this->breakpoints['md'] ) ? $this->breakpoints['md'] : '',
+				'sm' => isset( $this->breakpoints['sm'] ) ? $this->breakpoints['sm'] : '',
 			);
 		} else {
 			$new_input = array(
 				'md' => min( max( $breakpoint_md, FSB_BREAKPOINT_MIN ), FSB_BREAKPOINT_MAX ),
 				'sm' => min( max( $breakpoint_sm, FSB_BREAKPOINT_MIN ), FSB_BREAKPOINT_MAX ),
+			);
+		}
+		return $new_input;
+	}
+
+	/**
+	 * Sanitizer (default values)
+	 * @param array $input input values.
+	 *
+	 * @return array
+	 */
+	public function sanitize_default_value( $input ) {
+		$this->default_value = get_option( 'flexible_spacer_block_default_value' );
+
+		$new_input = array();
+
+		$default_value_sm = isset( $input['sm'] ) ? absint( $input['sm'] ) : '';
+		$default_value_md = isset( $input['md'] ) ? absint( $input['md'] ) : '';
+		$default_value_lg = isset( $input['lg'] ) ? absint( $input['lg'] ) : '';
+
+		if ( 0 === $default_value_sm || 0 === $default_value_md || 0 === $default_value_lg ) {
+			add_settings_error(
+				'flexible-spacer-block-default-values',
+				'flexible-spacer-block-default-values-null',
+				__( 'Default Value: Fill in all fields.', 'flexible-spacer-block' )
+			);
+			$new_input = array(
+				'sm' => isset( $this->default_value['sm'] ) ? $this->default_value['sm'] : FSB_DEFAULT_SPACER_HEIGHT,
+				'md' => isset( $this->default_value['md'] ) ? $this->default_value['md'] : FSB_DEFAULT_SPACER_HEIGHT,
+				'lg' => isset( $this->default_value['lg'] ) ? $this->default_value['lg'] : FSB_DEFAULT_SPACER_HEIGHT,
+			);
+		} else {
+			$new_input = array(
+				'sm' => min( max( $default_value_sm, FSB_MIN_SPACER_HEIGHT ), FSB_MAX_SPACER_HEIGHT ),
+				'md' => min( max( $default_value_md, FSB_MIN_SPACER_HEIGHT ), FSB_MAX_SPACER_HEIGHT ),
+				'lg' => min( max( $default_value_lg, FSB_MIN_SPACER_HEIGHT ), FSB_MAX_SPACER_HEIGHT ),
 			);
 		}
 		return $new_input;
