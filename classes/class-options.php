@@ -174,8 +174,8 @@ class Options {
 				__( 'Responsive Setting: Fill in both fields.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
-				'md' => isset( $this->options['md'] ) ? $this->options['md'] : '',
-				'sm' => isset( $this->options['sm'] ) ? $this->options['sm'] : '',
+				'md' => isset( $this->options['md'] ) ? $this->options['md'] : FSB_BREAKPOINT_MD,
+				'sm' => isset( $this->options['sm'] ) ? $this->options['sm'] : FSB_BREAKPOINT_SM,
 			);
 		} elseif ( $breakpoint_md < $breakpoint_sm ) {
 			add_settings_error(
