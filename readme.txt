@@ -3,8 +3,8 @@ Contributors: wildworks
 Tags: gutenberg, block, spacer, responsive
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.9
-Tested up to: 6.1
-Stable tag: 1.4.1
+Tested up to: 6.2
+Stable tag: 2.0.0
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -47,6 +47,14 @@ License: CC0 Public Domain
 Source: https://pxhere.com/ja/photo/245
 
 == Changelog ==
+
+= 2.0.0 =
+* Tested to WordPress 6.2
+* Feature: Add default values setting
+* Enhancement: Remove focus style for unit elements on the setting page
+* Enhancement: Improve error messages on the setting page
+* Fix: Responsive Setting value is empty for certain operations
+* Fix: grammer in the setting page
 
 = 1.4.1 =
 * Clean: Remove files not needed for the release
