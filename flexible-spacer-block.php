@@ -30,5 +30,12 @@ const FSB_BREAKPOINT_SM  = 599;
 const FSB_BREAKPOINT_MIN = 200;
 const FSB_BREAKPOINT_MAX = 2000;
 
+// Range of values
+const FSB_MIN_SPACER_HEIGHT = 0;
+const FSB_MAX_SPACER_HEIGHT = 500;
+
+// Default spacer height
+const FSB_DEFAULT_SPACER_HEIGHT = 100;
+
 require_once __DIR__ . '/classes/class-init.php';
 new Flexible_Spacer_Block\Init();

@@ -84,14 +84,20 @@ class Enqueue {
 	 * @return array
 	 */
 	private function create_editor_config() {
-		$breakpoint_defaults = array(
+		$breakpoint_defaults    = array(
 			'md' => FSB_BREAKPOINT_MD,
 			'sm' => FSB_BREAKPOINT_SM,
 		);
+		$default_value_defaults = array(
+			'lg' => FSB_DEFAULT_SPACER_HEIGHT,
+			'md' => FSB_DEFAULT_SPACER_HEIGHT,
+			'sm' => FSB_DEFAULT_SPACER_HEIGHT,
+		);
 
 		$config = array(
-			'breakpoint' => get_option( 'flexible_spacer_block_breakpoint', $breakpoint_defaults ),
-			'showBlock'  => get_option( 'flexible_spacer_block_show_block', false ),
+			'breakpoint'   => get_option( 'flexible_spacer_block_breakpoint', $breakpoint_defaults ),
+			'defaultValue' => get_option( 'flexible_spacer_block_default_value', $default_value_defaults ),
+			'showBlock'    => get_option( 'flexible_spacer_block_show_block', false ),
 		);
 
 		return $config;
