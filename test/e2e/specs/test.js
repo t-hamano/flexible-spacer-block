@@ -13,13 +13,19 @@ import {
 /**
  * Internal dependencies
  */
-import { changeHeight, inputValue, openSidebar, toggleNegativeSpace } from '../helper';
+import {
+	changeHeight,
+	changeHeightUnit,
+	inputValue,
+	openSidebar,
+	toggleNegativeSpace,
+} from '../helper';
 
 const page = global.page;
 
 page.on( 'dialog', async ( dialog ) => await dialog.accept() );
 
-describe( 'Flexible Spacer Block', () => {
+describe( 'Block', () => {
 	beforeEach( async () => {
 		await createNewPost();
 	} );
@@ -33,7 +39,15 @@ describe( 'Flexible Spacer Block', () => {
 	it( 'should change all height', async () => {
 		await insertBlock( 'Flexible Spacer' );
 		await openSidebar();
-		await changeHeight( 'All', '200' );
+		await changeHeight( 'all', '200' );
+
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'should change all height unit', async () => {
+		await insertBlock( 'Flexible Spacer' );
+		await openSidebar();
+		await changeHeightUnit( 'all', 'em' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -41,9 +55,19 @@ describe( 'Flexible Spacer Block', () => {
 	it( 'should change each height', async () => {
 		await insertBlock( 'Flexible Spacer' );
 		await openSidebar();
-		await changeHeight( 'Desktop', '200' );
-		await changeHeight( 'Tablet', '300' );
-		await changeHeight( 'Mobile', '400' );
+		await changeHeight( 'lg', '200' );
+		await changeHeight( 'md', '300' );
+		await changeHeight( 'sm', '400' );
+
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'should change each height unit', async () => {
+		await insertBlock( 'Flexible Spacer' );
+		await openSidebar();
+		await changeHeightUnit( 'lg', '%' );
+		await changeHeightUnit( 'md', 'em' );
+		await changeHeightUnit( 'sm', 'rem' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -51,9 +75,9 @@ describe( 'Flexible Spacer Block', () => {
 	it( 'should apply negative space', async () => {
 		await insertBlock( 'Flexible Spacer' );
 		await openSidebar();
-		await changeHeight( 'Desktop', '200' );
-		await changeHeight( 'Tablet', '300' );
-		await changeHeight( 'Mobile', '400' );
+		await changeHeight( 'lg', '200' );
+		await changeHeight( 'md', '300' );
+		await changeHeight( 'sm', '400' );
 		await toggleNegativeSpace( 'lg' );
 		await toggleNegativeSpace( 'md' );
 		await toggleNegativeSpace( 'sm' );
@@ -61,12 +85,38 @@ describe( 'Flexible Spacer Block', () => {
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
+	it( 'should apply edged value correctly', async () => {
+		await insertBlock( 'Flexible Spacer' );
+		await openSidebar();
+		await changeHeight( 'lg', '0' );
+		await changeHeight( 'md', '' );
+		await changeHeight( 'sm', '0' );
+		await toggleNegativeSpace( 'sm' );
+
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'should be converted to core spacer block', async () => {
+		await insertBlock( 'Flexible Spacer' );
+		await transformBlockTo( 'Spacer' );
+
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
 	it( 'should be converted to core spacer block by keeping desktop height', async () => {
 		await insertBlock( 'Flexible Spacer' );
 		await openSidebar();
-		await changeHeight( 'Desktop', '200' );
+		await changeHeight( 'lg', '200' );
+		await changeHeightUnit( 'lg', 'em' );
 		await toggleNegativeSpace( 'lg' );
 		await transformBlockTo( 'Spacer' );
+
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'should be converted to flexible spacer block', async () => {
+		await insertBlock( 'Spacer' );
+		await transformBlockTo( 'Flexible Spacer' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -79,63 +129,102 @@ describe( 'Flexible Spacer Block', () => {
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
-
-	it( 'should be converted to flexible spacer block by converting height to px', async () => {
-		await insertBlock( 'Spacer' );
-		await openSidebar();
-		const inputSelector = '.block-editor-block-inspector input[type="number"]';
-		await inputValue( inputSelector, '50' );
-		await transformBlockTo( 'Flexible Spacer' );
-
-		expect( await getEditedPostContent() ).toMatchSnapshot();
-	} );
 } );
 
 describe( 'Setting', () => {
-	it( 'should be saved', async () => {
-		await switchUserToAdmin();
-		const smSelector = `input[name="flexible_spacer_block_breakpoint[sm]"]`;
-		const mdSelector = `input[name="flexible_spacer_block_breakpoint[md]"]`;
-		const showBlocksSelector = `input[name="flexible_spacer_block_show_block"]`;
-		const submitButton = 'input[id="submit"]';
+	describe( 'breakpoints', () => {
+		it( 'should be saved', async () => {
+			await switchUserToAdmin();
+			const smSelector = 'input[name="flexible_spacer_block_breakpoint[sm]"]';
+			const mdSelector = 'input[name="flexible_spacer_block_breakpoint[md]"]';
+			const submitButton = 'input[id="submit"]';
 
-		await visitAdminPage( 'options-general.php', 'page=flexible-spacer-block-option' );
-		await inputValue( smSelector, 500 );
-		await inputValue( mdSelector, 1000 );
-		await page.click( showBlocksSelector );
-		await page.click( submitButton );
+			await visitAdminPage( 'options-general.php', 'page=flexible-spacer-block-option' );
+			await inputValue( smSelector, 500 );
+			await inputValue( mdSelector, 1000 );
+			await page.click( submitButton );
 
-		await page.waitForSelector( smSelector );
-		await page.waitForSelector( mdSelector );
-		const smValue = await page.$eval( smSelector, ( element ) => element.value );
-		const mdValue = await page.$eval( mdSelector, ( element ) => element.value );
-		const blockSelectorValue = await page.$eval( showBlocksSelector, ( element ) => element.value );
+			await page.waitForSelector( smSelector );
+			await page.waitForSelector( mdSelector );
+			const smValue = await page.$eval( smSelector, ( element ) => element.value );
+			const mdValue = await page.$eval( mdSelector, ( element ) => element.value );
 
-		expect( smValue ).toBe( '500' );
-		expect( mdValue ).toBe( '1000' );
-		expect( blockSelectorValue ).toBe( '1' );
+			expect( smValue ).toBe( '500' );
+			expect( mdValue ).toBe( '1000' );
+		} );
+
+		it( 'should show error if the values are invalid', async () => {
+			await switchUserToAdmin();
+			const smSelector = 'input[name="flexible_spacer_block_breakpoint[sm]"]';
+			const mdSelector = 'input[name="flexible_spacer_block_breakpoint[md]"]';
+			const submitButton = 'input[id="submit"]';
+
+			await visitAdminPage( 'options-general.php', 'page=flexible-spacer-block-option' );
+
+			await inputValue( smSelector, '' );
+			await inputValue( mdSelector, '' );
+			await page.click( submitButton );
+
+			// Null values
+			await expect( page ).toMatchElement( '#setting-error-flexible-spacer-block-breakpoint-null' );
+
+			await inputValue( smSelector, 1000 );
+			await inputValue( mdSelector, 500 );
+			await page.click( submitButton );
+
+			// The screen width value in the left field is larger than the value in the right field
+			await expect( page ).toMatchElement(
+				'#setting-error-flexible-spacer-block-breakpoint-compare'
+			);
+		} );
 	} );
 
-	it( 'should be saved if the values are invalid', async () => {
-		await switchUserToAdmin();
-		const smSelector = `input[name="flexible_spacer_block_breakpoint[sm]"]`;
-		const mdSelector = `input[name="flexible_spacer_block_breakpoint[md]"]`;
-		const submitButton = 'input[id="submit"]';
+	describe( 'default values', () => {
+		it( 'should be saved', async () => {
+			await switchUserToAdmin();
+			const smSelector = 'input[name="flexible_spacer_block_default_value[sm]"]';
+			const mdSelector = 'input[name="flexible_spacer_block_default_value[md]"]';
+			const smUnitSelector = 'select[name="flexible_spacer_block_default_value[sm_unit]"]';
+			const mdUnitSelector = 'select[name="flexible_spacer_block_default_value[md_unit]"]';
+			const submitButton = 'input[id="submit"]';
 
-		await visitAdminPage( 'options-general.php', 'page=flexible-spacer-block-option' );
+			await visitAdminPage( 'options-general.php', 'page=flexible-spacer-block-option' );
+			await inputValue( smSelector, 300 );
+			await inputValue( mdSelector, 500 );
+			await page.select( smUnitSelector, '%' );
+			await page.select( mdUnitSelector, 'em' );
+			await page.click( submitButton );
 
-		await inputValue( smSelector, '' );
-		await inputValue( mdSelector, '' );
-		await page.click( submitButton );
+			await page.waitForSelector( smSelector );
+			await page.waitForSelector( mdSelector );
+			const smValue = await page.$eval( smSelector, ( element ) => element.value );
+			const mdValue = await page.$eval( mdSelector, ( element ) => element.value );
+			const smUnitValue = await page.$eval( smUnitSelector, ( element ) => element.value );
+			const mdUnitValue = await page.$eval( mdUnitSelector, ( element ) => element.value );
 
-		await expect( page ).toMatchElement( '#setting-error-flexible-spacer-block-breakpoint-null' );
+			expect( smValue ).toBe( '300' );
+			expect( mdValue ).toBe( '500' );
+			expect( smUnitValue ).toBe( '%' );
+			expect( mdUnitValue ).toBe( 'em' );
+		} );
+	} );
 
-		await inputValue( smSelector, 1000 );
-		await inputValue( mdSelector, 500 );
-		await page.click( submitButton );
+	describe( 'block editor setting', () => {
+		it( 'should be saved', async () => {
+			await switchUserToAdmin();
+			const showBlocksSelector = `input[name="flexible_spacer_block_show_block"]`;
+			const submitButton = 'input[id="submit"]';
 
-		await expect( page ).toMatchElement(
-			'#setting-error-flexible-spacer-block-breakpoint-compare'
-		);
+			await visitAdminPage( 'options-general.php', 'page=flexible-spacer-block-option' );
+			await page.click( showBlocksSelector );
+			await page.click( submitButton );
+
+			const blockSelectorValue = await page.$eval(
+				showBlocksSelector,
+				( element ) => element.value
+			);
+
+			expect( blockSelectorValue ).toBe( '1' );
+		} );
 	} );
 } );

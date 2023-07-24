@@ -33,10 +33,12 @@ import { addQueryArgs } from '@wordpress/url';
  */
 import { responsive } from './icons';
 
-const MIN_SPACER_HEIGHT = 0;
-const MAX_SPACER_HEIGHT = 500;
-const DEFAULT_SPACER_HEIGHT = '100';
-const DEFAULT_SPACER_HEIGHT_UNIT = 'px';
+import {
+	MIN_SPACER_HEIGHT,
+	MAX_SPACER_HEIGHT,
+	DEFAULT_SPACER_HEIGHT,
+	DEFAULT_SPACER_HEIGHT_UNIT,
+} from './constants';
 
 export default function Edit( { attributes, isSelected, setAttributes, toggleSelection } ) {
 	const [ heightAll, setHeightAll ] = useState( DEFAULT_SPACER_HEIGHT.DEFAULT_SPACER_HEIGHT_UNIT );
@@ -61,9 +63,9 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 	// Apply default values from the settings page when inserting a block.
 	useEffect( () => {
 		if (
-			heightLg === DEFAULT_SPACER_HEIGHT + DEFAULT_SPACER_HEIGHT_UNIT &&
-			heightMd === DEFAULT_SPACER_HEIGHT + DEFAULT_SPACER_HEIGHT_UNIT &&
-			heightSm === DEFAULT_SPACER_HEIGHT + DEFAULT_SPACER_HEIGHT_UNIT
+			heightLg === `${ DEFAULT_SPACER_HEIGHT }${ DEFAULT_SPACER_HEIGHT_UNIT }` &&
+			heightMd === `${ DEFAULT_SPACER_HEIGHT }${ DEFAULT_SPACER_HEIGHT_UNIT }` &&
+			heightSm === `${ DEFAULT_SPACER_HEIGHT }${ DEFAULT_SPACER_HEIGHT_UNIT }`
 		) {
 			setAttributes( {
 				heightLg: defaultValue.lg + defaultValue.lg_unit,

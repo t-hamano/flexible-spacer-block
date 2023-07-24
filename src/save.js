@@ -13,18 +13,38 @@ const defaultValue = fsbConf.defaultValue;
 export default function save( { attributes, className } ) {
 	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
 
-	const styleLg =
-		heightLg !== undefined
-			? { marginBottom: isNegativeLg ? `-${ heightLg }` : heightLg }
-			: { marginBottom: `${ defaultValue.lg }px` };
-	const styleMd =
-		heightMd !== undefined
-			? { marginBottom: isNegativeMd ? `-${ heightMd }` : heightMd }
-			: { marginBottom: `${ defaultValue.md }px` };
-	const styleSm =
-		heightSm !== undefined
-			? { marginBottom: isNegativeSm ? `-${ heightSm }` : heightSm }
-			: { marginBottom: `${ defaultValue.sm }px` };
+	const styleLg = isNegativeLg
+		? {
+				marginBottom:
+					heightLg === undefined
+						? `-${ defaultValue.lg }${ defaultValue.lg_unit }`
+						: `-${ heightLg }`,
+		  }
+		: {
+				height: heightLg === undefined ? `${ defaultValue.lg }${ defaultValue.lg_unit }` : heightLg,
+		  };
+
+	const styleMd = isNegativeMd
+		? {
+				marginBottom:
+					heightMd === undefined
+						? `-${ defaultValue.md }${ defaultValue.md_unit }`
+						: `-${ heightMd }`,
+		  }
+		: {
+				height: heightMd === undefined ? `${ defaultValue.md }${ defaultValue.md_unit }` : heightMd,
+		  };
+
+	const styleSm = isNegativeSm
+		? {
+				marginBottom:
+					heightSm === undefined
+						? `-${ defaultValue.sm }${ defaultValue.sm_unit }`
+						: `-${ heightSm }`,
+		  }
+		: {
+				height: heightSm === undefined ? `${ defaultValue.sm }${ defaultValue.sm_unit }` : heightSm,
+		  };
 
 	const blockProps = useBlockProps.save( {
 		'aria-hidden': true,
