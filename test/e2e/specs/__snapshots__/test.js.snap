@@ -6,8 +6,8 @@ exports[`Block should apply negative space 1`] = `
 <!-- /wp:fsb/flexible-spacer -->"
 `;
 
-exports[`Block should be converted to core table block by keeping desktop height 1`] = `
-"<!-- wp:spacer {"height":200} -->
+exports[`Block should be converted to core spacer block by keeping desktop height 1`] = `
+"<!-- wp:spacer {"height":"200px"} -->
 <div style="height:200px" aria-hidden="true" class="wp-block-spacer"></div>
 <!-- /wp:spacer -->"
 `;

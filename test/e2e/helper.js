@@ -26,7 +26,7 @@ export const changeHeight = async ( label, value ) => {
 	await page.keyboard.type( String( value ) );
 };
 
-export const toggleNegativeSpace = async ( label ) => {
-	const selector = `#flexible_spacer_block_height_${ label.toLowerCase() } input[type="checkbox"]`;
+export const toggleNegativeSpace = async ( slug ) => {
+	const selector = `.fsb-flexible-spacer__sidebar-${ slug } input[type="checkbox"]`;
 	await page.click( selector );
 };

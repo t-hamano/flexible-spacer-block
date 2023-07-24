@@ -54,9 +54,9 @@ describe( 'Block', () => {
 		await changeHeight( 'Desktop', '200' );
 		await changeHeight( 'Tablet', '300' );
 		await changeHeight( 'Mobile', '400' );
-		await toggleNegativeSpace( 'Desktop' );
-		await toggleNegativeSpace( 'Tablet' );
-		await toggleNegativeSpace( 'Mobile' );
+		await toggleNegativeSpace( 'lg' );
+		await toggleNegativeSpace( 'md' );
+		await toggleNegativeSpace( 'sm' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -65,7 +65,7 @@ describe( 'Block', () => {
 		await insertBlock( 'Flexible Spacer' );
 		await openSidebar();
 		await changeHeight( 'Desktop', '200' );
-		await toggleNegativeSpace( 'Desktop' );
+		await toggleNegativeSpace( 'lg' );
 		await transformBlockTo( 'Spacer' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
@@ -74,9 +74,7 @@ describe( 'Block', () => {
 	it( 'should be converted to flexible spacer block by keeping height', async () => {
 		await insertBlock( 'Spacer' );
 		await openSidebar();
-		const inputSelector = '.block-editor-block-inspector input[type="number"]';
-
-		await inputValue( inputSelector, '200' );
+		await inputValue( '.block-editor-block-inspector input[type="number"]', '200' );
 		await transformBlockTo( 'Flexible Spacer' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
@@ -86,13 +84,6 @@ describe( 'Block', () => {
 		await insertBlock( 'Spacer' );
 		await openSidebar();
 		const inputSelector = '.block-editor-block-inspector input[type="number"]';
-
-		// WordPress 5.9 has no units for spacer block.
-		try {
-			const unitSelector = `select[aria-label="Select unit"]`;
-			await page.select( unitSelector, 'em' );
-		} catch {}
-
 		await inputValue( inputSelector, '50' );
 		await transformBlockTo( 'Flexible Spacer' );
 

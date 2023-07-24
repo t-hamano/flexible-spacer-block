@@ -146,12 +146,14 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 		{
 			label: __( 'Height in pixels (All)', 'flexible-spacer-block' ),
 			icon: settings,
+			slug: 'all',
 			value: heightAll,
 			onChange: updateHeightAll,
 		},
 		{
 			label: __( 'Height in pixels (Desktop)', 'flexible-spacer-block' ),
 			icon: desktop,
+			slug: 'lg',
 			value: heightLg,
 			onChange: updateHeightLg,
 			isNegative: isNegativeLg,
@@ -160,6 +162,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 		{
 			label: __( 'Height in pixels (Tablet)', 'flexible-spacer-block' ),
 			icon: tablet,
+			slug: 'md',
 			value: heightMd,
 			onChange: updateHeightMd,
 			isNegative: isNegativeMd,
@@ -168,6 +171,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 		{
 			label: __( 'Height in pixels (Mobile)', 'flexible-spacer-block' ),
 			icon: mobile,
+			slug: 'sm',
 			value: heightSm,
 			onChange: updateHeightSm,
 			isNegative: isNegativeSm,
@@ -230,7 +234,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 					className="fsb-flexible-spacer__sidebar"
 				>
 					{ SPACER_CONTROLS.map( ( control, index ) => (
-						<Fragment key={ index }>
+						<div key={ index } className={ `fsb-flexible-spacer__sidebar-${ control.slug }` }>
 							<RangeControl
 								label={ control.label }
 								beforeIcon={ <Icon icon={ control.icon } /> }
@@ -247,7 +251,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 								/>
 							) }
 							<HorizontalRule />
-						</Fragment>
+						</div>
 					) ) }
 					<ExternalLink href={ settingUrl }>
 						{ __( 'Plugin Setting', 'flexible-spacer-block' ) }
