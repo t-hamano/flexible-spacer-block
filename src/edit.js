@@ -175,6 +175,39 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 		},
 	];
 
+	const SPACER_DEVICES = [
+		{
+			label: __( 'Mobile', 'flexible-spacer-block' ),
+			slug: 'sm',
+			icon: mobile,
+			isNegative: isNegativeSm,
+			height: heightSm,
+			onResizeStart: handleOnResizeStartSm,
+			onResizeStop: handleOnResizeStopSm,
+			isResizing: isResizingSm,
+		},
+		isEnableMd && {
+			label: __( 'Tablet', 'flexible-spacer-block' ),
+			slug: 'md',
+			icon: tablet,
+			isNegative: isNegativeMd,
+			height: heightMd,
+			onResizeStart: handleOnResizeStartMd,
+			onResizeStop: handleOnResizeStopMd,
+			isResizing: isResizingMd,
+		},
+		{
+			label: __( 'Desktop', 'flexible-spacer-block' ),
+			slug: 'lg',
+			icon: desktop,
+			isNegative: isNegativeLg,
+			height: heightLg,
+			onResizeStart: handleOnResizeStartLg,
+			onResizeStop: handleOnResizeStopLg,
+			isResizing: isResizingLg,
+		},
+	].filter( Boolean );
+
 	return (
 		<>
 			<BlockControls>
@@ -233,51 +266,21 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 							</div>
 						) }
 					</div>
-					<div className="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm">
-						<div className="fsb-flexible-spacer__device-ttl">
-							<Icon icon={ mobile } />
-							{ __( 'Mobile', 'flexible-spacer-block' ) }
-						</div>
-						<ResizableBox
-							className={ classnames( {
-								'is-selected': isSelected,
-								'is-negative': !! isNegativeSm,
-							} ) }
-							size={ { height: heightSm } }
-							minHeight={ MIN_SPACER_HEIGHT }
-							enable={ {
-								top: false,
-								right: false,
-								bottom: true,
-								left: false,
-								topRight: false,
-								bottomRight: false,
-								bottomLeft: false,
-								topLeft: false,
-							} }
-							onResizeStart={ handleOnResizeStartSm }
-							onResizeStop={ handleOnResizeStopSm }
-							showHandle={ isSelected }
-							__experimentalShowTooltip={ true }
-							__experimentalTooltipProps={ {
-								axis: 'y',
-								position: 'bottom',
-								isVisible: isResizingSm,
-							} }
-						/>
-					</div>
-					{ isEnableMd && (
-						<div className="fsb-flexible-spacer__device fsb-flexible-spacer__device--md">
+					{ SPACER_DEVICES.map( ( device, index ) => (
+						<div
+							key={ index }
+							className={ `fsb-flexible-spacer__device fsb-flexible-spacer__device--${ device.slug }` }
+						>
 							<div className="fsb-flexible-spacer__device-ttl">
-								<Icon icon={ tablet } />
-								{ __( 'Tablet', 'flexible-spacer-block' ) }
+								<Icon icon={ device.icon } />
+								{ device.label }
 							</div>
 							<ResizableBox
 								className={ classnames( {
 									'is-selected': isSelected,
-									'is-negative': !! isNegativeMd,
+									'is-negative': !! device.isNegative,
 								} ) }
-								size={ { height: heightMd } }
+								size={ { height: device.height } }
 								minHeight={ MIN_SPACER_HEIGHT }
 								enable={ {
 									top: false,
@@ -289,51 +292,18 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 									bottomLeft: false,
 									topLeft: false,
 								} }
-								onResizeStart={ handleOnResizeStartMd }
-								onResizeStop={ handleOnResizeStopMd }
+								onResizeStart={ device.onResizeStart }
+								onResizeStop={ device.onResizeStop }
 								showHandle={ isSelected }
 								__experimentalShowTooltip={ true }
 								__experimentalTooltipProps={ {
 									axis: 'y',
 									position: 'bottom',
-									isVisible: isResizingMd,
+									isVisible: device.isResizing,
 								} }
 							/>
 						</div>
-					) }
-					<div className="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg">
-						<div className="fsb-flexible-spacer__device-ttl">
-							<Icon icon={ desktop } />
-							{ __( 'Desktop', 'flexible-spacer-block' ) }
-						</div>
-						<ResizableBox
-							className={ classnames( {
-								'is-selected': isSelected,
-								'is-negative': !! isNegativeLg,
-							} ) }
-							size={ { height: heightLg } }
-							minHeight={ MIN_SPACER_HEIGHT }
-							enable={ {
-								top: false,
-								right: false,
-								bottom: true,
-								left: false,
-								topRight: false,
-								bottomRight: false,
-								bottomLeft: false,
-								topLeft: false,
-							} }
-							onResizeStart={ handleOnResizeStartLg }
-							onResizeStop={ handleOnResizeStopLg }
-							showHandle={ isSelected }
-							__experimentalShowTooltip={ true }
-							__experimentalTooltipProps={ {
-								axis: 'y',
-								position: 'bottom',
-								isVisible: isResizingLg,
-							} }
-						/>
-					</div>
+					) ) }
 				</div>
 			</View>
 		</>
