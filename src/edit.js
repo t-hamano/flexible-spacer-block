@@ -18,6 +18,10 @@ import {
 	ExternalLink,
 	ToolbarGroup,
 	ToolbarButton,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalUnitControl as UnitControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { View } from '@wordpress/primitives';
@@ -29,15 +33,21 @@ import { addQueryArgs } from '@wordpress/url';
  */
 import { responsive } from './icons';
 
-const MIN_SPACER_HEIGHT = 0;
-const MAX_SPACER_HEIGHT = 500;
-const DEFAULT_SPACER_HEIGHT = 100;
+import {
+	MIN_SPACER_HEIGHT,
+	MAX_SPACER_HEIGHT,
+	DEFAULT_SPACER_HEIGHT,
+	DEFAULT_SPACER_HEIGHT_UNIT,
+} from './constants';
 
 export default function Edit( { attributes, isSelected, setAttributes, toggleSelection } ) {
-	const [ heightAll, setHeightAll ] = useState( DEFAULT_SPACER_HEIGHT );
+	const [ heightAll, setHeightAll ] = useState( DEFAULT_SPACER_HEIGHT.DEFAULT_SPACER_HEIGHT_UNIT );
 	const [ isResizingLg, setIsResizingLg ] = useState( false );
 	const [ isResizingMd, setIsResizingMd ] = useState( false );
 	const [ isResizingSm, setIsResizingSm ] = useState( false );
+	const [ temporaryWidthLg, setTemporaryWidthLg ] = useState( null );
+	const [ temporaryWidthMd, setTemporaryWidthMd ] = useState( null );
+	const [ temporaryWidthSm, setTemporaryWidthSm ] = useState( null );
 
 	const isResponsive = useSelect( ( select ) =>
 		select( 'flexible-spacer-block' ).getIsResponsive()
@@ -50,18 +60,20 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 
 	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
 
+	// Apply default values from the settings page when inserting a block.
 	useEffect( () => {
 		if (
-			heightLg === DEFAULT_SPACER_HEIGHT &&
-			heightMd === DEFAULT_SPACER_HEIGHT &&
-			heightSm === DEFAULT_SPACER_HEIGHT
+			heightLg === `${ DEFAULT_SPACER_HEIGHT }${ DEFAULT_SPACER_HEIGHT_UNIT }` &&
+			heightMd === `${ DEFAULT_SPACER_HEIGHT }${ DEFAULT_SPACER_HEIGHT_UNIT }` &&
+			heightSm === `${ DEFAULT_SPACER_HEIGHT }${ DEFAULT_SPACER_HEIGHT_UNIT }`
 		) {
 			setAttributes( {
-				heightLg: defaultValue?.lg ?? DEFAULT_SPACER_HEIGHT,
-				heightMd: defaultValue?.md ?? DEFAULT_SPACER_HEIGHT,
-				heightSm: defaultValue?.sm ?? DEFAULT_SPACER_HEIGHT,
+				heightLg: defaultValue.lg + defaultValue.lg_unit,
+				heightMd: defaultValue.md + defaultValue.md_unit,
+				heightSm: defaultValue.sm + defaultValue.sm_unit,
 			} );
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	useEffect( () => {
@@ -81,65 +93,135 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 		} ),
 	} );
 
-	const updateHeightAll = ( value ) => {
+	function getUpdatedHeight( currentValue, newValue ) {
+		if ( ! newValue ) {
+			return undefined;
+		}
+
+		const [ newParsedQuantity, newParsedUnit ] = parseQuantityAndUnitFromRawValue( newValue );
+		const [ , currentParsedUnit ] = parseQuantityAndUnitFromRawValue( currentValue );
+		const newUnit = newParsedUnit || currentParsedUnit || 'px';
+		return newParsedQuantity + newUnit;
+	}
+
+	const onChangeHeightAll = ( currentValue, newValue ) => {
+		const updatedHeight = getUpdatedHeight( currentValue, newValue );
 		setAttributes( {
-			heightLg: value,
-			heightMd: value,
-			heightSm: value,
+			heightLg: updatedHeight,
+			heightMd: updatedHeight,
+			heightSm: updatedHeight,
 		} );
-		setHeightAll( value );
+		setHeightAll( updatedHeight );
 	};
 
-	const updateHeightLg = ( value ) => {
-		setAttributes( { heightLg: value } );
+	const onChangeHeightLg = ( currentValue, newValue ) => {
+		setAttributes( { heightLg: getUpdatedHeight( currentValue, newValue ) } );
 		if ( ! isEnableMd ) {
-			setAttributes( { heightMd: value } );
+			setAttributes( { heightMd: getUpdatedHeight( currentValue, newValue ) } );
 		}
-	};
-	const updateHeightMd = ( value ) => setAttributes( { heightMd: value } );
-	const updateHeightSm = ( value ) => setAttributes( { heightSm: value } );
-
-	const updateIsNegativeLg = ( value ) => {
-		setAttributes( { isNegativeLg: value } );
-		if ( ! isEnableMd ) {
-			setAttributes( { isNegativeMd: value } );
-		}
-	};
-	const updateIsNegativeMd = ( value ) => setAttributes( { isNegativeMd: value } );
-	const updateIsNegativeSm = ( value ) => setAttributes( { isNegativeSm: value } );
-
-	const handleOnResizeStartLg = () => {
-		setIsResizingLg( true );
-		toggleSelection( false );
+		setTemporaryWidthLg( null );
 	};
 
-	const handleOnResizeStartMd = () => {
-		setIsResizingMd( true );
-		toggleSelection( false );
+	const onChangeHeightMd = ( currentValue, newValue ) => {
+		setAttributes( { heightMd: getUpdatedHeight( currentValue, newValue ) } );
+		setTemporaryWidthMd( null );
 	};
 
-	const handleOnResizeStartSm = () => {
-		setIsResizingSm( true );
-		toggleSelection( false );
+	const onChangeHeightSm = ( currentValue, newValue ) => {
+		setAttributes( { heightSm: getUpdatedHeight( currentValue, newValue ) } );
+		setTemporaryWidthSm( null );
 	};
 
-	const handleOnResizeStopLg = ( event, direction, elt, delta ) => {
-		const spacerHeightLg = Math.min( parseInt( heightLg + delta.height, 10 ), MAX_SPACER_HEIGHT );
-		updateHeightLg( spacerHeightLg );
-		setIsResizingLg( false );
-	};
+	const SPACER_CONTROLS = [
+		{
+			label: __( 'Height (All)', 'flexible-spacer-block' ),
+			icon: settings,
+			slug: 'all',
+			value: heightAll,
+			quantity: parseQuantityAndUnitFromRawValue( heightAll )[ 0 ],
+			onChange: ( value ) => onChangeHeightAll( heightAll, value ),
+		},
+		{
+			label: __( 'Height (Desktop)', 'flexible-spacer-block' ),
+			icon: desktop,
+			slug: 'lg',
+			value: heightLg,
+			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthLg || heightLg )[ 0 ],
+			onChange: ( value ) => onChangeHeightLg( heightLg, value ),
+			isNegative: isNegativeLg,
+			onNegativeChange: ( value ) => {
+				setAttributes( { isNegativeLg: value } );
+				if ( ! isEnableMd ) {
+					setAttributes( { isNegativeMd: value } );
+				}
+			},
+		},
+		{
+			label: __( 'Height (Tablet)', 'flexible-spacer-block' ),
+			icon: tablet,
+			slug: 'md',
+			value: heightMd,
+			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthMd || heightMd )[ 0 ],
+			onChange: ( value ) => onChangeHeightMd( heightMd, value ),
+			isNegative: isNegativeMd,
+			onNegativeChange: ( value ) => setAttributes( { isNegativeMd: value } ),
+		},
+		{
+			label: __( 'Height (Mobile)', 'flexible-spacer-block' ),
+			icon: mobile,
+			slug: 'sm',
+			value: heightSm,
+			quantity: parseQuantityAndUnitFromRawValue( heightSm )[ 0 ],
+			onChange: ( value ) => onChangeHeightSm( temporaryWidthSm || heightSm, value ),
+			isNegative: isNegativeSm,
+			onNegativeChange: ( value ) => setAttributes( { isNegativeSm: value } ),
+		},
+	];
 
-	const handleOnResizeStopMd = ( event, direction, elt, delta ) => {
-		const spacerHeightMd = Math.min( parseInt( heightMd + delta.height, 10 ), MAX_SPACER_HEIGHT );
-		updateHeightMd( spacerHeightMd );
-		setIsResizingMd( false );
-	};
-
-	const handleOnResizeStopSm = ( event, direction, elt, delta ) => {
-		const spacerHeightSm = Math.min( parseInt( heightSm + delta.height, 10 ), MAX_SPACER_HEIGHT );
-		updateHeightSm( spacerHeightSm );
-		setIsResizingSm( false );
-	};
+	const SPACER_DEVICES = [
+		{
+			label: __( 'Mobile', 'flexible-spacer-block' ),
+			slug: 'sm',
+			icon: mobile,
+			isNegative: isNegativeSm,
+			height: heightSm || defaultValue.sm,
+			onResizeStart: () => toggleSelection( false ),
+			onResize: () => setIsResizingSm( true ),
+			onResizeStop: ( event, direction, elt ) => {
+				onChangeHeightSm( undefined, `${ elt.clientHeight }px` );
+				setIsResizingSm( false );
+			},
+			isResizing: isResizingSm,
+		},
+		isEnableMd && {
+			label: __( 'Tablet', 'flexible-spacer-block' ),
+			slug: 'md',
+			icon: tablet,
+			isNegative: isNegativeMd,
+			height: heightMd || defaultValue.md,
+			onResizeStart: () => toggleSelection( false ),
+			onResize: () => setIsResizingMd( true ),
+			onResizeStop: ( event, direction, elt ) => {
+				onChangeHeightMd( undefined, `${ elt.clientHeight }px` );
+				setIsResizingMd( false );
+			},
+			isResizing: isResizingMd,
+		},
+		{
+			label: __( 'Desktop', 'flexible-spacer-block' ),
+			slug: 'lg',
+			icon: desktop,
+			isNegative: isNegativeLg,
+			height: heightLg || defaultValue.lg,
+			onResizeStart: () => toggleSelection( false ),
+			onResize: () => setIsResizingLg( true ),
+			onResizeStop: ( event, direction, elt ) => {
+				onChangeHeightLg( undefined, `${ elt.clientHeight }px` );
+				setIsResizingLg( false );
+			},
+			isResizing: isResizingLg,
+		},
+	].filter( Boolean );
 
 	return (
 		<>
@@ -162,65 +244,32 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 					title={ __( 'Spacer settings', 'flexible-spacer-block' ) }
 					className="fsb-flexible-spacer__sidebar"
 				>
-					<RangeControl
-						label={ __( 'Height in pixels (All)', 'flexible-spacer-block' ) }
-						beforeIcon={ <Icon icon={ settings } /> }
-						min={ MIN_SPACER_HEIGHT }
-						max={ Math.max( MAX_SPACER_HEIGHT, heightAll ) }
-						value={ heightAll }
-						onChange={ updateHeightAll }
-					/>
-					<HorizontalRule />
-					<div id="flexible_spacer_block_height_desktop">
-						<RangeControl
-							label={ __( 'Height in pixels (Desktop)', 'flexible-spacer-block' ) }
-							beforeIcon={ <Icon icon={ desktop } /> }
-							min={ MIN_SPACER_HEIGHT }
-							max={ Math.max( MAX_SPACER_HEIGHT, heightLg ) }
-							value={ heightLg }
-							onChange={ updateHeightLg }
-						/>
-						<ToggleControl
-							label={ __( 'Negative space', 'flexible-spacer-block' ) }
-							checked={ isNegativeLg }
-							onChange={ updateIsNegativeLg }
-						/>
-					</div>
-					<HorizontalRule />
-					{ isEnableMd && (
-						<div id="flexible_spacer_block_height_tablet">
+					{ SPACER_CONTROLS.map( ( control, index ) => (
+						<div key={ index } className={ `fsb-flexible-spacer__sidebar-${ control.slug }` }>
 							<RangeControl
-								label={ __( 'Height in pixels (Tablet)', 'flexible-spacer-block' ) }
-								beforeIcon={ <Icon icon={ tablet } /> }
+								label={ control.label }
+								beforeIcon={ <Icon icon={ control.icon } /> }
 								min={ MIN_SPACER_HEIGHT }
-								max={ Math.max( MAX_SPACER_HEIGHT, heightMd ) }
-								value={ heightMd }
-								onChange={ updateHeightMd }
+								max={ MAX_SPACER_HEIGHT }
+								value={ control.quantity }
+								withInputField={ false }
+								onChange={ control.onChange }
 							/>
-							<ToggleControl
-								label={ __( 'Negative space', 'flexible-spacer-block' ) }
-								checked={ isNegativeMd }
-								onChange={ updateIsNegativeMd }
+							<UnitControl
+								value={ control.value }
+								min={ MIN_SPACER_HEIGHT }
+								onChange={ control.onChange }
 							/>
+							{ control.onNegativeChange && (
+								<ToggleControl
+									label={ __( 'Negative space', 'flexible-spacer-block' ) }
+									checked={ control.isNegative }
+									onChange={ control.onNegativeChange }
+								/>
+							) }
 							<HorizontalRule />
 						</div>
-					) }
-					<div id="flexible_spacer_block_height_mobile">
-						<RangeControl
-							label={ __( 'Height in pixels (Mobile)', 'flexible-spacer-block' ) }
-							beforeIcon={ <Icon icon={ mobile } /> }
-							min={ MIN_SPACER_HEIGHT }
-							max={ Math.max( MAX_SPACER_HEIGHT, heightSm ) }
-							value={ heightSm }
-							onChange={ updateHeightSm }
-						/>
-						<ToggleControl
-							label={ __( 'Negative space', 'flexible-spacer-block' ) }
-							checked={ isNegativeSm }
-							onChange={ updateIsNegativeSm }
-						/>
-					</div>
-					<HorizontalRule />
+					) ) }
 					<ExternalLink href={ settingUrl }>
 						{ __( 'Plugin Setting', 'flexible-spacer-block' ) }
 					</ExternalLink>
@@ -238,107 +287,47 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 							</div>
 						) }
 					</div>
-					<div className="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm">
-						<div className="fsb-flexible-spacer__device-ttl">
-							<Icon icon={ mobile } />
-							{ __( 'Mobile', 'flexible-spacer-block' ) }
-						</div>
-						<ResizableBox
-							className={ classnames( {
-								'is-selected': isSelected,
-								'is-negative': !! isNegativeSm,
-							} ) }
-							size={ { height: heightSm } }
-							minHeight={ MIN_SPACER_HEIGHT }
-							enable={ {
-								top: false,
-								right: false,
-								bottom: true,
-								left: false,
-								topRight: false,
-								bottomRight: false,
-								bottomLeft: false,
-								topLeft: false,
-							} }
-							onResizeStart={ handleOnResizeStartSm }
-							onResizeStop={ handleOnResizeStopSm }
-							showHandle={ isSelected }
-							__experimentalShowTooltip={ true }
-							__experimentalTooltipProps={ {
-								axis: 'y',
-								position: 'bottom',
-								isVisible: isResizingSm,
-							} }
-						/>
-					</div>
-					{ isEnableMd && (
-						<div className="fsb-flexible-spacer__device fsb-flexible-spacer__device--md">
+					{ SPACER_DEVICES.map( ( device, index ) => (
+						<div
+							key={ index }
+							className={ `fsb-flexible-spacer__device fsb-flexible-spacer__device--${ device.slug }` }
+						>
 							<div className="fsb-flexible-spacer__device-ttl">
-								<Icon icon={ tablet } />
-								{ __( 'Tablet', 'flexible-spacer-block' ) }
+								<Icon icon={ device.icon } />
+								{ device.label }
 							</div>
-							<ResizableBox
-								className={ classnames( {
-									'is-selected': isSelected,
-									'is-negative': !! isNegativeMd,
-								} ) }
-								size={ { height: heightMd } }
-								minHeight={ MIN_SPACER_HEIGHT }
-								enable={ {
-									top: false,
-									right: false,
-									bottom: true,
-									left: false,
-									topRight: false,
-									bottomRight: false,
-									bottomLeft: false,
-									topLeft: false,
-								} }
-								onResizeStart={ handleOnResizeStartMd }
-								onResizeStop={ handleOnResizeStopMd }
-								showHandle={ isSelected }
-								__experimentalShowTooltip={ true }
-								__experimentalTooltipProps={ {
-									axis: 'y',
-									position: 'bottom',
-									isVisible: isResizingMd,
-								} }
-							/>
+							<div className="hoge" style={ { height: device.height } }>
+								<ResizableBox
+									className={ classnames( {
+										'is-selected': isSelected,
+										'is-resizing': device.isResizing,
+										'is-negative': !! device.isNegative,
+									} ) }
+									minHeight={ MIN_SPACER_HEIGHT }
+									enable={ {
+										top: false,
+										right: false,
+										bottom: true,
+										left: false,
+										topRight: false,
+										bottomRight: false,
+										bottomLeft: false,
+										topLeft: false,
+									} }
+									onResizeStart={ device.onResizeStart }
+									onResize={ device.onResize }
+									onResizeStop={ device.onResizeStop }
+									showHandle={ isSelected }
+									__experimentalShowTooltip={ true }
+									__experimentalTooltipProps={ {
+										axis: 'y',
+										position: 'bottom',
+										isVisible: device.isResizing,
+									} }
+								/>
+							</div>
 						</div>
-					) }
-					<div className="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg">
-						<div className="fsb-flexible-spacer__device-ttl">
-							<Icon icon={ desktop } />
-							{ __( 'Desktop', 'flexible-spacer-block' ) }
-						</div>
-						<ResizableBox
-							className={ classnames( {
-								'is-selected': isSelected,
-								'is-negative': !! isNegativeLg,
-							} ) }
-							size={ { height: heightLg } }
-							minHeight={ MIN_SPACER_HEIGHT }
-							enable={ {
-								top: false,
-								right: false,
-								bottom: true,
-								left: false,
-								topRight: false,
-								bottomRight: false,
-								bottomLeft: false,
-								topLeft: false,
-							} }
-							onResizeStart={ handleOnResizeStartLg }
-							onResizeStop={ handleOnResizeStopLg }
-							showHandle={ isSelected }
-							__experimentalShowTooltip={ true }
-							__experimentalTooltipProps={ {
-								axis: 'y',
-								position: 'bottom',
-								isVisible: isResizingLg,
-							} }
-						/>
-					</div>
+					) ) }
 				</div>
 			</View>
 		</>

@@ -8,16 +8,16 @@
 	"textdomain": "flexible-spacer-block",
 	"attributes": {
 		"heightLg": {
-			"type": "number",
-			"default": 100
+			"type": "string",
+			"default": "100px"
 		},
 		"heightMd": {
-			"type": "number",
-			"default": 100
+			"type": "string",
+			"default": "100px"
 		},
 		"heightSm": {
-			"type": "number",
-			"default": 100
+			"type": "string",
+			"default": "100px"
 		},
 		"isNegativeLg": {
 			"type": "boolean",

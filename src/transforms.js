@@ -2,7 +2,12 @@
  * WordPress dependencies
  */
 import { createBlock } from '@wordpress/blocks';
+import {
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
+} from '@wordpress/components';
 
+import { DEFAULT_SPACER_HEIGHT, DEFAULT_SPACER_HEIGHT_UNIT } from './constants';
 import metadata from './block.json';
 
 export default {
@@ -11,12 +16,15 @@ export default {
 			type: 'block',
 			blocks: [ 'core/spacer' ],
 			transform: ( { anchor, height } ) => {
-				const parsedHeight = parseInt( height, 10 );
+				const [ parsedQuantity = DEFAULT_SPACER_HEIGHT, parsedUnit = DEFAULT_SPACER_HEIGHT_UNIT ] =
+					parseQuantityAndUnitFromRawValue( height );
+				const newHeight = `${ parsedQuantity }${ parsedUnit }`;
+
 				return createBlock( metadata.name, {
 					anchor,
-					heightLg: parsedHeight,
-					heightMd: parsedHeight,
-					heightSm: parsedHeight,
+					heightLg: newHeight,
+					heightMd: newHeight,
+					heightSm: newHeight,
 				} );
 			},
 		},
@@ -26,9 +34,12 @@ export default {
 			type: 'block',
 			blocks: [ 'core/spacer' ],
 			transform: ( { anchor, heightLg } ) => {
+				const [ parsedQuantity = DEFAULT_SPACER_HEIGHT, parsedUnit = DEFAULT_SPACER_HEIGHT_UNIT ] =
+					parseQuantityAndUnitFromRawValue( heightLg );
+				const newHeight = `${ parsedQuantity }${ parsedUnit }`;
 				return createBlock( 'core/spacer', {
 					anchor,
-					height: heightLg,
+					height: newHeight,
 				} );
 			},
 		},

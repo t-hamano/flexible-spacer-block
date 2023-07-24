@@ -14,6 +14,10 @@
 .fsb-flexible-spacer__device {
 	position: relative;
 	flex: 1;
+
+	.components-resizable-box__container:not(.is-resizing) {
+		height: 100% !important;
+	}
 }
 
 .fsb-flexible-spacer__device-ttl {
@@ -95,9 +99,11 @@
 	}
 }
 
-.fsb-flexible-spacer__sidebar {
+// Backward compatibility
+body.branch-6,
+body.branch-6-1 {
 
-	.components-range-control .components-input-control {
-		margin-bottom: 0;
+	.components-unit-control-wrapper {
+		margin-bottom: 24px;
 	}
 }

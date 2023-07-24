@@ -18,15 +18,20 @@ export const inputValue = async ( selector, value ) => {
 	await page.keyboard.type( String( value ) );
 };
 
-export const changeHeight = async ( label, value ) => {
-	const selector = `input[type="number"][aria-label="Height in pixels (${ label })"]`;
+export const changeHeight = async ( slug, value ) => {
+	const selector = `.fsb-flexible-spacer__sidebar-${ slug } input[type="number"]`;
 	await page.focus( selector );
 	await pressKeyWithModifier( 'primary', 'a' );
 	await page.keyboard.press( 'Delete' );
 	await page.keyboard.type( String( value ) );
 };
 
-export const toggleNegativeSpace = async ( label ) => {
-	const selector = `#flexible_spacer_block_height_${ label.toLowerCase() } input[type="checkbox"]`;
+export const changeHeightUnit = async ( slug, value ) => {
+	const selector = `.fsb-flexible-spacer__sidebar-${ slug } select`;
+	await page.select( selector, value );
+};
+
+export const toggleNegativeSpace = async ( slug ) => {
+	const selector = `.fsb-flexible-spacer__sidebar-${ slug } input[type="checkbox"]`;
 	await page.click( selector );
 };
