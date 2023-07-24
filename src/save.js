@@ -8,12 +8,23 @@ import classnames from 'classnames';
  */
 import { useBlockProps } from '@wordpress/block-editor';
 
+const defaultValue = fsbConf.defaultValue;
+
 export default function save( { attributes, className } ) {
 	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
 
-	const styleLg = isNegativeLg ? { marginBottom: -heightLg } : { height: heightLg };
-	const styleMd = isNegativeMd ? { marginBottom: -heightMd } : { height: heightMd };
-	const styleSm = isNegativeSm ? { marginBottom: -heightSm } : { height: heightSm };
+	const styleLg =
+		heightLg !== undefined
+			? { marginBottom: isNegativeLg ? `-${ heightLg }` : heightLg }
+			: { marginBottom: `${ defaultValue.lg }px` };
+	const styleMd =
+		heightMd !== undefined
+			? { marginBottom: isNegativeMd ? `-${ heightMd }` : heightMd }
+			: { marginBottom: `${ defaultValue.md }px` };
+	const styleSm =
+		heightSm !== undefined
+			? { marginBottom: isNegativeSm ? `-${ heightSm }` : heightSm }
+			: { marginBottom: `${ defaultValue.sm }px` };
 
 	const blockProps = useBlockProps.save( {
 		'aria-hidden': true,

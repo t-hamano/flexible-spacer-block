@@ -18,8 +18,12 @@ import {
 	ExternalLink,
 	ToolbarGroup,
 	ToolbarButton,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalUnitControl as UnitControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
-import { Fragment, useEffect, useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { View } from '@wordpress/primitives';
 import { Icon, settings, mobile, tablet, desktop } from '@wordpress/icons';
 import { addQueryArgs } from '@wordpress/url';
@@ -31,13 +35,17 @@ import { responsive } from './icons';
 
 const MIN_SPACER_HEIGHT = 0;
 const MAX_SPACER_HEIGHT = 500;
-const DEFAULT_SPACER_HEIGHT = 100;
+const DEFAULT_SPACER_HEIGHT = '100';
+const DEFAULT_SPACER_HEIGHT_UNIT = 'px';
 
 export default function Edit( { attributes, isSelected, setAttributes, toggleSelection } ) {
-	const [ heightAll, setHeightAll ] = useState( DEFAULT_SPACER_HEIGHT );
+	const [ heightAll, setHeightAll ] = useState( DEFAULT_SPACER_HEIGHT.DEFAULT_SPACER_HEIGHT_UNIT );
 	const [ isResizingLg, setIsResizingLg ] = useState( false );
 	const [ isResizingMd, setIsResizingMd ] = useState( false );
 	const [ isResizingSm, setIsResizingSm ] = useState( false );
+	const [ temporaryWidthLg, setTemporaryWidthLg ] = useState( null );
+	const [ temporaryWidthMd, setTemporaryWidthMd ] = useState( null );
+	const [ temporaryWidthSm, setTemporaryWidthSm ] = useState( null );
 
 	const isResponsive = useSelect( ( select ) =>
 		select( 'flexible-spacer-block' ).getIsResponsive()
@@ -50,16 +58,17 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 
 	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
 
+	// Apply default values from the settings page when inserting a block.
 	useEffect( () => {
 		if (
-			heightLg === DEFAULT_SPACER_HEIGHT &&
-			heightMd === DEFAULT_SPACER_HEIGHT &&
-			heightSm === DEFAULT_SPACER_HEIGHT
+			heightLg === DEFAULT_SPACER_HEIGHT + DEFAULT_SPACER_HEIGHT_UNIT &&
+			heightMd === DEFAULT_SPACER_HEIGHT + DEFAULT_SPACER_HEIGHT_UNIT &&
+			heightSm === DEFAULT_SPACER_HEIGHT + DEFAULT_SPACER_HEIGHT_UNIT
 		) {
 			setAttributes( {
-				heightLg: defaultValue?.lg ?? DEFAULT_SPACER_HEIGHT,
-				heightMd: defaultValue?.md ?? DEFAULT_SPACER_HEIGHT,
-				heightSm: defaultValue?.sm ?? DEFAULT_SPACER_HEIGHT,
+				heightLg: defaultValue.lg + defaultValue.lg_unit,
+				heightMd: defaultValue.md + defaultValue.md_unit,
+				heightSm: defaultValue.sm + defaultValue.sm_unit,
 			} );
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,64 +91,43 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 		} ),
 	} );
 
-	const updateHeightAll = ( value ) => {
+	function getUpdatedHeight( currentValue, newValue ) {
+		if ( ! newValue ) {
+			return undefined;
+		}
+
+		const [ newParsedQuantity, newParsedUnit ] = parseQuantityAndUnitFromRawValue( newValue );
+		const [ , currentParsedUnit ] = parseQuantityAndUnitFromRawValue( currentValue );
+		const newUnit = newParsedUnit || currentParsedUnit || 'px';
+		return newParsedQuantity + newUnit;
+	}
+
+	const onChangeHeightAll = ( currentValue, newValue ) => {
+		const updatedHeight = getUpdatedHeight( currentValue, newValue );
 		setAttributes( {
-			heightLg: value,
-			heightMd: value,
-			heightSm: value,
+			heightLg: updatedHeight,
+			heightMd: updatedHeight,
+			heightSm: updatedHeight,
 		} );
-		setHeightAll( value );
+		setHeightAll( updatedHeight );
 	};
 
-	const updateHeightLg = ( value ) => {
-		setAttributes( { heightLg: value } );
+	const onChangeHeightLg = ( currentValue, newValue ) => {
+		setAttributes( { heightLg: getUpdatedHeight( currentValue, newValue ) } );
 		if ( ! isEnableMd ) {
-			setAttributes( { heightMd: value } );
+			setAttributes( { heightMd: getUpdatedHeight( currentValue, newValue ) } );
 		}
-	};
-	const updateHeightMd = ( value ) => setAttributes( { heightMd: value } );
-	const updateHeightSm = ( value ) => setAttributes( { heightSm: value } );
-
-	const updateIsNegativeLg = ( value ) => {
-		setAttributes( { isNegativeLg: value } );
-		if ( ! isEnableMd ) {
-			setAttributes( { isNegativeMd: value } );
-		}
-	};
-	const updateIsNegativeMd = ( value ) => setAttributes( { isNegativeMd: value } );
-	const updateIsNegativeSm = ( value ) => setAttributes( { isNegativeSm: value } );
-
-	const handleOnResizeStartLg = () => {
-		setIsResizingLg( true );
-		toggleSelection( false );
+		setTemporaryWidthLg( null );
 	};
 
-	const handleOnResizeStartMd = () => {
-		setIsResizingMd( true );
-		toggleSelection( false );
+	const onChangeHeightMd = ( currentValue, newValue ) => {
+		setAttributes( { heightMd: getUpdatedHeight( currentValue, newValue ) } );
+		setTemporaryWidthMd( null );
 	};
 
-	const handleOnResizeStartSm = () => {
-		setIsResizingSm( true );
-		toggleSelection( false );
-	};
-
-	const handleOnResizeStopLg = ( event, direction, elt, delta ) => {
-		const spacerHeightLg = Math.min( parseInt( heightLg + delta.height, 10 ), MAX_SPACER_HEIGHT );
-		updateHeightLg( spacerHeightLg );
-		setIsResizingLg( false );
-	};
-
-	const handleOnResizeStopMd = ( event, direction, elt, delta ) => {
-		const spacerHeightMd = Math.min( parseInt( heightMd + delta.height, 10 ), MAX_SPACER_HEIGHT );
-		updateHeightMd( spacerHeightMd );
-		setIsResizingMd( false );
-	};
-
-	const handleOnResizeStopSm = ( event, direction, elt, delta ) => {
-		const spacerHeightSm = Math.min( parseInt( heightSm + delta.height, 10 ), MAX_SPACER_HEIGHT );
-		updateHeightSm( spacerHeightSm );
-		setIsResizingSm( false );
+	const onChangeHeightSm = ( currentValue, newValue ) => {
+		setAttributes( { heightSm: getUpdatedHeight( currentValue, newValue ) } );
+		setTemporaryWidthSm( null );
 	};
 
 	const SPACER_CONTROLS = [
@@ -148,34 +136,43 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 			icon: settings,
 			slug: 'all',
 			value: heightAll,
-			onChange: updateHeightAll,
+			quantity: parseQuantityAndUnitFromRawValue( heightAll )[ 0 ],
+			onChange: ( value ) => onChangeHeightAll( heightAll, value ),
 		},
 		{
 			label: __( 'Height in pixels (Desktop)', 'flexible-spacer-block' ),
 			icon: desktop,
 			slug: 'lg',
 			value: heightLg,
-			onChange: updateHeightLg,
+			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthLg || heightLg )[ 0 ],
+			onChange: ( value ) => onChangeHeightLg( heightLg, value ),
 			isNegative: isNegativeLg,
-			onNegativeChange: updateIsNegativeLg,
+			onNegativeChange: ( value ) => {
+				setAttributes( { isNegativeLg: value } );
+				if ( ! isEnableMd ) {
+					setAttributes( { isNegativeMd: value } );
+				}
+			},
 		},
 		{
 			label: __( 'Height in pixels (Tablet)', 'flexible-spacer-block' ),
 			icon: tablet,
 			slug: 'md',
 			value: heightMd,
-			onChange: updateHeightMd,
+			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthMd || heightMd )[ 0 ],
+			onChange: ( value ) => onChangeHeightMd( heightMd, value ),
 			isNegative: isNegativeMd,
-			onNegativeChange: updateIsNegativeMd,
+			onNegativeChange: ( value ) => setAttributes( { isNegativeMd: value } ),
 		},
 		{
 			label: __( 'Height in pixels (Mobile)', 'flexible-spacer-block' ),
 			icon: mobile,
 			slug: 'sm',
 			value: heightSm,
-			onChange: updateHeightSm,
+			quantity: parseQuantityAndUnitFromRawValue( heightSm )[ 0 ],
+			onChange: ( value ) => onChangeHeightSm( temporaryWidthSm || heightSm, value ),
 			isNegative: isNegativeSm,
-			onNegativeChange: updateIsNegativeSm,
+			onNegativeChange: ( value ) => setAttributes( { isNegativeSm: value } ),
 		},
 	];
 
@@ -186,8 +183,12 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 			icon: mobile,
 			isNegative: isNegativeSm,
 			height: heightSm,
-			onResizeStart: handleOnResizeStartSm,
-			onResizeStop: handleOnResizeStopSm,
+			onResizeStart: () => toggleSelection( false ),
+			onResize: () => setIsResizingSm( true ),
+			onResizeStop: ( event, direction, elt ) => {
+				onChangeHeightSm( undefined, `${ elt.clientHeight }px` );
+				setIsResizingSm( false );
+			},
 			isResizing: isResizingSm,
 		},
 		isEnableMd && {
@@ -196,8 +197,12 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 			icon: tablet,
 			isNegative: isNegativeMd,
 			height: heightMd,
-			onResizeStart: handleOnResizeStartMd,
-			onResizeStop: handleOnResizeStopMd,
+			onResizeStart: () => toggleSelection( false ),
+			onResize: () => setIsResizingMd( true ),
+			onResizeStop: ( event, direction, elt ) => {
+				onChangeHeightMd( undefined, `${ elt.clientHeight }px` );
+				setIsResizingMd( false );
+			},
 			isResizing: isResizingMd,
 		},
 		{
@@ -206,8 +211,12 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 			icon: desktop,
 			isNegative: isNegativeLg,
 			height: heightLg,
-			onResizeStart: handleOnResizeStartLg,
-			onResizeStop: handleOnResizeStopLg,
+			onResizeStart: () => toggleSelection( false ),
+			onResize: () => setIsResizingLg( true ),
+			onResizeStop: ( event, direction, elt ) => {
+				onChangeHeightLg( undefined, `${ elt.clientHeight }px` );
+				setIsResizingLg( false );
+			},
 			isResizing: isResizingLg,
 		},
 	].filter( Boolean );
@@ -239,8 +248,14 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 								label={ control.label }
 								beforeIcon={ <Icon icon={ control.icon } /> }
 								min={ MIN_SPACER_HEIGHT }
-								max={ Math.max( MAX_SPACER_HEIGHT, control.value ) }
+								max={ MAX_SPACER_HEIGHT }
+								value={ control.quantity }
+								withInputField={ false }
+								onChange={ control.onChange }
+							/>
+							<UnitControl
 								value={ control.value }
+								min={ MIN_SPACER_HEIGHT }
 								onChange={ control.onChange }
 							/>
 							{ control.onNegativeChange && (
@@ -279,33 +294,36 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 								<Icon icon={ device.icon } />
 								{ device.label }
 							</div>
-							<ResizableBox
-								className={ classnames( {
-									'is-selected': isSelected,
-									'is-negative': !! device.isNegative,
-								} ) }
-								size={ { height: device.height } }
-								minHeight={ MIN_SPACER_HEIGHT }
-								enable={ {
-									top: false,
-									right: false,
-									bottom: true,
-									left: false,
-									topRight: false,
-									bottomRight: false,
-									bottomLeft: false,
-									topLeft: false,
-								} }
-								onResizeStart={ device.onResizeStart }
-								onResizeStop={ device.onResizeStop }
-								showHandle={ isSelected }
-								__experimentalShowTooltip={ true }
-								__experimentalTooltipProps={ {
-									axis: 'y',
-									position: 'bottom',
-									isVisible: device.isResizing,
-								} }
-							/>
+							<div className="hoge" style={ { height: device.height } }>
+								<ResizableBox
+									className={ classnames( {
+										'is-selected': isSelected,
+										'is-resizing': device.isResizing,
+										'is-negative': !! device.isNegative,
+									} ) }
+									minHeight={ MIN_SPACER_HEIGHT }
+									enable={ {
+										top: false,
+										right: false,
+										bottom: true,
+										left: false,
+										topRight: false,
+										bottomRight: false,
+										bottomLeft: false,
+										topLeft: false,
+									} }
+									onResizeStart={ device.onResizeStart }
+									onResize={ device.onResize }
+									onResizeStop={ device.onResizeStop }
+									showHandle={ isSelected }
+									__experimentalShowTooltip={ true }
+									__experimentalTooltipProps={ {
+										axis: 'y',
+										position: 'bottom',
+										isVisible: device.isResizing,
+									} }
+								/>
+							</div>
 						</div>
 					) ) }
 				</div>

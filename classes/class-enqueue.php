@@ -89,9 +89,12 @@ class Enqueue {
 			'sm' => FSB_BREAKPOINT_SM,
 		);
 		$default_value_defaults = array(
-			'lg' => FSB_DEFAULT_SPACER_HEIGHT,
-			'md' => FSB_DEFAULT_SPACER_HEIGHT,
-			'sm' => FSB_DEFAULT_SPACER_HEIGHT,
+			'lg'      => FSB_DEFAULT_SPACER_HEIGHT,
+			'md'      => FSB_DEFAULT_SPACER_HEIGHT,
+			'sm'      => FSB_DEFAULT_SPACER_HEIGHT,
+			'lg_unit' => FSB_DEFAULT_SPACER_HEIGHT_UNIT,
+			'md_unit' => FSB_DEFAULT_SPACER_HEIGHT_UNIT,
+			'sm_unit' => FSB_DEFAULT_SPACER_HEIGHT_UNIT,
 		);
 
 		$config = array(
