@@ -61,7 +61,7 @@ describe( 'Block', () => {
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	it( 'should be converted to core table block by keeping desktop height', async () => {
+	it( 'should be converted to core spacer block by keeping desktop height', async () => {
 		await insertBlock( 'Flexible Spacer' );
 		await openSidebar();
 		await changeHeight( 'Desktop', '200' );
