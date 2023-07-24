@@ -48,6 +48,12 @@ Source: https://pxhere.com/ja/photo/245
 
 == Changelog ==
 
+= 2.1.0 =
+* Tested to WordPress 6.3
+* Add: unit support
+* Drop support for WordPress5.9
+* Drop support for PHP7.3
+
 = 2.0.0 =
 * Tested to WordPress 6.2
 * Feature: Add default values setting
