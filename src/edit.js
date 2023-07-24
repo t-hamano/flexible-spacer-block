@@ -19,7 +19,7 @@ import {
 	ToolbarGroup,
 	ToolbarButton,
 } from '@wordpress/components';
-import { useEffect, useState } from '@wordpress/element';
+import { Fragment, useEffect, useState } from '@wordpress/element';
 import { View } from '@wordpress/primitives';
 import { Icon, settings, mobile, tablet, desktop } from '@wordpress/icons';
 import { addQueryArgs } from '@wordpress/url';
@@ -142,6 +142,39 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 		setIsResizingSm( false );
 	};
 
+	const SPACER_CONTROLS = [
+		{
+			label: __( 'Height in pixels (All)', 'flexible-spacer-block' ),
+			icon: settings,
+			value: heightAll,
+			onChange: updateHeightAll,
+		},
+		{
+			label: __( 'Height in pixels (Desktop)', 'flexible-spacer-block' ),
+			icon: desktop,
+			value: heightLg,
+			onChange: updateHeightLg,
+			isNegative: isNegativeLg,
+			onNegativeChange: updateIsNegativeLg,
+		},
+		{
+			label: __( 'Height in pixels (Tablet)', 'flexible-spacer-block' ),
+			icon: tablet,
+			value: heightMd,
+			onChange: updateHeightMd,
+			isNegative: isNegativeMd,
+			onNegativeChange: updateIsNegativeMd,
+		},
+		{
+			label: __( 'Height in pixels (Mobile)', 'flexible-spacer-block' ),
+			icon: mobile,
+			value: heightSm,
+			onChange: updateHeightSm,
+			isNegative: isNegativeSm,
+			onNegativeChange: updateIsNegativeSm,
+		},
+	];
+
 	return (
 		<>
 			<BlockControls>
@@ -163,65 +196,26 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 					title={ __( 'Spacer settings', 'flexible-spacer-block' ) }
 					className="fsb-flexible-spacer__sidebar"
 				>
-					<RangeControl
-						label={ __( 'Height in pixels (All)', 'flexible-spacer-block' ) }
-						beforeIcon={ <Icon icon={ settings } /> }
-						min={ MIN_SPACER_HEIGHT }
-						max={ Math.max( MAX_SPACER_HEIGHT, heightAll ) }
-						value={ heightAll }
-						onChange={ updateHeightAll }
-					/>
-					<HorizontalRule />
-					<div id="flexible_spacer_block_height_desktop">
-						<RangeControl
-							label={ __( 'Height in pixels (Desktop)', 'flexible-spacer-block' ) }
-							beforeIcon={ <Icon icon={ desktop } /> }
-							min={ MIN_SPACER_HEIGHT }
-							max={ Math.max( MAX_SPACER_HEIGHT, heightLg ) }
-							value={ heightLg }
-							onChange={ updateHeightLg }
-						/>
-						<ToggleControl
-							label={ __( 'Negative space', 'flexible-spacer-block' ) }
-							checked={ isNegativeLg }
-							onChange={ updateIsNegativeLg }
-						/>
-					</div>
-					<HorizontalRule />
-					{ isEnableMd && (
-						<div id="flexible_spacer_block_height_tablet">
+					{ SPACER_CONTROLS.map( ( control, index ) => (
+						<Fragment key={ index }>
 							<RangeControl
-								label={ __( 'Height in pixels (Tablet)', 'flexible-spacer-block' ) }
-								beforeIcon={ <Icon icon={ tablet } /> }
+								label={ control.label }
+								beforeIcon={ <Icon icon={ control.icon } /> }
 								min={ MIN_SPACER_HEIGHT }
-								max={ Math.max( MAX_SPACER_HEIGHT, heightMd ) }
-								value={ heightMd }
-								onChange={ updateHeightMd }
+								max={ Math.max( MAX_SPACER_HEIGHT, control.value ) }
+								value={ control.value }
+								onChange={ control.onChange }
 							/>
-							<ToggleControl
-								label={ __( 'Negative space', 'flexible-spacer-block' ) }
-								checked={ isNegativeMd }
-								onChange={ updateIsNegativeMd }
-							/>
+							{ control.onNegativeChange && (
+								<ToggleControl
+									label={ __( 'Negative space', 'flexible-spacer-block' ) }
+									checked={ control.isNegative }
+									onChange={ control.onNegativeChange }
+								/>
+							) }
 							<HorizontalRule />
-						</div>
-					) }
-					<div id="flexible_spacer_block_height_mobile">
-						<RangeControl
-							label={ __( 'Height in pixels (Mobile)', 'flexible-spacer-block' ) }
-							beforeIcon={ <Icon icon={ mobile } /> }
-							min={ MIN_SPACER_HEIGHT }
-							max={ Math.max( MAX_SPACER_HEIGHT, heightSm ) }
-							value={ heightSm }
-							onChange={ updateHeightSm }
-						/>
-						<ToggleControl
-							label={ __( 'Negative space', 'flexible-spacer-block' ) }
-							checked={ isNegativeSm }
-							onChange={ updateIsNegativeSm }
-						/>
-					</div>
-					<HorizontalRule />
+						</Fragment>
+					) ) }
 					<ExternalLink href={ settingUrl }>
 						{ __( 'Plugin Setting', 'flexible-spacer-block' ) }
 					</ExternalLink>
