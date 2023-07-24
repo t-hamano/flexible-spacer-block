@@ -91,7 +91,6 @@ describe( 'Block', () => {
 		await changeHeight( 'lg', '0' );
 		await changeHeight( 'md', '' );
 		await changeHeight( 'sm', '0' );
-		await toggleNegativeSpace( 'sm' );
 		await changeHeightUnit( 'sm', 'em' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();

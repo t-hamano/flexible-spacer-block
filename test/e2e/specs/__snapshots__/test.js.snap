@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Block should apply edged value correctly if the value is falsy 1`] = `
-"<!-- wp:fsb/flexible-spacer {"heightLg":"0px","heightSm":"0em","isNegativeSm":true} -->
+"<!-- wp:fsb/flexible-spacer {"heightLg":"0px","heightSm":"0em"} -->
 <div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:0px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:0em"></div></div>
 <!-- /wp:fsb/flexible-spacer -->"
 `;
