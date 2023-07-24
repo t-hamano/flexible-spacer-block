@@ -1,43 +1,43 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Block should apply negative space 1`] = `
-"<!-- wp:fsb/flexible-spacer {\\"heightLg\\":200,\\"heightMd\\":300,\\"heightSm\\":400,\\"isNegativeLg\\":true,\\"isNegativeMd\\":true,\\"isNegativeSm\\":true} -->
-<div aria-hidden=\\"true\\" class=\\"wp-block-fsb-flexible-spacer fsb-flexible-spacer\\"><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--lg\\" style=\\"margin-bottom:-200px\\"></div><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--md\\" style=\\"margin-bottom:-300px\\"></div><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--sm\\" style=\\"margin-bottom:-400px\\"></div></div>
+"<!-- wp:fsb/flexible-spacer {"heightLg":200,"heightMd":300,"heightSm":400,"isNegativeLg":true,"isNegativeMd":true,"isNegativeSm":true} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="margin-bottom:-200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="margin-bottom:-300px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="margin-bottom:-400px"></div></div>
 <!-- /wp:fsb/flexible-spacer -->"
 `;
 
 exports[`Block should be converted to core table block by keeping desktop height 1`] = `
-"<!-- wp:spacer {\\"height\\":200} -->
-<div style=\\"height:200px\\" aria-hidden=\\"true\\" class=\\"wp-block-spacer\\"></div>
+"<!-- wp:spacer {"height":200} -->
+<div style="height:200px" aria-hidden="true" class="wp-block-spacer"></div>
 <!-- /wp:spacer -->"
 `;
 
 exports[`Block should be converted to flexible spacer block by converting height to px 1`] = `
-"<!-- wp:fsb/flexible-spacer {\\"heightLg\\":50,\\"heightMd\\":50,\\"heightSm\\":50} -->
-<div aria-hidden=\\"true\\" class=\\"wp-block-fsb-flexible-spacer fsb-flexible-spacer\\"><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--lg\\" style=\\"height:50px\\"></div><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--md\\" style=\\"height:50px\\"></div><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--sm\\" style=\\"height:50px\\"></div></div>
+"<!-- wp:fsb/flexible-spacer {"heightLg":50,"heightMd":50,"heightSm":50} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:50px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:50px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:50px"></div></div>
 <!-- /wp:fsb/flexible-spacer -->"
 `;
 
 exports[`Block should be converted to flexible spacer block by keeping height 1`] = `
-"<!-- wp:fsb/flexible-spacer {\\"heightLg\\":200,\\"heightMd\\":200,\\"heightSm\\":200} -->
-<div aria-hidden=\\"true\\" class=\\"wp-block-fsb-flexible-spacer fsb-flexible-spacer\\"><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--lg\\" style=\\"height:200px\\"></div><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--md\\" style=\\"height:200px\\"></div><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--sm\\" style=\\"height:200px\\"></div></div>
+"<!-- wp:fsb/flexible-spacer {"heightLg":200,"heightMd":200,"heightSm":200} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:200px"></div></div>
 <!-- /wp:fsb/flexible-spacer -->"
 `;
 
 exports[`Block should change all height 1`] = `
-"<!-- wp:fsb/flexible-spacer {\\"heightLg\\":200,\\"heightMd\\":200,\\"heightSm\\":200} -->
-<div aria-hidden=\\"true\\" class=\\"wp-block-fsb-flexible-spacer fsb-flexible-spacer\\"><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--lg\\" style=\\"height:200px\\"></div><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--md\\" style=\\"height:200px\\"></div><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--sm\\" style=\\"height:200px\\"></div></div>
+"<!-- wp:fsb/flexible-spacer {"heightLg":200,"heightMd":200,"heightSm":200} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:200px"></div></div>
 <!-- /wp:fsb/flexible-spacer -->"
 `;
 
 exports[`Block should change each height 1`] = `
-"<!-- wp:fsb/flexible-spacer {\\"heightLg\\":200,\\"heightMd\\":300,\\"heightSm\\":400} -->
-<div aria-hidden=\\"true\\" class=\\"wp-block-fsb-flexible-spacer fsb-flexible-spacer\\"><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--lg\\" style=\\"height:200px\\"></div><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--md\\" style=\\"height:300px\\"></div><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--sm\\" style=\\"height:400px\\"></div></div>
+"<!-- wp:fsb/flexible-spacer {"heightLg":200,"heightMd":300,"heightSm":400} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:300px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:400px"></div></div>
 <!-- /wp:fsb/flexible-spacer -->"
 `;
 
 exports[`Block should create block 1`] = `
 "<!-- wp:fsb/flexible-spacer -->
-<div aria-hidden=\\"true\\" class=\\"wp-block-fsb-flexible-spacer fsb-flexible-spacer\\"><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--lg\\" style=\\"height:100px\\"></div><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--md\\" style=\\"height:100px\\"></div><div class=\\"fsb-flexible-spacer__device fsb-flexible-spacer__device--sm\\" style=\\"height:100px\\"></div></div>
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:100px"></div></div>
 <!-- /wp:fsb/flexible-spacer -->"
 `;
