@@ -62,6 +62,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 				heightSm: defaultValue?.sm ?? DEFAULT_SPACER_HEIGHT,
 			} );
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	useEffect( () => {
