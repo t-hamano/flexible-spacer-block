@@ -34,10 +34,12 @@ export default {
 			type: 'block',
 			blocks: [ 'core/spacer' ],
 			transform: ( { anchor, heightLg } ) => {
-				const parsedHeight = parseInt( heightLg, 10 );
+				const [ parsedQuantity = DEFAULT_SPACER_HEIGHT, parsedUnit = DEFAULT_SPACER_HEIGHT_UNIT ] =
+					parseQuantityAndUnitFromRawValue( heightLg );
+				const newHeight = `${ parsedQuantity }${ parsedUnit }`;
 				return createBlock( 'core/spacer', {
 					anchor,
-					height: ! isNaN( parsedHeight ) ? `${ parsedHeight }px` : undefined,
+					height: newHeight,
 				} );
 			},
 		},

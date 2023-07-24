@@ -184,7 +184,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 			slug: 'sm',
 			icon: mobile,
 			isNegative: isNegativeSm,
-			height: heightSm,
+			height: heightSm || defaultValue.sm,
 			onResizeStart: () => toggleSelection( false ),
 			onResize: () => setIsResizingSm( true ),
 			onResizeStop: ( event, direction, elt ) => {
@@ -198,7 +198,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 			slug: 'md',
 			icon: tablet,
 			isNegative: isNegativeMd,
-			height: heightMd,
+			height: heightMd || defaultValue.md,
 			onResizeStart: () => toggleSelection( false ),
 			onResize: () => setIsResizingMd( true ),
 			onResizeStop: ( event, direction, elt ) => {
@@ -212,7 +212,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 			slug: 'lg',
 			icon: desktop,
 			isNegative: isNegativeLg,
-			height: heightLg,
+			height: heightLg || defaultValue.lg,
 			onResizeStart: () => toggleSelection( false ),
 			onResize: () => setIsResizingLg( true ),
 			onResizeStop: ( event, direction, elt ) => {

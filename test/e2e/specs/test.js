@@ -85,13 +85,28 @@ describe( 'Block', () => {
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	it( 'should apply edged value correctly', async () => {
+	it( 'should apply edged value correctly if the value is falsy', async () => {
 		await insertBlock( 'Flexible Spacer' );
 		await openSidebar();
 		await changeHeight( 'lg', '0' );
 		await changeHeight( 'md', '' );
 		await changeHeight( 'sm', '0' );
 		await toggleNegativeSpace( 'sm' );
+		await changeHeightUnit( 'sm', 'em' );
+
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'should apply edged value correctly if the value is falsy and negative', async () => {
+		await insertBlock( 'Flexible Spacer' );
+		await openSidebar();
+		await changeHeight( 'lg', '0' );
+		await changeHeight( 'md', '' );
+		await changeHeight( 'sm', '0' );
+		await toggleNegativeSpace( 'lg' );
+		await toggleNegativeSpace( 'md' );
+		await toggleNegativeSpace( 'sm' );
+		await changeHeightUnit( 'sm', 'em' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -144,8 +159,6 @@ describe( 'Setting', () => {
 			await inputValue( mdSelector, 1000 );
 			await page.click( submitButton );
 
-			await page.waitForSelector( smSelector );
-			await page.waitForSelector( mdSelector );
 			const smValue = await page.$eval( smSelector, ( element ) => element.value );
 			const mdValue = await page.$eval( mdSelector, ( element ) => element.value );
 
@@ -195,8 +208,6 @@ describe( 'Setting', () => {
 			await page.select( mdUnitSelector, 'em' );
 			await page.click( submitButton );
 
-			await page.waitForSelector( smSelector );
-			await page.waitForSelector( mdSelector );
 			const smValue = await page.$eval( smSelector, ( element ) => element.value );
 			const mdValue = await page.$eval( mdSelector, ( element ) => element.value );
 			const smUnitValue = await page.$eval( smUnitSelector, ( element ) => element.value );
@@ -206,25 +217,34 @@ describe( 'Setting', () => {
 			expect( mdValue ).toBe( '500' );
 			expect( smUnitValue ).toBe( '%' );
 			expect( mdUnitValue ).toBe( 'em' );
+
+			// Finally update with default values.
+			await inputValue( smSelector, 100 );
+			await inputValue( mdSelector, 100 );
+			await page.select( smUnitSelector, 'px' );
+			await page.select( mdUnitSelector, 'px' );
+			await page.click( submitButton );
 		} );
 	} );
 
 	describe( 'block editor setting', () => {
-		it( 'should be saved', async () => {
+		it( 'should be toggled', async () => {
 			await switchUserToAdmin();
-			const showBlocksSelector = `input[name="flexible_spacer_block_show_block"]`;
+			const selector = `input[name="flexible_spacer_block_show_block"]`;
 			const submitButton = 'input[id="submit"]';
 
 			await visitAdminPage( 'options-general.php', 'page=flexible-spacer-block-option' );
-			await page.click( showBlocksSelector );
+
+			const currentCheckbox = await page.$( selector );
+			const currentChecked = await ( await currentCheckbox.getProperty( 'checked' ) ).jsonValue();
+
+			await page.click( selector );
 			await page.click( submitButton );
 
-			const blockSelectorValue = await page.$eval(
-				showBlocksSelector,
-				( element ) => element.value
-			);
+			const newCheckbox = await page.$( selector );
+			const newChecked = await ( await newCheckbox.getProperty( 'checked' ) ).jsonValue();
 
-			expect( blockSelectorValue ).toBe( '1' );
+			expect( newChecked ).toBe( ! currentChecked );
 		} );
 	} );
 } );
