@@ -26,9 +26,10 @@ export default {
 			type: 'block',
 			blocks: [ 'core/spacer' ],
 			transform: ( { anchor, heightLg } ) => {
+				const parsedHeight = parseInt( heightLg, 10 );
 				return createBlock( 'core/spacer', {
 					anchor,
-					height: heightLg,
+					height: ! isNaN( parsedHeight ) ? `${ parsedHeight }px` : undefined,
 				} );
 			},
 		},
