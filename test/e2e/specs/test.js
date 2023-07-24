@@ -19,12 +19,12 @@ const page = global.page;
 
 page.on( 'dialog', async ( dialog ) => await dialog.accept() );
 
-describe( 'Block', () => {
+describe( 'Flexible Spacer Block', () => {
 	beforeEach( async () => {
 		await createNewPost();
 	} );
 
-	it( 'should create block', async () => {
+	it( 'should be created', async () => {
 		await insertBlock( 'Flexible Spacer' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();

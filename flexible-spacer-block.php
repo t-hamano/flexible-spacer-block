@@ -35,7 +35,7 @@ const FSB_MIN_SPACER_HEIGHT = 0;
 const FSB_MAX_SPACER_HEIGHT = 500;
 
 // Default spacer height
-const FSB_DEFAULT_SPACER_HEIGHT = 100;
+const FSB_DEFAULT_SPACER_HEIGHT      = 100;
 const FSB_DEFAULT_SPACER_HEIGHT_UNIT = 'px';
 
 require_once __DIR__ . '/classes/class-init.php';
