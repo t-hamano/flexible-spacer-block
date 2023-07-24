@@ -98,3 +98,12 @@
 		display: none;
 	}
 }
+
+// Backward compatibility
+body.branch-6,
+body.branch-6-1 {
+
+	.components-unit-control-wrapper {
+		margin-bottom: 24px;
+	}
+}
