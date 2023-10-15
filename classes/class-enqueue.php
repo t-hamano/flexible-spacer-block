@@ -12,7 +12,7 @@ class Enqueue {
 	/**
 	 * Constructor
 	 */
-	function __construct() {
+	public function __construct() {
 		// Enqueue front-end inline styles
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
@@ -39,7 +39,7 @@ class Enqueue {
 	 * Enqueue block editor scripts
 	 */
 	public function enqueue_editor_scripts() {
-		$asset_file = include( FSB_PATH . '/build/js/index.asset.php' );
+		$asset_file = include FSB_PATH . '/build/js/index.asset.php';
 
 		wp_register_style(
 			'fsb-flexible-spacer-editor',
