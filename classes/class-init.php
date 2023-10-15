@@ -26,8 +26,8 @@ class Init {
 	 * Load classes
 	 */
 	private function load_classes() {
-		require_once( FSB_PATH . '/classes/class-enqueue.php' );
-		require_once( FSB_PATH . '/classes/class-options.php' );
+		require_once FSB_PATH . '/classes/class-enqueue.php';
+		require_once FSB_PATH . '/classes/class-options.php';
 	}
 
 	/**

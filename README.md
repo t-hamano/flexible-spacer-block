@@ -39,11 +39,11 @@ Filters media query breakpoints.
 
 - `$breakpoint`
 
-  *(array)* media query breakpoints ( `md` / `sm` ).
+*(array)* media query breakpoints ( `md` / `sm` ).
 
 - `$is_editor`
 
-  *(bool)* Whether it is rendered on the editor.
+*(bool)* Whether it is rendered on the editor.
 
 #### Return
 
@@ -70,11 +70,11 @@ Filters Generated inline styles.
 
 - `$css`
 
-  *(string)* Generated inline styles.
+*(string)* Generated inline styles.
 
 - `$is_editor`
 
-  *(bool)* Whether it is rendered on the editor.
+*(bool)* Whether it is rendered on the editor.
 
 #### Return
 
