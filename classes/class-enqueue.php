@@ -17,6 +17,8 @@ class Enqueue {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		// Enqueue block editor scripts
+		// TODO: Once the minimum WordPress version supported by the plugin is 6.3 or higher,
+		// Use enqueue_block_assets instead of enqueue_block_editor_assets.
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_scripts' ) );
 
 		// Enqueue admin option page scripts
