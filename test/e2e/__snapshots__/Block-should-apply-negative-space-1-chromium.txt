@@ -1,0 +1,3 @@
+<!-- wp:fsb/flexible-spacer {"heightLg":"200px","heightMd":"300px","heightSm":"400px","isNegativeLg":true,"isNegativeMd":true,"isNegativeSm":true} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="margin-bottom:-200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="margin-bottom:-300px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="margin-bottom:-400px"></div></div>
+<!-- /wp:fsb/flexible-spacer -->

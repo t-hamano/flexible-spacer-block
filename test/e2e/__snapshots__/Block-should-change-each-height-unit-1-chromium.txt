@@ -1,0 +1,3 @@
+<!-- wp:fsb/flexible-spacer {"heightLg":"100%","heightMd":"100em","heightSm":"100rem"} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:100%"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:100em"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:100rem"></div></div>
+<!-- /wp:fsb/flexible-spacer -->
