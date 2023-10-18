@@ -48,6 +48,10 @@ Source: https://pxhere.com/ja/photo/245
 
 == Changelog ==
 
+= 2.2.0 =
+* Tested to WordPress 6.4
+* Drop support for WordPress 6.0, 6.1
+
 = 2.1.0 =
 * Tested to WordPress 6.3
 * Add: unit support
