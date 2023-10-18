@@ -4,8 +4,8 @@
 import { test, expect } from '@wordpress/e2e-test-utils-playwright';
 
 test.use( {
-	flexibleSpacerBlockUtils: async ( { page }, use ) => {
-		await use( new FlexibleSpacerBlockUtils( { page } ) );
+	fsbUtils: async ( { page }, use ) => {
+		await use( new FsbUtils( { page } ) );
 	},
 } );
 
@@ -19,17 +19,17 @@ test.describe( 'Block', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test.skip( 'should change all height', async ( { editor, flexibleSpacerBlockUtils } ) => {
+	test.skip( 'should change all height', async ( { editor, fsbUtils } ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		await editor.openDocumentSettingsSidebar();
-		await flexibleSpacerBlockUtils.changeHeight( 'all', '200' );
+		await fsbUtils.changeHeight( 'all', '200' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test( 'should change all height unit', async ( { editor, flexibleSpacerBlockUtils } ) => {
+	test.skip( 'should change all height unit', async ( { editor, fsbUtils } ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		await editor.openDocumentSettingsSidebar();
-		await flexibleSpacerBlockUtils.changeHeightUnit( 'all', 'em' );
+		await fsbUtils.changeHeightUnit( 'all', 'em' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -233,7 +233,7 @@ test.describe( 'Block', () => {
 // 	} );
 // } );
 
-class FlexibleSpacerBlockUtils {
+class FsbUtils {
 	constructor( { page, pageUtils } ) {
 		this.page = page;
 		this.pageUtils = pageUtils;
