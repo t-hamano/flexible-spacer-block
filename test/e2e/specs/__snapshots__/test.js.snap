@@ -42,18 +42,6 @@ exports[`Block should be converted to flexible spacer block by keeping height 1`
 <!-- /wp:fsb/flexible-spacer -->"
 `;
 
-exports[`Block should be created 1`] = `
-"<!-- wp:fsb/flexible-spacer -->
-<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:100px"></div></div>
-<!-- /wp:fsb/flexible-spacer -->"
-`;
-
-exports[`Block should change all height 1`] = `
-"<!-- wp:fsb/flexible-spacer {"heightLg":"200px","heightMd":"200px","heightSm":"200px"} -->
-<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:200px"></div></div>
-<!-- /wp:fsb/flexible-spacer -->"
-`;
-
 exports[`Block should change all height unit 1`] = `
 "<!-- wp:fsb/flexible-spacer {"heightLg":"100em","heightMd":"100em","heightSm":"100em"} -->
 <div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:100em"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:100em"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:100em"></div></div>

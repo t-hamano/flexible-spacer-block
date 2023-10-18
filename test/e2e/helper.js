@@ -5,12 +5,6 @@ import { pressKeyWithModifier } from '@wordpress/e2e-test-utils';
 
 const page = global.page;
 
-export const openSidebar = async () => {
-	const selector = '.edit-post-header [aria-label="Settings"]';
-	const [ sidebarButton ] = await page.$$( `${ selector }[aria-expanded="false"]` );
-	await sidebarButton.click();
-};
-
 export const inputValue = async ( selector, value ) => {
 	await page.focus( selector );
 	await pressKeyWithModifier( 'primary', 'a' );
