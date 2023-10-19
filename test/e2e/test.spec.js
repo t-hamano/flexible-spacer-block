@@ -9,12 +9,12 @@ test.use( {
 	},
 } );
 
-test.describe.skip( 'Block', () => {
+test.describe( 'Block', () => {
 	test.beforeEach( async ( { admin } ) => {
 		await admin.createNewPost();
 	} );
 
-	test.skip( 'should be created', async ( { editor } ) => {
+	test( 'should be created', async ( { editor } ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -133,7 +133,7 @@ test.describe( 'Setting', () => {
 	const submitButton = 'input[id="submit"]';
 
 	test.describe( 'breakpoints', () => {
-		test.skip( 'should be saved', async ( { admin, page } ) => {
+		test( 'should be saved', async ( { admin, page } ) => {
 			const smSelector = 'input[name="flexible_spacer_block_breakpoint[sm]"]';
 			const mdSelector = 'input[name="flexible_spacer_block_breakpoint[md]"]';
 
