@@ -21,10 +21,10 @@
 		"test:e2e:debug": "wp-scripts test-playwright --debug"
 	},
 	"devDependencies": {
-		"@wordpress/env": "^8.9.0",
-		"@wordpress/icons": "^9.34.0",
-		"@wordpress/scripts": "^26.14.0",
-		"concurrently": "8.2.1",
+		"@wordpress/env": "^8.11.0",
+		"@wordpress/icons": "^9.36.0",
+		"@wordpress/scripts": "^26.16.0",
+		"concurrently": "8.2.2",
 		"opener": "^1.5.2",
 		"prettier": "npm:wp-prettier@3.0.3",
 		"rimraf": "^5.0.5"
