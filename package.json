@@ -28,13 +28,11 @@
 		"@wordpress/icons": "^9.36.0",
 		"@wordpress/scripts": "^26.16.0",
 		"concurrently": "8.2.2",
-		"opener": "^1.5.2",
 		"prettier": "npm:wp-prettier@3.0.3",
 		"rimraf": "^5.0.5"
 	},
 	"scripts": {
 		"wp-env": "wp-env",
-		"open": "wp-env start && opener http://localhost:8888",
 		"stop": "wp-env stop",
 		"start:js": "wp-scripts start --output-path=build/js",
 		"start:sass": "sass src/admin-style.scss:build/css/admin-style.css src/editor-style.scss:build/css/editor-style.css --watch",
