@@ -4,7 +4,12 @@
 	"description": "WordPress plugin to add white space between blocks and customize its height for each device.",
 	"author": "Aki Hamano",
 	"license": "GPL-2.0-or-later",
-	"keywords": ["gutenberg", "block", "spacer", "responsive"],
+	"keywords": [
+		"gutenberg",
+		"block",
+		"spacer",
+		"responsive"
+	],
 	"homepage": "https://github.com/t-hamano/flexible-spacer-block",
 	"repository": "git+https://github.com/t-hamano/flexible-spacer-block.git",
 	"bugs": {
@@ -44,7 +49,7 @@
 		"lint:php": "composer lint",
 		"lint:md-docs": "wp-scripts lint-md-docs",
 		"lint:pkg-json": "wp-scripts lint-pkg-json",
-		"format": "wp-scripts format ./src",
+		"format": "wp-scripts format",
 		"test:e2e": "wp-scripts test-playwright",
 		"test:e2e:debug": "wp-scripts test-playwright --debug"
 	}
