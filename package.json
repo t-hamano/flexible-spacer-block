@@ -1,7 +1,32 @@
 {
 	"name": "flexible-spacer-block",
+	"version": "2.2.0",
+	"description": "WordPress plugin to add white space between blocks and customize its height for each device.",
 	"author": "Aki Hamano",
-	"license": "GPL-2.0+",
+	"license": "GPL-2.0-or-later",
+	"keywords": ["gutenberg", "block", "spacer", "responsive"],
+	"homepage": "https://github.com/t-hamano/flexible-spacer-block",
+	"repository": "git+https://github.com/t-hamano/flexible-spacer-block.git",
+	"bugs": {
+		"url": "https://github.com/t-hamano/flexible-spacer-block/issues"
+	},
+	"engines": {
+		"node": ">=16.0.0",
+		"npm": ">=8.0.0"
+	},
+	"volta": {
+		"node": "16.18.0",
+		"npm": "8.19.2"
+	},
+	"devDependencies": {
+		"@wordpress/env": "^8.11.0",
+		"@wordpress/icons": "^9.36.0",
+		"@wordpress/scripts": "^26.16.0",
+		"concurrently": "8.2.2",
+		"opener": "^1.5.2",
+		"prettier": "npm:wp-prettier@3.0.3",
+		"rimraf": "^5.0.5"
+	},
 	"scripts": {
 		"wp-env": "wp-env",
 		"open": "wp-env start && opener http://localhost:8888",
@@ -13,28 +38,14 @@
 		"build:sass": "sass src/admin-style.scss:build/css/admin-style.css src/editor-style.scss:build/css/editor-style.css --no-source-map --style compressed",
 		"build": "npm run clean && npm run build:js && npm run build:sass",
 		"clean": "rimraf build",
-		"lint": "npm run lint:php && npm run lint:js && npm run lint:style",
-		"lint:php": "composer lint",
+		"lint": "npm run lint:css && npm run lint:js && npm run lint:php && npm run lint:md-docs && npm run lint:pkg-json",
+		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
-		"lint:style": "wp-scripts lint-style",
+		"lint:php": "composer lint",
+		"lint:md-docs": "wp-scripts lint-md-docs",
+		"lint:pkg-json": "wp-scripts lint-pkg-json",
+		"format": "wp-scripts format ./src",
 		"test:e2e": "wp-scripts test-playwright",
 		"test:e2e:debug": "wp-scripts test-playwright --debug"
-	},
-	"devDependencies": {
-		"@wordpress/env": "^8.11.0",
-		"@wordpress/icons": "^9.36.0",
-		"@wordpress/scripts": "^26.16.0",
-		"concurrently": "8.2.2",
-		"opener": "^1.5.2",
-		"prettier": "npm:wp-prettier@3.0.3",
-		"rimraf": "^5.0.5"
-	},
-	"engines": {
-		"node": ">=16.0.0",
-		"npm": ">=8.0.0"
-	},
-	"volta": {
-		"node": "16.18.0",
-		"npm": "8.19.2"
 	}
 }
