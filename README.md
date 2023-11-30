@@ -12,11 +12,13 @@ Also available to set "negative space (negative margin)" instead of the normal s
 And this block supports transform from and to core spacer block.
 
 ## About negative space
+
 "**Negative space**" narrows the margins both blocks above and below the spacer, and it is also possible to overlap the blocks.
 If unintended overlap occurs, add a CSS class named "**fsb-style-show-front**" to the block you want to show in the front.
 To apply the CSS class to the block, click on the block on WordPress editor, and check the block settings on the right for the Advanced setting ,then enter the CSS class.
 
 ## Screenshot
+
 ![On Block Editor](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/screenshot-1.png "On Block Editor")
 ![Setting page](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/screenshot-2.png "Setting page")
 ![Negative space example](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/screenshot-3.png "Negative space example")
@@ -24,9 +26,9 @@ To apply the CSS class to the block, click on the block on WordPress editor, and
 
 ## How to build
 
-```
-$ npm install
-$ npm run build
+```sh
+npm install
+npm run build
 ```
 
 ## Filters
@@ -96,8 +98,10 @@ add_filter( 'flexible_spacer_block_inline_css', 'custom_flexible_spacer_block_in
 ## Resources
 
 ### Image for screenshot
-* License: CC0 Public Domain
-* Source: https://pxhere.com/ja/photo/245
+
+- License: CC0 Public Domain
+- Source: <https://pxhere.com/ja/photo/245>
+
 ## Author
 
 [Aki Hamano (Github)](https://github.com/t-hamano)
