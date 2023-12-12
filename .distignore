@@ -10,6 +10,7 @@
 .eslintignore
 .eslintrc.js
 .gitignore
+.markdownlint.json
 .npmrc
 .nvmrc
 .prettierrc.js
