@@ -27,7 +27,7 @@
 
 .fsb-flexible-spacer__device-ttl {
 	position: absolute;
-	top: 0;
+	top: $grid-unit-05;
 	left: 0;
 	z-index: 1;
 	display: flex;
@@ -51,7 +51,7 @@
 
 .fsb-flexible-spacer__breakpoint {
 	position: absolute;
-	top: $grid-unit-15 * -1;
+	top: -14px;
 	left: 0;
 	z-index: 2;
 	display: flex;
@@ -68,7 +68,7 @@
 	align-items: center;
 	justify-content: center;
 	width: $grid-unit-10 * 9;
-	height: $grid-unit-30;
+	height: $grid-unit-20 + $grid-unit-05;
 	font-size: 11px;
 	color: $white;
 	text-align: center;
