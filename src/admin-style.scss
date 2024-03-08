@@ -1,3 +1,6 @@
+// WordPress base styles
+@import "../node_modules/@wordpress/base-styles/variables";
+
 .fsb-option-form {
 
 	ul {
@@ -8,9 +11,9 @@
 
 .fsb-option-breakpoint {
 	display: flex;
-	gap: 1em;
+	gap: $grid-unit-20;
 	align-items: center;
-	margin-bottom: 1em;
+	margin-bottom: $grid-unit-20;
 
 	@media screen and (max-width: 782px) {
 		flex-direction: column;
@@ -23,7 +26,7 @@
 	align-items: center;
 
 	svg {
-		fill: #646970;
+		fill: $gray-800;
 	}
 }
 
@@ -42,28 +45,28 @@
 	input {
 		max-width: 100%;
 		margin: 0;
-		border-radius: 4px 0 0 4px;
+		border-radius: $radius-block-ui 0 0 $radius-block-ui;
 	}
 
 	span {
 		display: flex;
 		align-items: center;
-		padding: 0 8px;
-		background: #f5f5f5;
-		border: #7e8993 solid 1px;
+		padding: 0 $grid-unit-10;
+		background: $gray-100;
+		border: #8c8f94 solid $border-width;
 		border-left: none;
-		border-radius: 0 4px 4px 0;
+		border-radius: 0 $radius-block-ui $radius-block-ui 0;
 	}
 }
 
 .fsb-option-default-values {
 	display: flex;
-	gap: 32px;
+	gap: $grid-unit-40;
 }
 
 .fsb-option-default-values__col {
 	display: flex;
-	gap: 8px;
+	gap: $grid-unit-10;
 	align-items: center;
 }
 
@@ -80,22 +83,12 @@
 	input {
 		max-width: 100%;
 		margin: 0;
-		border-radius: 4px 0 0 4px;
-	}
-
-	span {
-		display: flex;
-		align-items: center;
-		padding: 0 8px;
-		background: #f5f5f5;
-		border: #7e8993 solid 1px;
-		border-left: none;
-		border-radius: 0 4px 4px 0;
+		border-radius: $radius-block-ui 0 0 $radius-block-ui;
 	}
 
 	select {
 		margin: 0;
 		border-left: none;
-		border-radius: 0 3px 3px 0;
+		border-radius: 0 $radius-block-ui $radius-block-ui 0;
 	}
 }
