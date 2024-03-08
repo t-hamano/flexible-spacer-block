@@ -1,3 +1,6 @@
+// WordPress base styles
+@import "../node_modules/@wordpress/base-styles/variables";
+
 // Hack to load css files into iframe editor instances on WordPress 6.0.
 // https://github.com/WordPress/gutenberg/pull/40842
 // TODO: Once the minimum WordPress version supported by the plugin
@@ -24,7 +27,7 @@
 
 .fsb-flexible-spacer__device-ttl {
 	position: absolute;
-	top: 2px;
+	top: 0;
 	left: 0;
 	z-index: 1;
 	display: flex;
@@ -34,7 +37,7 @@
 	font-size: 12px;
 	font-weight: bold;
 	line-height: 1.2;
-	color: #757575;
+	color: $gray-700;
 	text-align: center;
 	pointer-events: none;
 	user-select: none;
@@ -48,7 +51,7 @@
 
 .fsb-flexible-spacer__breakpoint {
 	position: absolute;
-	top: -15px;
+	top: $grid-unit-15 * -1;
 	left: 0;
 	z-index: 2;
 	display: flex;
@@ -64,16 +67,16 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 70px;
-	height: 20px;
+	width: $grid-unit-10 * 9;
+	height: $grid-unit-30;
 	font-size: 11px;
-	color: #fff;
+	color: $white;
 	text-align: center;
-	background: #757575;
-	border-radius: 2px;
+	background: $gray-700;
+	border-radius: $radius-block-ui;
 
 	&:last-child:not(:first-child) {
-		margin-left: calc(33.3% - 70px);
+		margin-left: calc(33.3% - $grid-unit-10 * 9);
 	}
 }
 
@@ -86,7 +89,7 @@
 	}
 
 	.components-resizable-box__container {
-		background: #f0f0f0;
+		background: $gray-100;
 
 		&.is-negative {
 			background: #f6b9b9;
