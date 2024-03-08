@@ -61,7 +61,12 @@
 
 .fsb-option-default-values {
 	display: flex;
+	align-items: center;
 	gap: $grid-unit-40;
+
+	@media screen and (max-width: 782px) {
+		flex-direction: column;
+	}
 }
 
 .fsb-option-default-values__col {
