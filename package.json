@@ -24,11 +24,11 @@
 		"npm": "10.5.0"
 	},
 	"devDependencies": {
-		"@wordpress/env": "^8.11.0",
-		"@wordpress/icons": "^9.36.0",
-		"@wordpress/scripts": "^26.16.0",
+		"@wordpress/env": "^9.5.0",
+		"@wordpress/icons": "^9.44.0",
+		"@wordpress/scripts": "^27.4.0",
 		"concurrently": "8.2.2",
-		"husky": "^8.0.0",
+		"husky": "^9.0.11",
 		"lint-staged": "15.2.2",
 		"prettier": "npm:wp-prettier@3.0.3",
 		"rimraf": "^5.0.5"
