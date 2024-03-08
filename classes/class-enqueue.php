@@ -17,7 +17,7 @@ class Enqueue {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		if ( is_admin() ) {
-			add_action( 'enqueue_block_assets', array( $this, 'enqueue_editor_scripts' ) );
+			add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_assets' ) );
 		}
 
 		// Enqueue admin option page scripts
@@ -37,9 +37,9 @@ class Enqueue {
 	}
 
 	/**
-	 * Enqueue block editor scripts
+	 * Enqueue block assets
 	 */
-	public function enqueue_editor_scripts() {
+	public function enqueue_block_assets() {
 		$asset_file = include FSB_PATH . '/build/js/index.asset.php';
 
 		wp_register_style(
