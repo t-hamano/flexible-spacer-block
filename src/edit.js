@@ -318,7 +318,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 									onResize={ device.onResize }
 									onResizeStop={ device.onResizeStop }
 									showHandle={ isSelected }
-									__experimentalShowTooltip={ true }
+									__experimentalShowTooltip
 									__experimentalTooltipProps={ {
 										axis: 'y',
 										position: 'bottom',
