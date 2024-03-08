@@ -259,6 +259,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 								value={ control.value }
 								min={ MIN_SPACER_HEIGHT }
 								onChange={ control.onChange }
+								size={ '__unstable-large' }
 							/>
 							{ control.onNegativeChange && (
 								<ToggleControl
