@@ -296,7 +296,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 								<Icon icon={ device.icon } />
 								{ device.label }
 							</div>
-							<div className="hoge" style={ { height: device.height } }>
+							<div style={ { height: device.height } }>
 								<ResizableBox
 									className={ classnames( {
 										'is-selected': isSelected,
