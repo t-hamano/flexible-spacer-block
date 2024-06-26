@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 /**
  * WordPress dependencies
@@ -54,7 +54,7 @@ const v1 = {
 
 		const blockProps = useBlockProps.save( {
 			'aria-hidden': true,
-			className: classnames( 'fsb-flexible-spacer', className ),
+			className: clsx( 'fsb-flexible-spacer', className ),
 		} );
 
 		return (

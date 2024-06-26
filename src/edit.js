@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 /**
  * WordPress dependencies
@@ -87,7 +87,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 	} );
 
 	const blockProps = useBlockProps( {
-		className: classnames( 'fsb-flexible-spacer', {
+		className: clsx( 'fsb-flexible-spacer', {
 			'fsb-flexible-spacer--is-show-block': !! isShowBlock,
 			'fsb-flexible-spacer--is-responsive': !! isResponsive,
 		} ),
@@ -299,7 +299,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 							</div>
 							<div style={ { height: device.height } }>
 								<ResizableBox
-									className={ classnames( {
+									className={ clsx( {
 										'is-selected': isSelected,
 										'is-resizing': device.isResizing,
 										'is-negative': !! device.isNegative,
