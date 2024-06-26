@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Flexible Spacer Block
  * Description: Add white space between blocks and customize its height for each device.
- * Requires at least: 6.3
+ * Requires at least: 6.4
  * Requires PHP: 7.4
  * Version: 2.3.0
  * Author: Aki Hamano
