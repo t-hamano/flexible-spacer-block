@@ -16,7 +16,7 @@
 		},
 		{
 			"step": "runPHP",
-			"code": "<?php\ninclude 'wordpress/wp-load.php';\nwp_insert_post(array(\n'import_id' => 5,\n'post_title' => 'Flexible Spacer Block',\n'post_content' => '<!-- wp:fsb/flexible-spacer {\"heightLg\":\"300px\",\"heightMd\":\"200px\"} --><div aria-hidden=\"true\" class=\"wp-block-fsb-flexible-spacer fsb-flexible-spacer\"><div class=\"fsb-flexible-spacer__device fsb-flexible-spacer__device--lg\" style=\"height:300px\"></div><div class=\"fsb-flexible-spacer__device fsb-flexible-spacer__device--md\" style=\"height:200px\"></div><div class=\"fsb-flexible-spacer__device fsb-flexible-spacer__device--sm\" style=\"height:100px\"></div></div><!-- /wp:fsb/flexible-spacer -->',\n'post_status' => 'publish',\n'post_author' => 1\n));"
+			"code": "<?php\ninclude 'wordpress/wp-load.php';\nwp_insert_post(array(\n'import_id' => 5,\n'post_title' => 'Flexible Spacer Block',\n'post_content' => '<!-- wp:paragraph -->\n<p>Click on the area below to see the Flexible Spacer Block.</p>\n<!-- /wp:paragraph -->\n<!-- wp:fsb/flexible-spacer {\"heightLg\":\"300px\",\"heightMd\":\"200px\"} --><div aria-hidden=\"true\" class=\"wp-block-fsb-flexible-spacer fsb-flexible-spacer\"><div class=\"fsb-flexible-spacer__device fsb-flexible-spacer__device--lg\" style=\"height:300px\"></div><div class=\"fsb-flexible-spacer__device fsb-flexible-spacer__device--md\" style=\"height:200px\"></div><div class=\"fsb-flexible-spacer__device fsb-flexible-spacer__device--sm\" style=\"height:100px\"></div></div><!-- /wp:fsb/flexible-spacer -->',\n'post_status' => 'publish',\n'post_author' => 1\n));"
 		}
 	]
 }
