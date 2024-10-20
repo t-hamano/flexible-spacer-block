@@ -2,8 +2,17 @@ module.exports = {
 	extends: [ 'plugin:@wordpress/eslint-plugin/recommended' ],
 	parser: '@babel/eslint-parser',
 	rules: {
-		'react/jsx-boolean-value': 'error',
 		'import/no-extraneous-dependencies': 'off',
+		'react/jsx-boolean-value': 'error',
+		'react/jsx-curly-brace-presence': [ 'error', { props: 'never', children: 'never' } ],
+		'@wordpress/dependency-group': 'error',
+		'@wordpress/no-unsafe-wp-apis': 'off',
+		'@wordpress/i18n-text-domain': [
+			'error',
+			{
+				allowedTextDomain: 'flexible-spacer-block',
+			},
+		],
 		'prettier/prettier': [
 			'error',
 			{
