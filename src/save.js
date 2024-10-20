@@ -7,10 +7,7 @@ import clsx from 'clsx';
  * WordPress dependencies
  */
 import { useBlockProps } from '@wordpress/block-editor';
-import {
-	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
-	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
-} from '@wordpress/components';
+import { __experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue } from '@wordpress/components';
 
 const defaultValue = fsbConf.defaultValue;
 

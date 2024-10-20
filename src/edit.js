@@ -18,9 +18,7 @@ import {
 	ExternalLink,
 	ToolbarGroup,
 	ToolbarButton,
-	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 	__experimentalUnitControl as UnitControl,
-	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
