@@ -254,6 +254,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 								value={ control.quantity }
 								withInputField={ false }
 								onChange={ control.onChange }
+								__nextHasNoMarginBottom
 							/>
 							<UnitControl
 								value={ control.value }
@@ -266,6 +267,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 									label={ __( 'Negative space', 'flexible-spacer-block' ) }
 									checked={ control.isNegative }
 									onChange={ control.onNegativeChange }
+									__nextHasNoMarginBottom
 								/>
 							) }
 							<HorizontalRule />
