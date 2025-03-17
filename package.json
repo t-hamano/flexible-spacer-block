@@ -24,14 +24,14 @@
 		"npm": "10.5.0"
 	},
 	"devDependencies": {
-		"@wordpress/base-styles": "5.10.0",
-		"@wordpress/env": "^10.10.0",
-		"@wordpress/icons": "^10.10.0",
-		"@wordpress/scripts": "^27.9.0",
+		"@wordpress/base-styles": "5.20.0",
+		"@wordpress/env": "^10.20.0",
+		"@wordpress/icons": "^10.20.0",
+		"@wordpress/scripts": "^30.13.0",
 		"clsx": "2.1.1",
-		"concurrently": "9.0.1",
-		"husky": "^9.1.6",
-		"lint-staged": "15.2.10",
+		"concurrently": "9.1.2",
+		"husky": "^9.1.7",
+		"lint-staged": "15.5.0",
 		"prettier": "npm:wp-prettier@3.0.3",
 		"rimraf": "^6.0.1"
 	},
