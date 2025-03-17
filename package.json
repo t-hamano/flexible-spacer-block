@@ -24,7 +24,6 @@
 		"npm": "10.5.0"
 	},
 	"devDependencies": {
-		"@wordpress/base-styles": "5.20.0",
 		"@wordpress/env": "^10.20.0",
 		"@wordpress/icons": "^10.20.0",
 		"@wordpress/scripts": "^30.13.0",
