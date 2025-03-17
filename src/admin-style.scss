@@ -1,5 +1,4 @@
-// WordPress base styles
-@import "../node_modules/@wordpress/base-styles/variables";
+@use "wp-base-styles" as wpBaseStyles;
 
 .fsb-option-form {
 
@@ -11,9 +10,9 @@
 
 .fsb-option-breakpoint {
 	display: flex;
-	gap: $grid-unit-20;
+	gap: wpBaseStyles.$grid-unit-20;
 	align-items: center;
-	margin-bottom: $grid-unit-20;
+	margin-bottom: wpBaseStyles.$grid-unit-20;
 
 	@media screen and (max-width: 782px) {
 		flex-direction: column;
@@ -26,7 +25,7 @@
 	align-items: center;
 
 	svg {
-		fill: $gray-800;
+		fill: wpBaseStyles.$gray-800;
 	}
 }
 
@@ -45,24 +44,24 @@
 	input {
 		max-width: 100%;
 		margin: 0;
-		border-radius: $radius-block-ui 0 0 $radius-block-ui;
+		border-radius: wpBaseStyles.$radius-small 0 0 wpBaseStyles.$radius-small;
 	}
 
 	span {
 		display: flex;
 		align-items: center;
-		padding: 0 $grid-unit-10;
-		background: $gray-100;
-		border: #8c8f94 solid $border-width;
+		padding: 0 wpBaseStyles.$grid-unit-10;
+		background: wpBaseStyles.$gray-100;
+		border: wpBaseStyles.$border-width solid wpBaseStyles.$gray-100;
 		border-left: none;
-		border-radius: 0 $radius-block-ui $radius-block-ui 0;
+		border-radius: 0 wpBaseStyles.$radius-small wpBaseStyles.$radius-small 0;
 	}
 }
 
 .fsb-option-default-values {
 	display: flex;
 	align-items: center;
-	gap: $grid-unit-40;
+	gap: wpBaseStyles.$grid-unit-40;
 
 	@media screen and (max-width: 782px) {
 		flex-direction: column;
@@ -71,7 +70,7 @@
 
 .fsb-option-default-values__col {
 	display: flex;
-	gap: $grid-unit-10;
+	gap: wpBaseStyles.$grid-unit-10;
 	align-items: center;
 }
 
@@ -88,12 +87,12 @@
 	input {
 		max-width: 100%;
 		margin: 0;
-		border-radius: $radius-block-ui 0 0 $radius-block-ui;
+		border-radius: wpBaseStyles.$radius-small 0 0 wpBaseStyles.$radius-small;
 	}
 
 	select {
 		margin: 0;
 		border-left: none;
-		border-radius: 0 $radius-block-ui $radius-block-ui 0;
+		border-radius: 0 wpBaseStyles.$radius-small wpBaseStyles.$radius-small 0;
 	}
 }
