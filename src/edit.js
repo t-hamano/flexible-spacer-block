@@ -253,6 +253,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 								withInputField={ false }
 								onChange={ control.onChange }
 								__nextHasNoMarginBottom
+								__next40pxDefaultSize
 							/>
 							<UnitControl
 								value={ control.value }
