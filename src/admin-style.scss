@@ -1,4 +1,5 @@
-@use "wp-base-styles" as wpBaseStyles;
+@use "@wordpress/base-styles/variables" as variables;
+@use "@wordpress/base-styles/colors" as colors;
 
 .fsb-option-form {
 
@@ -10,9 +11,9 @@
 
 .fsb-option-breakpoint {
 	display: flex;
-	gap: wpBaseStyles.$grid-unit-20;
+	gap: variables.$grid-unit-20;
 	align-items: center;
-	margin-bottom: wpBaseStyles.$grid-unit-20;
+	margin-bottom: variables.$grid-unit-20;
 
 	@media screen and (max-width: 782px) {
 		flex-direction: column;
@@ -25,7 +26,7 @@
 	align-items: center;
 
 	svg {
-		fill: wpBaseStyles.$gray-800;
+		fill: colors.$gray-800;
 	}
 }
 
@@ -44,24 +45,24 @@
 	input {
 		max-width: 100%;
 		margin: 0;
-		border-radius: wpBaseStyles.$radius-small 0 0 wpBaseStyles.$radius-small;
+		border-radius: variables.$radius-small 0 0 variables.$radius-small;
 	}
 
 	span {
 		display: flex;
 		align-items: center;
-		padding: 0 wpBaseStyles.$grid-unit-10;
-		background: wpBaseStyles.$gray-100;
-		border: wpBaseStyles.$border-width solid wpBaseStyles.$gray-100;
+		padding: 0 variables.$grid-unit-10;
+		background: colors.$gray-100;
+		border: variables.$border-width solid colors.$gray-100;
 		border-left: none;
-		border-radius: 0 wpBaseStyles.$radius-small wpBaseStyles.$radius-small 0;
+		border-radius: 0 variables.$radius-small variables.$radius-small 0;
 	}
 }
 
 .fsb-option-default-values {
 	display: flex;
 	align-items: center;
-	gap: wpBaseStyles.$grid-unit-40;
+	gap: variables.$grid-unit-40;
 
 	@media screen and (max-width: 782px) {
 		flex-direction: column;
@@ -70,7 +71,7 @@
 
 .fsb-option-default-values__col {
 	display: flex;
-	gap: wpBaseStyles.$grid-unit-10;
+	gap: variables.$grid-unit-10;
 	align-items: center;
 }
 
@@ -87,12 +88,12 @@
 	input {
 		max-width: 100%;
 		margin: 0;
-		border-radius: wpBaseStyles.$radius-small 0 0 wpBaseStyles.$radius-small;
+		border-radius: variables.$radius-small 0 0 variables.$radius-small;
 	}
 
 	select {
 		margin: 0;
 		border-left: none;
-		border-radius: 0 wpBaseStyles.$radius-small wpBaseStyles.$radius-small 0;
+		border-radius: 0 variables.$radius-small variables.$radius-small 0;
 	}
 }
