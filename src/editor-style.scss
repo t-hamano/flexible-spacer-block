@@ -1,4 +1,5 @@
-@use "wp-base-styles" as wpBaseStyles;
+@use "@wordpress/base-styles/variables" as variables;
+@use "@wordpress/base-styles/colors" as colors;
 
 .fsb-flexible-spacer__inner {
 	display: flex;
@@ -18,7 +19,7 @@
 
 .fsb-flexible-spacer__device-ttl {
 	position: absolute;
-	top: wpBaseStyles.$grid-unit-05;
+	top: variables.$grid-unit-05;
 	left: 0;
 	z-index: 1;
 	display: flex;
@@ -28,7 +29,7 @@
 	font-size: 12px;
 	font-weight: bold;
 	line-height: 1.2;
-	color: wpBaseStyles.$gray-700;
+	color: colors.$gray-700;
 	text-align: center;
 	pointer-events: none;
 	user-select: none;
@@ -64,16 +65,16 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: wpBaseStyles.$grid-unit-10 * 9;
-	height: wpBaseStyles.$grid-unit-20 + wpBaseStyles.$grid-unit-05;
+	width: variables.$grid-unit-10 * 9;
+	height: variables.$grid-unit-20 + variables.$grid-unit-05;
 	font-size: 11px;
-	color: wpBaseStyles.$white;
+	color: colors.$white;
 	text-align: center;
-	background: wpBaseStyles.$gray-700;
-	border-radius: wpBaseStyles.$radius-small;
+	background: colors.$gray-700;
+	border-radius: variables.$radius-small;
 
 	&:last-child:not(:first-child) {
-		margin-left: calc(33.3% - wpBaseStyles.$grid-unit-10 * 9);
+		margin-left: calc(33.3% - variables.$grid-unit-10 * 9);
 	}
 }
 
@@ -86,7 +87,7 @@
 	}
 
 	.components-resizable-box__container {
-		background: wpBaseStyles.$gray-100;
+		background: colors.$gray-100;
 
 		&.is-negative {
 			background: #f6b9b9;

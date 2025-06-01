@@ -16,21 +16,22 @@
 		"url": "https://github.com/t-hamano/flexible-spacer-block/issues"
 	},
 	"engines": {
-		"node": ">=20.0.0",
-		"npm": ">=10.0.0"
+		"node": ">=22.0.0",
+		"npm": ">=10.9.2"
 	},
 	"volta": {
-		"node": "20.11.1",
-		"npm": "10.5.0"
+		"node": "22.16.0",
+		"npm": "10.9.2"
 	},
 	"devDependencies": {
-		"@wordpress/env": "^10.20.0",
-		"@wordpress/icons": "^10.20.0",
-		"@wordpress/scripts": "^30.13.0",
+		"@wordpress/base-styles": "6.0.0",
+		"@wordpress/env": "^10.24.0",
+		"@wordpress/icons": "^10.24.0",
+		"@wordpress/scripts": "^30.17.0",
 		"clsx": "2.1.1",
 		"concurrently": "9.1.2",
 		"husky": "^9.1.7",
-		"lint-staged": "15.5.0",
+		"lint-staged": "16.1.0",
 		"prettier": "npm:wp-prettier@3.0.3",
 		"rimraf": "^6.0.1"
 	},
@@ -38,10 +39,10 @@
 		"wp-env": "wp-env",
 		"stop": "wp-env stop",
 		"start:js": "wp-scripts start --output-path=build/js",
-		"start:sass": "sass src/admin-style.scss:build/css/admin-style.css src/editor-style.scss:build/css/editor-style.css --watch",
+		"start:sass": "sass src/admin-style.scss:build/css/admin-style.css src/editor-style.scss:build/css/editor-style.css --load-path=node_modules --watch",
 		"start": "concurrently \"npm run start:js\" \"npm run start:sass\"",
 		"build:js": "wp-scripts build --output-path=build/js",
-		"build:sass": "sass src/admin-style.scss:build/css/admin-style.css src/editor-style.scss:build/css/editor-style.css --no-source-map --style compressed",
+		"build:sass": "sass src/admin-style.scss:build/css/admin-style.css src/editor-style.scss:build/css/editor-style.css --load-path=node_modules --no-source-map --style compressed",
 		"build": "npm run clean && npm run build:js && npm run build:sass",
 		"clean": "rimraf build",
 		"check-licenses": "wp-scripts check-licenses",
