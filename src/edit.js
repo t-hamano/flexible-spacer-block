@@ -292,7 +292,6 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 							hasValue={ control.hasValue }
 							onDeselect={ control.onDeselect }
 							__nextHasNoMarginBottom
-							className={ `fsb-flexible-spacer__sidebar-${ control.slug }` }
 						>
 							<VStack spacing={ 4 }>
 								<RangeControl
