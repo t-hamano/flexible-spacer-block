@@ -3,8 +3,8 @@ Contributors: wildworks
 Tags: gutenberg, block, spacer, responsive
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 6.8
-Tested up to: 6.8
-Stable tag: 2.6.0
+Tested up to: 6.9
+Stable tag: 2.7.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -47,6 +47,14 @@ License: CC0 Public Domain
 Source: https://pxhere.com/ja/photo/245
 
 == Changelog ==
+
+= 2.7.0 =
+* Tested to WordPress 6.9
+* Drop support for WordPress 6.6 and 6.7
+* Update: block icon and toolbar icon
+* Enhancement: Polish settings sidebar layout
+* Enhancement: Highlight active spacer
+* Accessibility: Add aria-label to controls
 
 = 2.6.0 =
 * Tested to WordPress 6.8
