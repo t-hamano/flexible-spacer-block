@@ -256,6 +256,8 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 								__next40pxDefaultSize
 							/>
 							<UnitControl
+								hideLabelFromVision
+								label={ control.label }
 								value={ control.value }
 								min={ MIN_SPACER_HEIGHT }
 								onChange={ control.onChange }
