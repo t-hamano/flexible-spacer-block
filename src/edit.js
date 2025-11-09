@@ -21,6 +21,7 @@ import {
 	__experimentalToolsPanelItem as ToolsPanelItem,
 	__experimentalUnitControl as UnitControl,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
+	__experimentalGrid as Grid,
 	__experimentalVStack as VStack,
 } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
@@ -294,33 +295,37 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 							__nextHasNoMarginBottom
 						>
 							<VStack spacing={ 4 }>
-								<RangeControl
-									label={ control.label }
-									beforeIcon={ <Icon icon={ control.icon } /> }
-									min={ MIN_SPACER_HEIGHT }
-									max={ MAX_SPACER_HEIGHT }
-									value={ control.quantity }
-									withInputField={ false }
-									onChange={ control.onChange }
-									__nextHasNoMarginBottom
-									__next40pxDefaultSize
-								/>
-								<UnitControl
-									hideLabelFromVision
-									label={ control.label }
-									value={ control.value }
-									min={ MIN_SPACER_HEIGHT }
-									onChange={ control.onChange }
-									size="__unstable-large"
-								/>
-								{ control.onNegativeChange && (
-									<ToggleControl
-										label={ __( 'Negative space', 'flexible-spacer-block' ) }
-										checked={ control.isNegative }
-										onChange={ control.onNegativeChange }
-										__nextHasNoMarginBottom
-									/>
-								) }
+								<VStack spacing={ 2 }>
+									<Grid align="end" gap={ 2 } templateColumns="1fr 0.7fr">
+										<RangeControl
+											label={ control.label }
+											beforeIcon={ <Icon icon={ control.icon } /> }
+											min={ MIN_SPACER_HEIGHT }
+											max={ MAX_SPACER_HEIGHT }
+											value={ control.quantity }
+											withInputField={ false }
+											onChange={ control.onChange }
+											__nextHasNoMarginBottom
+											__next40pxDefaultSize
+										/>
+										<UnitControl
+											hideLabelFromVision
+											label={ control.label }
+											value={ control.value }
+											min={ MIN_SPACER_HEIGHT }
+											onChange={ control.onChange }
+											size="__unstable-large"
+										/>
+									</Grid>
+									{ control.onNegativeChange && (
+										<ToggleControl
+											label={ __( 'Negative space', 'flexible-spacer-block' ) }
+											checked={ control.isNegative }
+											onChange={ control.onNegativeChange }
+											__nextHasNoMarginBottom
+										/>
+									) }
+								</VStack>
 								<HorizontalRule />
 							</VStack>
 						</ToolsPanelItem>
