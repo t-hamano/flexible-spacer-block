@@ -44,6 +44,7 @@ import {
 
 export default function Edit( { attributes, isSelected, setAttributes, toggleSelection } ) {
 	const [ heightAll, setHeightAll ] = useState( DEFAULT_SPACER_HEIGHT.DEFAULT_SPACER_HEIGHT_UNIT );
+	const [ activeDevice, setActiveDevice ] = useState( undefined );
 	const [ isResizingLg, setIsResizingLg ] = useState( false );
 	const [ isResizingMd, setIsResizingMd ] = useState( false );
 	const [ isResizingSm, setIsResizingSm ] = useState( false );
@@ -295,8 +296,12 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 							__nextHasNoMarginBottom
 						>
 							<VStack spacing={ 4 }>
-								<VStack spacing={ 2 }>
-									<Grid align="end" gap={ 2 } templateColumns="1fr 0.7fr">
+								<VStack
+									spacing={ 2 }
+									onMouseEnter={ () => setActiveDevice( control.slug ) }
+									onMouseLeave={ () => setActiveDevice( undefined ) }
+								>
+									<Grid align="end" templateColumns="1fr 0.7fr">
 										<RangeControl
 											label={ control.label }
 											beforeIcon={ <Icon icon={ control.icon } /> }
@@ -358,10 +363,10 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 							</div>
 							<div style={ { height: device.height } }>
 								<ResizableBox
-									className={ clsx( {
-										'is-selected': isSelected,
+									className={ clsx( 'fsb-flexible-spacer__device-resizer', {
 										'is-resizing': device.isResizing,
 										'is-negative': !! device.isNegative,
+										'is-active': activeDevice === device.slug,
 									} ) }
 									minHeight={ MIN_SPACER_HEIGHT }
 									enable={ {

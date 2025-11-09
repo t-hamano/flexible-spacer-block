@@ -15,10 +15,6 @@
 .fsb-flexible-spacer__device {
 	position: relative;
 	flex: 1;
-
-	.components-resizable-box__container:not(.is-resizing) {
-		height: 100% !important;
-	}
 }
 
 .fsb-flexible-spacer__device-ttl {
@@ -90,11 +86,23 @@
 		opacity: 1;
 	}
 
-	.components-resizable-box__container {
+	.fsb-flexible-spacer__device-resizer {
 		background: colors.$gray-100;
+
+		&:not(.is-resizing) {
+			height: 100% !important;
+		}
+
+		&.is-active {
+			background: colors.$gray-300;
+		}
 
 		&.is-negative {
 			background: #f6b9b9;
+		}
+
+		&.is-negative.is-active {
+			background: #f0a0a0;
 		}
 	}
 }
