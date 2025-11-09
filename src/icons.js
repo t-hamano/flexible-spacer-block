@@ -1,12 +1,12 @@
 /**
  * WordPress dependencies
  */
-import { Path, SVG, Polygon } from '@wordpress/components';
+import { Path, SVG } from '@wordpress/components';
 
 export const blockIcon = (
 	<SVG viewBox="0 0 24 24">
-		<Polygon points="17.5,1.5 7.8,6.1 10.8,6.5 6.5,10.5 16.5,6 13.4,5.5 " />
-		<Path d="M13.5,10.2v1.6h3.7L5.8,19.2V15H4.2v6.8H11v-1.6H6.8l11.4-7.4v3.7h1.6v-6.3H13.5z" />
+		<path d="M4.5 15.5H8.5V17H2V10.5H3.5V14.5L14.5 3.5H10.5V2H17V8.5H15.5V4.5L4.5 15.5Z" />
+		<path d="M20 10L15 10C13.9 10 13 10.9 13 12V20C13 21.1 13.9 22 15 22H20C21.1 22 22 21.1 22 20V12C22 10.9 21.1 10 20 10ZM20.5 20C20.5 20.3 20.3 20.5 20 20.5H15C14.7 20.5 14.5 20.3 14.5 20V12C14.5 11.7 14.7 11.5 15 11.5H20C20.3 11.5 20.5 11.7 20.5 12V20ZM16.5 19.5H18.5V18.5H16.5V19.5Z" />
 	</SVG>
 );
 
