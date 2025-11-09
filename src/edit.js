@@ -132,7 +132,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 
 	const SPACER_CONTROLS = [
 		{
-			label: __( 'Height (All)', 'flexible-spacer-block' ),
+			label: __( 'All heights', 'flexible-spacer-block' ),
 			icon: settings,
 			slug: 'all',
 			value: heightAll,
@@ -140,7 +140,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 			onChange: ( value ) => onChangeHeightAll( heightAll, value ),
 		},
 		{
-			label: __( 'Height (Desktop)', 'flexible-spacer-block' ),
+			label: __( 'Desktop height', 'flexible-spacer-block' ),
 			icon: desktop,
 			slug: 'lg',
 			value: heightLg,
@@ -155,7 +155,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 			},
 		},
 		{
-			label: __( 'Height (Tablet)', 'flexible-spacer-block' ),
+			label: __( 'Tablet height', 'flexible-spacer-block' ),
 			icon: tablet,
 			slug: 'md',
 			value: heightMd,
@@ -165,7 +165,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 			onNegativeChange: ( value ) => setAttributes( { isNegativeMd: value } ),
 		},
 		{
-			label: __( 'Height (Mobile)', 'flexible-spacer-block' ),
+			label: __( 'Mobile height', 'flexible-spacer-block' ),
 			icon: mobile,
 			slug: 'sm',
 			value: heightSm,
