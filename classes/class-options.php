@@ -250,7 +250,8 @@ class Options {
 		?>
 		<fieldset>
 			<label>
-				<input type="checkbox" name="flexible_spacer_block_show_block" value="1" <?php checked( get_option( 'flexible_spacer_block_show_block', false ) ); ?>><?php _e( 'Always show blocks in the block editor', 'flexible-spacer-block' ); ?>
+				<input type="checkbox" name="flexible_spacer_block_show_block" value="1" <?php checked( get_option( 'flexible_spacer_block_show_block', false ) ); ?>>
+				<?php _e( 'Always show blocks in the block editor', 'flexible-spacer-block' ); ?>
 			</label>
 			<p class="description"><?php _e( 'The block will always be visible even when it is not selected.', 'flexible-spacer-block' ); ?></p>
 		</fieldset>

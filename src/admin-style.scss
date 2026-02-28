@@ -46,14 +46,18 @@
 		max-width: 100%;
 		margin: 0;
 		border-radius: variables.$radius-small 0 0 variables.$radius-small;
+
+		&:focus {
+			z-index: 1;
+		}
 	}
 
 	span {
 		display: flex;
 		align-items: center;
 		padding: 0 variables.$grid-unit-10;
-		background: colors.$gray-100;
-		border: variables.$border-width solid colors.$gray-100;
+		background: colors.$white;
+		border: variables.$border-width solid colors.$gray-600;
 		border-left: none;
 		border-radius: 0 variables.$radius-small variables.$radius-small 0;
 	}
@@ -89,6 +93,10 @@
 		max-width: 100%;
 		margin: 0;
 		border-radius: variables.$radius-small 0 0 variables.$radius-small;
+
+		&:focus {
+			z-index: 1;
+		}
 	}
 
 	select {
