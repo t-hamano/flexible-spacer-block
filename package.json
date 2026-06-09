@@ -29,7 +29,7 @@
 		"@wordpress/icons": "^11.7.0",
 		"@wordpress/scripts": "^31.5.0",
 		"clsx": "2.1.1",
-		"concurrently": "9.2.1",
+		"concurrently": "10.0.3",
 		"husky": "^9.1.7",
 		"lint-staged": "16.2.7",
 		"prettier": "npm:wp-prettier@3.0.3",
