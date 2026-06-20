@@ -14,7 +14,7 @@ import type { BlockSaveProps } from '@wordpress/blocks';
  */
 import type { BlockAttributes } from './types';
 
-type DeprecatedV1Attributes = {
+type V1Attributes = {
 	heightLg: number;
 	heightMd: number;
 	heightSm: number;
@@ -51,7 +51,7 @@ const v1 = {
 			default: false,
 		},
 	},
-	migrate( attributes: DeprecatedV1Attributes ): BlockAttributes {
+	migrate( attributes: V1Attributes ): BlockAttributes {
 		const { heightLg, heightMd, heightSm } = attributes;
 		return {
 			...attributes,
@@ -60,7 +60,7 @@ const v1 = {
 			heightSm: heightSm !== undefined ? `${ heightSm }px` : undefined,
 		};
 	},
-	save( { attributes, className }: BlockSaveProps< DeprecatedV1Attributes > ) {
+	save( { attributes, className }: BlockSaveProps< V1Attributes > ) {
 		const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
 
 		const styleLg = isNegativeLg ? { marginBottom: -heightLg } : { height: heightLg };
