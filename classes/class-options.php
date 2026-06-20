@@ -128,8 +128,8 @@ class Options {
 	 * Display field (Responsive Setting)
 	 */
 	public function flexible_spacer_block_breakpoint_display_field() {
-		$breakpoint_sm = isset( $this->breakpoints['sm'] ) ? $this->breakpoints['sm'] : FSB_BREAKPOINT_SM;
-		$breakpoint_md = isset( $this->breakpoints['md'] ) ? $this->breakpoints['md'] : FSB_BREAKPOINT_MD;
+		$breakpoint_sm = $this->breakpoints['sm'] ?? FSB_BREAKPOINT_SM;
+		$breakpoint_md = $this->breakpoints['md'] ?? FSB_BREAKPOINT_MD;
 		?>
 		<div class="fsb-option-breakpoint">
 			<div class="fsb-option-breakpoint__device">
@@ -169,13 +169,13 @@ class Options {
 	 * Display field (Default Values)
 	 */
 	public function flexible_spacer_block_default_value_display_field() {
-		$default_value_sm = isset( $this->default_value['sm'] ) ? $this->default_value['sm'] : FSB_DEFAULT_SPACER_HEIGHT;
-		$default_value_md = isset( $this->default_value['md'] ) ? $this->default_value['md'] : FSB_DEFAULT_SPACER_HEIGHT;
-		$default_value_lg = isset( $this->default_value['lg'] ) ? $this->default_value['lg'] : FSB_DEFAULT_SPACER_HEIGHT;
+		$default_value_sm = $this->default_value['sm'] ?? FSB_DEFAULT_SPACER_HEIGHT;
+		$default_value_md = $this->default_value['md'] ?? FSB_DEFAULT_SPACER_HEIGHT;
+		$default_value_lg = $this->default_value['lg'] ?? FSB_DEFAULT_SPACER_HEIGHT;
 
-		$default_value_sm_unit = isset( $this->default_value['sm_unit'] ) ? $this->default_value['sm_unit'] : FSB_DEFAULT_SPACER_HEIGHT_UNIT;
-		$default_value_md_unit = isset( $this->default_value['md_unit'] ) ? $this->default_value['md_unit'] : FSB_DEFAULT_SPACER_HEIGHT_UNIT;
-		$default_value_lg_unit = isset( $this->default_value['lg_unit'] ) ? $this->default_value['lg_unit'] : FSB_DEFAULT_SPACER_HEIGHT_UNIT;
+		$default_value_sm_unit = $this->default_value['sm_unit'] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT;
+		$default_value_md_unit = $this->default_value['md_unit'] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT;
+		$default_value_lg_unit = $this->default_value['lg_unit'] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT;
 		?>
 		<div class="fsb-option-default-values">
 			<div class="fsb-option-default-values__col">
@@ -188,11 +188,7 @@ class Options {
 					<select name="flexible_spacer_block_default_value[sm_unit]">
 						<?php
 						foreach ( $this->units as $unit ) {
-							if ( $unit === $default_value_sm_unit ) {
-								echo '<option value="' . esc_attr( $unit ) . '" selected>' . esc_html( $unit ) . '</option>';
-							} else {
-								echo '<option value="' . esc_attr( $unit ) . '">' . esc_html( $unit ) . '</option>';
-							}
+							echo '<option value="' . esc_attr( $unit ) . '"' . selected( $unit, $default_value_sm_unit, false ) . '>' . esc_html( $unit ) . '</option>';
 						}
 						?>
 					</select>
@@ -208,11 +204,7 @@ class Options {
 					<select name="flexible_spacer_block_default_value[md_unit]">
 						<?php
 						foreach ( $this->units as $unit ) {
-							if ( $unit === $default_value_md_unit ) {
-								echo '<option value="' . esc_attr( $unit ) . '" selected>' . esc_html( $unit ) . '</option>';
-							} else {
-								echo '<option value="' . esc_attr( $unit ) . '">' . esc_html( $unit ) . '</option>';
-							}
+							echo '<option value="' . esc_attr( $unit ) . '"' . selected( $unit, $default_value_md_unit, false ) . '>' . esc_html( $unit ) . '</option>';
 						}
 						?>
 					</select>
@@ -228,11 +220,7 @@ class Options {
 					<select name="flexible_spacer_block_default_value[lg_unit]">
 						<?php
 						foreach ( $this->units as $unit ) {
-							if ( $unit === $default_value_lg_unit ) {
-								echo '<option value="' . esc_attr( $unit ) . '" selected>' . esc_html( $unit ) . '</option>';
-							} else {
-								echo '<option value="' . esc_attr( $unit ) . '">' . esc_html( $unit ) . '</option>';
-							}
+							echo '<option value="' . esc_attr( $unit ) . '"' . selected( $unit, $default_value_lg_unit, false ) . '>' . esc_html( $unit ) . '</option>';
 						}
 						?>
 					</select>
@@ -279,8 +267,8 @@ class Options {
 				__( 'Responsive Setting: Fill in both fields.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
-				'md' => isset( $this->breakpoints['md'] ) ? $this->breakpoints['md'] : FSB_BREAKPOINT_MD,
-				'sm' => isset( $this->breakpoints['sm'] ) ? $this->breakpoints['sm'] : FSB_BREAKPOINT_SM,
+				'md' => $this->breakpoints['md'] ?? FSB_BREAKPOINT_MD,
+				'sm' => $this->breakpoints['sm'] ?? FSB_BREAKPOINT_SM,
 			);
 		} elseif ( $breakpoint_md < $breakpoint_sm ) {
 			add_settings_error(
@@ -289,8 +277,8 @@ class Options {
 				__( 'Responsive Setting: the screen width value in the left field must be equal to or smaller than the value in the right field.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
-				'md' => isset( $this->breakpoints['md'] ) ? $this->breakpoints['md'] : '',
-				'sm' => isset( $this->breakpoints['sm'] ) ? $this->breakpoints['sm'] : '',
+				'md' => $this->breakpoints['md'] ?? '',
+				'sm' => $this->breakpoints['sm'] ?? '',
 			);
 		} else {
 			$new_input = array(
@@ -327,12 +315,12 @@ class Options {
 				__( 'Default Value: Fill in all fields.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
-				'sm'      => isset( $this->default_value['sm'] ) ? $this->default_value['sm'] : FSB_DEFAULT_SPACER_HEIGHT,
-				'md'      => isset( $this->default_value['md'] ) ? $this->default_value['md'] : FSB_DEFAULT_SPACER_HEIGHT,
-				'lg'      => isset( $this->default_value['lg'] ) ? $this->default_value['lg'] : FSB_DEFAULT_SPACER_HEIGHT,
-				'sm_unit' => isset( $this->default_value['sm_unit'] ) ? $this->default_value['sm_unit'] : FSB_DEFAULT_SPACER_HEIGHT_UNIT,
-				'md_unit' => isset( $this->default_value['md_unit'] ) ? $this->default_value['md_unit'] : FSB_DEFAULT_SPACER_HEIGHT_UNIT,
-				'lg_unit' => isset( $this->default_value['lg_unit'] ) ? $this->default_value['lg_unit'] : FSB_DEFAULT_SPACER_HEIGHT_UNIT,
+				'sm'      => $this->default_value['sm'] ?? FSB_DEFAULT_SPACER_HEIGHT,
+				'md'      => $this->default_value['md'] ?? FSB_DEFAULT_SPACER_HEIGHT,
+				'lg'      => $this->default_value['lg'] ?? FSB_DEFAULT_SPACER_HEIGHT,
+				'sm_unit' => $this->default_value['sm_unit'] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT,
+				'md_unit' => $this->default_value['md_unit'] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT,
+				'lg_unit' => $this->default_value['lg_unit'] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT,
 			);
 		} else {
 			$new_input = array(
@@ -354,7 +342,7 @@ class Options {
 	 * @return boolean
 	 */
 	public static function sanitize_checkbox( $value ) {
-		return ( isset( $value ) ? true : false );
+		return isset( $value );
 	}
 }
 
