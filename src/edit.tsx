@@ -6,7 +6,7 @@ import clsx from 'clsx';
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
 import {
@@ -386,11 +386,19 @@ export default function Edit( {
 				<div className="fsb-flexible-spacer__inner">
 					<div className="fsb-flexible-spacer__breakpoint">
 						<div className="fsb-flexible-spacer__breakpoint-item">
-							&le; { fsbConf.breakpoint.sm }px &lt;
+							{ sprintf(
+								/* translators: %d: Breakpoint width in pixels. */
+								__( '≤ %dpx <', 'flexible-spacer-block' ),
+								fsbConf.breakpoint.sm
+							) }
 						</div>
 						{ isEnableMd && (
 							<div className="fsb-flexible-spacer__breakpoint-item">
-								&le; { fsbConf.breakpoint.md }px &lt;
+								{ sprintf(
+									/* translators: %d: Breakpoint width in pixels. */
+									__( '≤ %dpx <', 'flexible-spacer-block' ),
+									fsbConf.breakpoint.md
+								) }
 							</div>
 						) }
 					</div>
