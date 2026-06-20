@@ -20,9 +20,6 @@ registerBlockType< BlockAttributes >( metadata as BlockConfiguration< BlockAttri
 	icon,
 	edit,
 	save,
-	// `transforms` and `deprecated` carry callback signatures (e.g. `transform`,
-	// `migrate`) that are intentionally narrower than the loose types expected by
-	// `registerBlockType`, so they are cast at this boundary.
 	transforms: transforms as BlockConfiguration< BlockAttributes >[ 'transforms' ],
 	deprecated: deprecated as unknown as BlockConfiguration< BlockAttributes >[ 'deprecated' ],
 } );

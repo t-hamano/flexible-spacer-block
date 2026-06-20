@@ -1,8 +1,3 @@
-/**
- * Editor configuration injected from PHP via `wp_localize_script`.
- *
- * @see classes/class-enqueue.php (`create_editor_config`)
- */
 interface FsbConf {
 	breakpoint: {
 		md: string;
