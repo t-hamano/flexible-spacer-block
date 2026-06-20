@@ -34,7 +34,11 @@ class Init {
 	 * Add a link to this plugin settings page in plugin list
 	 */
 	public function add_action_links( $links ) {
-		$link = '<a href="' . admin_url( 'options-general.php?page=flexible-spacer-block-option' ) . '">' . __( 'Settings', 'flexible-spacer-block' ) . '</a>';
+		$link = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url( admin_url( 'options-general.php?page=flexible-spacer-block-option' ) ),
+			__( 'Settings', 'flexible-spacer-block' )
+		);
 		array_unshift( $links, $link );
 		return $links;
 	}
