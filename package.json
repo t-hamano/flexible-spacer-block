@@ -33,7 +33,8 @@
 	},
 	"scripts": {
 		"wp-env": "wp-env",
-		"stop": "wp-env stop",
+		"wp-env-test": "wp-env --config .wp-env.test.json",
+		"stop": "wp-env stop && wp-env --config .wp-env.test.json stop",
 		"start:js": "wp-scripts start --output-path=build/js",
 		"start:sass": "sass src/admin-style.scss:build/css/admin-style.css src/editor-style.scss:build/css/editor-style.css --load-path=node_modules --watch",
 		"start": "concurrently \"npm run start:js\" \"npm run start:sass\"",
