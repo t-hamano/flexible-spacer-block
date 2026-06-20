@@ -10,15 +10,15 @@ import { __ } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
 import {
-	ResizableBox as ResizableBoxComponent,
+	ResizableBox,
 	RangeControl,
 	ToggleControl,
 	HorizontalRule,
 	ExternalLink,
 	ToolbarGroup,
 	ToolbarButton,
-	__experimentalToolsPanel as ToolsPanelComponent,
-	__experimentalToolsPanelItem as ToolsPanelItemComponent,
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
 	__experimentalUnitControl as UnitControl,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 	__experimentalGrid as Grid,
@@ -49,16 +49,6 @@ type EditProps = BlockEditProps< BlockAttributes > & {
 	// Injected by the block editor at runtime; not part of `BlockEditProps`.
 	toggleSelection?: ( isSelectionEnabled: boolean ) => void;
 };
-
-// These experimental components ship type definitions that do not match the
-// props used here (e.g. a required `resetAll`, `__nextHasNoMarginBottom`, or
-// mandatory `children`). Wrap them in permissive types to keep runtime behavior
-// untouched while satisfying the type checker.
-type LooseComponentProps = Record< string, unknown >;
-const ToolsPanel = ToolsPanelComponent as unknown as React.ComponentType< LooseComponentProps >;
-const ToolsPanelItem =
-	ToolsPanelItemComponent as unknown as React.ComponentType< LooseComponentProps >;
-const ResizableBox = ResizableBoxComponent as unknown as React.ComponentType< LooseComponentProps >;
 
 type HeightValue = string | number | undefined;
 
@@ -191,6 +181,18 @@ export default function Edit( {
 		setTemporaryWidthSm( null );
 	};
 
+	const resetAll = () => {
+		setAttributes( {
+			heightLg: defaultLgValue,
+			heightMd: isEnableMd ? defaultMdValue : defaultLgValue,
+			heightSm: defaultSmValue,
+			isNegativeLg: false,
+			isNegativeMd: false,
+			isNegativeSm: false,
+		} );
+		setHeightAll( defaultLgValue );
+	};
+
 	const SPACER_CONTROLS: SpacerControl[] = [
 		{
 			label: __( 'All heights', 'flexible-spacer-block' ),
@@ -206,17 +208,7 @@ export default function Edit( {
 				isNegativeLg ||
 				isNegativeMd ||
 				isNegativeSm,
-			onDeselect: () => {
-				setAttributes( {
-					heightLg: defaultLgValue,
-					heightMd: isEnableMd ? defaultMdValue : defaultLgValue,
-					heightSm: defaultSmValue,
-					isNegativeLg: false,
-					isNegativeMd: false,
-					isNegativeSm: false,
-				} );
-				setHeightAll( defaultLgValue );
-			},
+			onDeselect: resetAll,
 		},
 		{
 			label: __( 'Desktop height', 'flexible-spacer-block' ),
@@ -338,6 +330,7 @@ export default function Edit( {
 					label={ __( 'Settings', 'flexible-spacer-block' ) }
 					dropdownMenuProps={ dropdownMenuProps }
 					className="fsb-flexible-spacer__sidebar"
+					resetAll={ resetAll }
 				>
 					{ SPACER_CONTROLS.map( ( control ) => (
 						<ToolsPanelItem
@@ -346,7 +339,6 @@ export default function Edit( {
 							isShownByDefault
 							hasValue={ control.hasValue }
 							onDeselect={ control.onDeselect }
-							__nextHasNoMarginBottom
 						>
 							<VStack spacing={ 4 }>
 								<VStack
@@ -442,7 +434,10 @@ export default function Edit( {
 										position: 'bottom',
 										isVisible: device.isResizing,
 									} }
-								/>
+								>
+									{ /* `children` is required by the type, but is not actually needed here, so render a dummy element. */ }
+									<></>
+								</ResizableBox>
 							</div>
 						</div>
 					) ) }
