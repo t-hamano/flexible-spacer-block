@@ -15,6 +15,3 @@ interface FsbConf {
 }
 
 declare const fsbConf: FsbConf;
-
-// `@wordpress/block-editor` does not ship its own type declarations.
-declare module '@wordpress/block-editor';
