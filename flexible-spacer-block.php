@@ -15,10 +15,6 @@
  * @license GPL-2.0+
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 defined( 'ABSPATH' ) || exit;
 
 define( 'FSB_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
