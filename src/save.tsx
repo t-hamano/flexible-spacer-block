@@ -8,13 +8,24 @@ import clsx from 'clsx';
  */
 import { useBlockProps } from '@wordpress/block-editor';
 import { __experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue } from '@wordpress/components';
+import type { BlockSaveProps } from '@wordpress/blocks';
+
+/**
+ * Internal dependencies
+ */
+import type { BlockAttributes } from './types';
 
 const defaultValue = fsbConf.defaultValue;
 
-export default function save( { attributes, className } ) {
+export default function save( { attributes, className }: BlockSaveProps< BlockAttributes > ) {
 	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
 
-	function getStyleObject( value, isNegative, defaultQuantity, defaultUnit ) {
+	function getStyleObject(
+		value: string | undefined,
+		isNegative: boolean,
+		defaultQuantity: string,
+		defaultUnit: string
+	): React.CSSProperties {
 		// Return default value if the value is falsy.
 		if ( value === undefined ) {
 			return isNegative

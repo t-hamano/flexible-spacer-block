@@ -74,11 +74,15 @@ test.describe( 'Setting', () => {
 		const selector = `input[name="flexible_spacer_block_show_block"]`;
 		await admin.visitAdminPage( '/options-general.php', `page=flexible-spacer-block-option` );
 		const currentCheckbox = await page.locator( selector );
-		const currentChecked = await currentCheckbox.evaluate( ( element ) => element.checked );
+		const currentChecked = await currentCheckbox.evaluate(
+			( element: HTMLInputElement ) => element.checked
+		);
 		await currentCheckbox.click();
 		await page.click( submitButton );
 		const newCheckbox = await page.locator( selector );
-		const newChecked = await newCheckbox.evaluate( ( element ) => element.checked );
+		const newChecked = await newCheckbox.evaluate(
+			( element: HTMLInputElement ) => element.checked
+		);
 		expect( newChecked ).toBe( ! currentChecked );
 	} );
 } );

@@ -3,12 +3,18 @@
  */
 import { createReduxStore, register } from '@wordpress/data';
 
-const DEFAULT_STATE = {
+interface State {
+	isResponsive: boolean;
+}
+
+type Action = { type: 'UPDATE_IS_RESPONSIVE'; value: boolean };
+
+const DEFAULT_STATE: State = {
 	isResponsive: false,
 };
 
-const store = createReduxStore( 'flexible-spacer-block', {
-	reducer: ( state = DEFAULT_STATE, action ) => {
+export const store = createReduxStore( 'flexible-spacer-block', {
+	reducer: ( state: State = DEFAULT_STATE, action: Action ): State => {
 		if ( action.type === 'UPDATE_IS_RESPONSIVE' ) {
 			return {
 				...state,
@@ -18,14 +24,14 @@ const store = createReduxStore( 'flexible-spacer-block', {
 		return state;
 	},
 	selectors: {
-		getIsResponsive( state ) {
+		getIsResponsive( state: State ) {
 			return state.isResponsive;
 		},
 	},
 	actions: {
-		setIsResponsive( value ) {
+		setIsResponsive( value: boolean ) {
 			return {
-				type: 'UPDATE_IS_RESPONSIVE',
+				type: 'UPDATE_IS_RESPONSIVE' as const,
 				value,
 			};
 		},
