@@ -45,11 +45,6 @@ import {
 	DEFAULT_SPACER_HEIGHT_UNIT,
 } from './constants';
 
-type EditProps = BlockEditProps< BlockAttributes > & {
-	// Injected by the block editor at runtime; not part of `BlockEditProps`.
-	toggleSelection?: ( isSelectionEnabled: boolean ) => void;
-};
-
 type HeightValue = string | number | undefined;
 
 interface SpacerControl {
@@ -82,7 +77,10 @@ export default function Edit( {
 	isSelected,
 	setAttributes,
 	toggleSelection,
-}: EditProps ) {
+}: BlockEditProps< BlockAttributes > & {
+	// Injected by the block editor at runtime; not part of `BlockEditProps`.
+	toggleSelection?: ( isSelectionEnabled: boolean ) => void;
+} ) {
 	const [ heightAll, setHeightAll ] = useState< string | undefined >( undefined );
 	const [ activeDevice, setActiveDevice ] = useState< string | undefined >( undefined );
 	const [ isResizingLg, setIsResizingLg ] = useState( false );
