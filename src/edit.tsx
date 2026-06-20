@@ -10,15 +10,15 @@ import { __ } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
 import {
-	ResizableBox,
+	ResizableBox as ResizableBoxComponent,
 	RangeControl,
 	ToggleControl,
 	HorizontalRule,
 	ExternalLink,
 	ToolbarGroup,
 	ToolbarButton,
-	__experimentalToolsPanel as ToolsPanel,
-	__experimentalToolsPanelItem as ToolsPanelItem,
+	__experimentalToolsPanel as ToolsPanelComponent,
+	__experimentalToolsPanelItem as ToolsPanelItemComponent,
 	__experimentalUnitControl as UnitControl,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 	__experimentalGrid as Grid,
@@ -29,11 +29,14 @@ import { View } from '@wordpress/primitives';
 import { Icon, settings, mobile, tablet, desktop } from '@wordpress/icons';
 import { addQueryArgs } from '@wordpress/url';
 import { useViewportMatch } from '@wordpress/compose';
+import type { BlockEditProps } from '@wordpress/blocks';
 
 /**
  * Internal dependencies
  */
 import { responsive } from './icons';
+import { store } from './store';
+import type { BlockAttributes } from './types';
 
 import {
 	MIN_SPACER_HEIGHT,
@@ -42,20 +45,65 @@ import {
 	DEFAULT_SPACER_HEIGHT_UNIT,
 } from './constants';
 
-export default function Edit( { attributes, isSelected, setAttributes, toggleSelection } ) {
-	const [ heightAll, setHeightAll ] = useState( DEFAULT_SPACER_HEIGHT.DEFAULT_SPACER_HEIGHT_UNIT );
-	const [ activeDevice, setActiveDevice ] = useState( undefined );
+type EditProps = BlockEditProps< BlockAttributes > & {
+	// Injected by the block editor at runtime; not part of `BlockEditProps`.
+	toggleSelection?: ( isSelectionEnabled: boolean ) => void;
+};
+
+// These experimental components ship type definitions that do not match the
+// props used here (e.g. a required `resetAll`, `__nextHasNoMarginBottom`, or
+// mandatory `children`). Wrap them in permissive types to keep runtime behavior
+// untouched while satisfying the type checker.
+type LooseComponentProps = Record< string, unknown >;
+const ToolsPanel = ToolsPanelComponent as unknown as React.ComponentType< LooseComponentProps >;
+const ToolsPanelItem =
+	ToolsPanelItemComponent as unknown as React.ComponentType< LooseComponentProps >;
+const ResizableBox = ResizableBoxComponent as unknown as React.ComponentType< LooseComponentProps >;
+
+type HeightValue = string | number | undefined;
+
+interface SpacerControl {
+	label: string;
+	icon: JSX.Element;
+	slug: string;
+	value: string | undefined;
+	quantity: number | undefined;
+	onChange: ( value: HeightValue ) => void;
+	isNegative?: boolean;
+	onNegativeChange?: ( value: boolean ) => void;
+	hasValue: () => boolean;
+	onDeselect: () => void;
+}
+
+interface SpacerDevice {
+	label: string;
+	slug: string;
+	icon: JSX.Element;
+	isNegative: boolean;
+	height: string;
+	onResizeStart: () => void;
+	onResize: () => void;
+	onResizeStop: ( event: unknown, direction: unknown, elt: HTMLElement ) => void;
+	isResizing: boolean;
+}
+
+export default function Edit( {
+	attributes,
+	isSelected,
+	setAttributes,
+	toggleSelection,
+}: EditProps ) {
+	const [ heightAll, setHeightAll ] = useState< string | undefined >( undefined );
+	const [ activeDevice, setActiveDevice ] = useState< string | undefined >( undefined );
 	const [ isResizingLg, setIsResizingLg ] = useState( false );
 	const [ isResizingMd, setIsResizingMd ] = useState( false );
 	const [ isResizingSm, setIsResizingSm ] = useState( false );
-	const [ temporaryWidthLg, setTemporaryWidthLg ] = useState( null );
-	const [ temporaryWidthMd, setTemporaryWidthMd ] = useState( null );
-	const [ temporaryWidthSm, setTemporaryWidthSm ] = useState( null );
+	const [ temporaryWidthLg, setTemporaryWidthLg ] = useState< string | null >( null );
+	const [ temporaryWidthMd, setTemporaryWidthMd ] = useState< string | null >( null );
+	const [ temporaryWidthSm, setTemporaryWidthSm ] = useState< string | null >( null );
 
-	const isResponsive = useSelect( ( select ) =>
-		select( 'flexible-spacer-block' ).getIsResponsive()
-	);
-	const { setIsResponsive } = useDispatch( 'flexible-spacer-block' );
+	const isResponsive = useSelect( ( select ) => select( store ).getIsResponsive(), [] );
+	const { setIsResponsive } = useDispatch( store );
 	const isMobile = useViewportMatch( 'medium', '<' );
 
 	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
@@ -101,7 +149,10 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 		} ),
 	} );
 
-	function getUpdatedHeight( currentValue, newValue ) {
+	function getUpdatedHeight(
+		currentValue: HeightValue,
+		newValue: HeightValue
+	): string | undefined {
 		if ( ! newValue ) {
 			return undefined;
 		}
@@ -112,7 +163,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 		return newParsedQuantity + newUnit;
 	}
 
-	const onChangeHeightAll = ( currentValue, newValue ) => {
+	const onChangeHeightAll = ( currentValue: HeightValue, newValue: HeightValue ) => {
 		const updatedHeight = getUpdatedHeight( currentValue, newValue );
 		setAttributes( {
 			heightLg: updatedHeight,
@@ -122,7 +173,7 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 		setHeightAll( updatedHeight );
 	};
 
-	const onChangeHeightLg = ( currentValue, newValue ) => {
+	const onChangeHeightLg = ( currentValue: HeightValue, newValue: HeightValue ) => {
 		setAttributes( { heightLg: getUpdatedHeight( currentValue, newValue ) } );
 		if ( ! isEnableMd ) {
 			setAttributes( { heightMd: getUpdatedHeight( currentValue, newValue ) } );
@@ -130,17 +181,17 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 		setTemporaryWidthLg( null );
 	};
 
-	const onChangeHeightMd = ( currentValue, newValue ) => {
+	const onChangeHeightMd = ( currentValue: HeightValue, newValue: HeightValue ) => {
 		setAttributes( { heightMd: getUpdatedHeight( currentValue, newValue ) } );
 		setTemporaryWidthMd( null );
 	};
 
-	const onChangeHeightSm = ( currentValue, newValue ) => {
+	const onChangeHeightSm = ( currentValue: HeightValue, newValue: HeightValue ) => {
 		setAttributes( { heightSm: getUpdatedHeight( currentValue, newValue ) } );
 		setTemporaryWidthSm( null );
 	};
 
-	const SPACER_CONTROLS = [
+	const SPACER_CONTROLS: SpacerControl[] = [
 		{
 			label: __( 'All heights', 'flexible-spacer-block' ),
 			icon: settings,
@@ -210,55 +261,57 @@ export default function Edit( { attributes, isSelected, setAttributes, toggleSel
 		},
 	];
 
-	const SPACER_DEVICES = [
-		{
-			label: __( 'Mobile', 'flexible-spacer-block' ),
-			slug: 'sm',
-			icon: mobile,
-			isNegative: isNegativeSm,
-			height: heightSm || defaultValue.sm,
-			onResizeStart: () => toggleSelection( false ),
-			onResize: () => setIsResizingSm( true ),
-			onResizeStop: ( event, direction, elt ) => {
-				onChangeHeightSm( undefined, `${ elt.clientHeight }px` );
-				setIsResizingSm( false );
+	const SPACER_DEVICES: SpacerDevice[] = (
+		[
+			{
+				label: __( 'Mobile', 'flexible-spacer-block' ),
+				slug: 'sm',
+				icon: mobile,
+				isNegative: isNegativeSm,
+				height: heightSm || defaultValue.sm,
+				onResizeStart: () => toggleSelection?.( false ),
+				onResize: () => setIsResizingSm( true ),
+				onResizeStop: ( _event, _direction, elt ) => {
+					onChangeHeightSm( undefined, `${ elt.clientHeight }px` );
+					setIsResizingSm( false );
+				},
+				isResizing: isResizingSm,
 			},
-			isResizing: isResizingSm,
-		},
-		isEnableMd && {
-			label: __( 'Tablet', 'flexible-spacer-block' ),
-			slug: 'md',
-			icon: tablet,
-			isNegative: isNegativeMd,
-			height: heightMd || defaultValue.md,
-			onResizeStart: () => toggleSelection( false ),
-			onResize: () => setIsResizingMd( true ),
-			onResizeStop: ( event, direction, elt ) => {
-				onChangeHeightMd( undefined, `${ elt.clientHeight }px` );
-				setIsResizingMd( false );
+			isEnableMd && {
+				label: __( 'Tablet', 'flexible-spacer-block' ),
+				slug: 'md',
+				icon: tablet,
+				isNegative: isNegativeMd,
+				height: heightMd || defaultValue.md,
+				onResizeStart: () => toggleSelection?.( false ),
+				onResize: () => setIsResizingMd( true ),
+				onResizeStop: ( _event, _direction, elt ) => {
+					onChangeHeightMd( undefined, `${ elt.clientHeight }px` );
+					setIsResizingMd( false );
+				},
+				isResizing: isResizingMd,
 			},
-			isResizing: isResizingMd,
-		},
-		{
-			label: __( 'Desktop', 'flexible-spacer-block' ),
-			slug: 'lg',
-			icon: desktop,
-			isNegative: isNegativeLg,
-			height: heightLg || defaultValue.lg,
-			onResizeStart: () => toggleSelection( false ),
-			onResize: () => setIsResizingLg( true ),
-			onResizeStop: ( event, direction, elt ) => {
-				onChangeHeightLg( undefined, `${ elt.clientHeight }px` );
-				setIsResizingLg( false );
+			{
+				label: __( 'Desktop', 'flexible-spacer-block' ),
+				slug: 'lg',
+				icon: desktop,
+				isNegative: isNegativeLg,
+				height: heightLg || defaultValue.lg,
+				onResizeStart: () => toggleSelection?.( false ),
+				onResize: () => setIsResizingLg( true ),
+				onResizeStop: ( _event, _direction, elt ) => {
+					onChangeHeightLg( undefined, `${ elt.clientHeight }px` );
+					setIsResizingLg( false );
+				},
+				isResizing: isResizingLg,
 			},
-			isResizing: isResizingLg,
-		},
-	].filter( Boolean );
+		] as Array< SpacerDevice | false >
+	 ).filter( ( device ): device is SpacerDevice => Boolean( device ) );
 
 	const dropdownMenuProps = ! isMobile
 		? {
 				popoverProps: {
-					placement: 'left-start',
+					placement: 'left-start' as const,
 					offset: 259,
 				},
 		  }

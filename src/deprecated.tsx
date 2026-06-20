@@ -7,6 +7,21 @@ import clsx from 'clsx';
  * WordPress dependencies
  */
 import { useBlockProps } from '@wordpress/block-editor';
+import type { BlockSaveProps } from '@wordpress/blocks';
+
+/**
+ * Internal dependencies
+ */
+import type { BlockAttributes } from './types';
+
+type DeprecatedV1Attributes = {
+	heightLg: number;
+	heightMd: number;
+	heightSm: number;
+	isNegativeLg: boolean;
+	isNegativeMd: boolean;
+	isNegativeSm: boolean;
+};
 
 // Add unit support
 const v1 = {
@@ -36,7 +51,7 @@ const v1 = {
 			default: false,
 		},
 	},
-	migrate( attributes ) {
+	migrate( attributes: DeprecatedV1Attributes ): BlockAttributes {
 		const { heightLg, heightMd, heightSm } = attributes;
 		return {
 			...attributes,
@@ -45,7 +60,7 @@ const v1 = {
 			heightSm: heightSm !== undefined ? `${ heightSm }px` : undefined,
 		};
 	},
-	save( { attributes, className } ) {
+	save( { attributes, className }: BlockSaveProps< DeprecatedV1Attributes > ) {
 		const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
 
 		const styleLg = isNegativeLg ? { marginBottom: -heightLg } : { height: heightLg };

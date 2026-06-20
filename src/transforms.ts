@@ -10,12 +10,12 @@ import { __experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitF
 import { DEFAULT_SPACER_HEIGHT, DEFAULT_SPACER_HEIGHT_UNIT } from './constants';
 import metadata from './block.json';
 
-export default {
+const transforms = {
 	from: [
 		{
 			type: 'block',
 			blocks: [ 'core/spacer' ],
-			transform: ( { anchor, height } ) => {
+			transform: ( { anchor, height }: { anchor?: string; height?: string } ) => {
 				const [ parsedQuantity = DEFAULT_SPACER_HEIGHT, parsedUnit = DEFAULT_SPACER_HEIGHT_UNIT ] =
 					parseQuantityAndUnitFromRawValue( height );
 				const newHeight = `${ parsedQuantity }${ parsedUnit }`;
@@ -33,7 +33,7 @@ export default {
 		{
 			type: 'block',
 			blocks: [ 'core/spacer' ],
-			transform: ( { anchor, heightLg } ) => {
+			transform: ( { anchor, heightLg }: { anchor?: string; heightLg?: string } ) => {
 				const [ parsedQuantity = DEFAULT_SPACER_HEIGHT, parsedUnit = DEFAULT_SPACER_HEIGHT_UNIT ] =
 					parseQuantityAndUnitFromRawValue( heightLg );
 				const newHeight = `${ parsedQuantity }${ parsedUnit }`;
@@ -45,3 +45,5 @@ export default {
 		},
 	],
 };
+
+export default transforms;
