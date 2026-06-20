@@ -251,52 +251,51 @@ export default function Edit( {
 		},
 	];
 
-	const SPACER_DEVICES: SpacerDevice[] = (
-		[
-			{
-				label: __( 'Mobile', 'flexible-spacer-block' ),
-				slug: 'sm',
-				icon: mobile,
-				isNegative: isNegativeSm,
-				height: heightSm || defaultValue.sm,
-				onResizeStart: () => toggleSelection?.( false ),
-				onResize: () => setIsResizingSm( true ),
-				onResizeStop: ( _event, _direction, elt ) => {
-					onChangeHeightSm( undefined, `${ elt.clientHeight }px` );
-					setIsResizingSm( false );
-				},
-				isResizing: isResizingSm,
+	const SPACER_DEVICES: SpacerDevice[] = [
+		{
+			label: __( 'Mobile', 'flexible-spacer-block' ),
+			slug: 'sm',
+			icon: mobile,
+			isNegative: isNegativeSm,
+			height: heightSm || defaultValue.sm,
+			isResizing: isResizingSm,
+			setIsResizing: setIsResizingSm,
+			onChangeHeight: onChangeHeightSm,
+			enabled: true,
+		},
+		{
+			label: __( 'Tablet', 'flexible-spacer-block' ),
+			slug: 'md',
+			icon: tablet,
+			isNegative: isNegativeMd,
+			height: heightMd || defaultValue.md,
+			isResizing: isResizingMd,
+			setIsResizing: setIsResizingMd,
+			onChangeHeight: onChangeHeightMd,
+			enabled: isEnableMd,
+		},
+		{
+			label: __( 'Desktop', 'flexible-spacer-block' ),
+			slug: 'lg',
+			icon: desktop,
+			isNegative: isNegativeLg,
+			height: heightLg || defaultValue.lg,
+			isResizing: isResizingLg,
+			setIsResizing: setIsResizingLg,
+			onChangeHeight: onChangeHeightLg,
+			enabled: true,
+		},
+	]
+		.filter( ( device ) => device.enabled )
+		.map( ( { enabled, setIsResizing, onChangeHeight, ...device } ) => ( {
+			...device,
+			onResizeStart: () => toggleSelection?.( false ),
+			onResize: () => setIsResizing( true ),
+			onResizeStop: ( _event: unknown, _direction: unknown, elt: HTMLElement ) => {
+				onChangeHeight( undefined, `${ elt.clientHeight }px` );
+				setIsResizing( false );
 			},
-			isEnableMd && {
-				label: __( 'Tablet', 'flexible-spacer-block' ),
-				slug: 'md',
-				icon: tablet,
-				isNegative: isNegativeMd,
-				height: heightMd || defaultValue.md,
-				onResizeStart: () => toggleSelection?.( false ),
-				onResize: () => setIsResizingMd( true ),
-				onResizeStop: ( _event, _direction, elt ) => {
-					onChangeHeightMd( undefined, `${ elt.clientHeight }px` );
-					setIsResizingMd( false );
-				},
-				isResizing: isResizingMd,
-			},
-			{
-				label: __( 'Desktop', 'flexible-spacer-block' ),
-				slug: 'lg',
-				icon: desktop,
-				isNegative: isNegativeLg,
-				height: heightLg || defaultValue.lg,
-				onResizeStart: () => toggleSelection?.( false ),
-				onResize: () => setIsResizingLg( true ),
-				onResizeStop: ( _event, _direction, elt ) => {
-					onChangeHeightLg( undefined, `${ elt.clientHeight }px` );
-					setIsResizingLg( false );
-				},
-				isResizing: isResizingLg,
-			},
-		] as Array< SpacerDevice | false >
-	 ).filter( ( device ): device is SpacerDevice => Boolean( device ) );
+		} ) );
 
 	const dropdownMenuProps = ! isMobile
 		? {
