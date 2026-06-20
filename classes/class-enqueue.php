@@ -126,10 +126,20 @@ class Enqueue {
 		 *
 		 * @since 1.3.0
 		 *
-		 * @param array $breakpoint media query breakpoints.
+		 * @param array $breakpoint {
+		 *     Media query breakpoints in pixels.
+		 *
+		 *     @type int $md Breakpoint between large and medium devices.
+		 *     @type int $sm Breakpoint between medium and small devices.
+		 * }
 		 * @param bool $is_editor Whether it is rendered on the editor.
 		 */
 		$breakpoint = apply_filters( 'flexible_spacer_block_breakpoint', $breakpoint, $is_editor );
+
+		$breakpoint = array(
+			'md' => absint( $breakpoint['md'] ?? FSB_BREAKPOINT_MD ),
+			'sm' => absint( $breakpoint['sm'] ?? FSB_BREAKPOINT_SM ),
+		);
 
 		$breakpoint_lg_min = $breakpoint['md'] + 1;
 		$breakpoint_md_max = $breakpoint['md'];
