@@ -19,6 +19,14 @@
 		"node": ">=24.0.0",
 		"npm": ">=11.0.0"
 	},
+	"files": [
+		"classes",
+		"src",
+		"build",
+		"flexible-spacer-block.php",
+		"uninstall.php",
+		"readme.txt"
+	],
 	"devDependencies": {
 		"@types/wordpress__block-editor": "15.0.6",
 		"@wordpress/base-styles": "10.0.1",
@@ -53,6 +61,7 @@
 		"build:js": "wp-scripts build --output-path=build/js",
 		"build:sass": "sass src/admin-style.scss:build/css/admin-style.css src/editor-style.scss:build/css/editor-style.css --load-path=node_modules --no-source-map --style compressed",
 		"build": "npm run clean && npm run build:js && npm run build:sass",
+		"plugin-zip": "npm run build && wp-scripts plugin-zip",
 		"clean": "rimraf build",
 		"check-licenses": "wp-scripts check-licenses",
 		"lint": "npm run lint:css && npm run lint:js && npm run lint:types && npm run lint:php && npm run lint:md-docs && npm run lint:pkg-json",

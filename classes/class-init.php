@@ -12,9 +12,6 @@ class Init {
 	 * Constructor
 	 */
 	public function __construct() {
-		// Uninstallation process
-		register_uninstall_hook( FSB_BASENAME, 'Flexible_Spacer_Block\Init::uninstall_flexible_spacer_block' );
-
 		// Add a link to this plugin settings page in plugin list
 		add_filter( 'plugin_action_links_' . FSB_BASENAME, array( $this, 'add_action_links' ) );
 
@@ -41,13 +38,5 @@ class Init {
 		);
 		array_unshift( $links, $link );
 		return $links;
-	}
-
-	/**
-	 * Uninstallation process
-	 */
-	public static function uninstall_flexible_spacer_block() {
-		delete_option( 'flexible_spacer_block_breakpoint' );
-		delete_option( 'flexible_spacer_block_show_block' );
 	}
 }
