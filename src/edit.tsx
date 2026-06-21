@@ -389,7 +389,7 @@ export default function Edit( {
 							{ sprintf(
 								/* translators: %d: Breakpoint width in pixels. */
 								__( '≤ %dpx <', 'flexible-spacer-block' ),
-								fsbConf.breakpoint.sm
+								Number( fsbConf.breakpoint.sm )
 							) }
 						</div>
 						{ isEnableMd && (
@@ -397,7 +397,7 @@ export default function Edit( {
 								{ sprintf(
 									/* translators: %d: Breakpoint width in pixels. */
 									__( '≤ %dpx <', 'flexible-spacer-block' ),
-									fsbConf.breakpoint.md
+									Number( fsbConf.breakpoint.md )
 								) }
 							</div>
 						) }
