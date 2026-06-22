@@ -441,6 +441,7 @@ export default function Edit( {
 									} }
 								>
 									{ /* `children` is required by the type, but is not actually needed here, so render a dummy element. */ }
+									{ /* TODO: Remove this once https://github.com/WordPress/gutenberg/pull/79370 is merged. */ }
 									<></>
 								</ResizableBox>
 							</div>
