@@ -11,6 +11,7 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
 import {
 	ResizableBox,
+	BaseControl,
 	RangeControl,
 	ToggleControl,
 	HorizontalRule,
@@ -338,41 +339,48 @@ export default function Edit( {
 							onDeselect={ control.onDeselect }
 						>
 							<VStack spacing={ 4 }>
-								<VStack
-									spacing={ 2 }
-									onMouseEnter={ () => setActiveDevice( control.slug ) }
-									onMouseLeave={ () => setActiveDevice( undefined ) }
-								>
-									<Grid align="end" templateColumns="1fr 0.7fr">
-										<RangeControl
-											label={ control.label }
-											beforeIcon={ <Icon icon={ control.icon } /> }
-											min={ MIN_SPACER_HEIGHT }
-											max={ MAX_SPACER_HEIGHT }
-											value={ control.quantity }
-											withInputField={ false }
-											onChange={ control.onChange }
-											__nextHasNoMarginBottom
-											__next40pxDefaultSize
-										/>
-										<UnitControl
-											hideLabelFromVision
-											label={ control.label }
-											value={ control.value }
-											min={ MIN_SPACER_HEIGHT }
-											onChange={ control.onChange }
-											size="__unstable-large"
-										/>
-									</Grid>
-									{ control.onNegativeChange && (
-										<ToggleControl
-											label={ __( 'Negative space', 'flexible-spacer-block' ) }
-											checked={ control.isNegative }
-											onChange={ control.onNegativeChange }
-											__nextHasNoMarginBottom
-										/>
-									) }
-								</VStack>
+								<BaseControl __nextHasNoMarginBottom>
+									<div
+										role="group"
+										aria-labelledby={ `fsb-spacer-${ control.slug }__label` }
+										onMouseEnter={ () => setActiveDevice( control.slug ) }
+										onMouseLeave={ () => setActiveDevice( undefined ) }
+									>
+										<BaseControl.VisualLabel id={ `fsb-spacer-${ control.slug }__label` }>
+											{ control.label }
+										</BaseControl.VisualLabel>
+										<VStack spacing={ 2 }>
+											<Grid align="end" templateColumns="1fr 0.7fr">
+												<RangeControl
+													label={ __( 'Height', 'flexible-spacer-block' ) }
+													hideLabelFromVision
+													beforeIcon={ <Icon icon={ control.icon } /> }
+													min={ MIN_SPACER_HEIGHT }
+													max={ MAX_SPACER_HEIGHT }
+													value={ control.quantity }
+													withInputField={ false }
+													onChange={ control.onChange }
+													__next40pxDefaultSize
+												/>
+												<UnitControl
+													hideLabelFromVision
+													label={ __( 'Height', 'flexible-spacer-block' ) }
+													value={ control.value }
+													min={ MIN_SPACER_HEIGHT }
+													onChange={ control.onChange }
+													size="__unstable-large"
+												/>
+											</Grid>
+											{ control.onNegativeChange && (
+												<ToggleControl
+													label={ __( 'Negative space', 'flexible-spacer-block' ) }
+													checked={ control.isNegative }
+													onChange={ control.onNegativeChange }
+												/>
+											) }
+										</VStack>
+									</div>
+								</BaseControl>
 								<HorizontalRule />
 							</VStack>
 						</ToolsPanelItem>
