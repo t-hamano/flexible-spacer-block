@@ -339,7 +339,7 @@ export default function Edit( {
 							onDeselect={ control.onDeselect }
 						>
 							<VStack spacing={ 4 }>
-								<BaseControl __nextHasNoMarginBottom>
+								<BaseControl>
 									<div
 										role="group"
 										aria-labelledby={ `fsb-spacer-${ control.slug }__label` }
