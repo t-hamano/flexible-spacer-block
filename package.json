@@ -27,6 +27,9 @@
 		"uninstall.php",
 		"readme.txt"
 	],
+	"dependencies": {
+		"@wordpress/ui": "0.16.0"
+	},
 	"devDependencies": {
 		"@types/wordpress__block-editor": "15.0.6",
 		"@wordpress/base-styles": "10.0.1",

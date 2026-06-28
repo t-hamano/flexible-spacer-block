@@ -15,7 +15,6 @@ import {
 	RangeControl,
 	ToggleControl,
 	HorizontalRule,
-	ExternalLink,
 	ToolbarGroup,
 	ToolbarButton,
 	__experimentalToolsPanel as ToolsPanel,
@@ -23,8 +22,8 @@ import {
 	__experimentalUnitControl as UnitControl,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 	__experimentalGrid as Grid,
-	__experimentalVStack as VStack,
 } from '@wordpress/components';
+import { Link, Stack } from '@wordpress/ui';
 import { useEffect, useState } from '@wordpress/element';
 import { View } from '@wordpress/primitives';
 import { Icon, settings, mobile, tablet, desktop } from '@wordpress/icons';
@@ -338,7 +337,7 @@ export default function Edit( {
 							hasValue={ control.hasValue }
 							onDeselect={ control.onDeselect }
 						>
-							<VStack spacing={ 4 }>
+							<Stack direction="column" gap="lg">
 								<BaseControl>
 									<div
 										role="group"
@@ -349,7 +348,7 @@ export default function Edit( {
 										<BaseControl.VisualLabel id={ `fsb-spacer-${ control.slug }__label` }>
 											{ control.label }
 										</BaseControl.VisualLabel>
-										<VStack spacing={ 2 }>
+										<Stack direction="column" gap="sm">
 											<Grid align="end" templateColumns="1fr 0.7fr">
 												<RangeControl
 													label={ __( 'Height', 'flexible-spacer-block' ) }
@@ -378,16 +377,16 @@ export default function Edit( {
 													onChange={ control.onNegativeChange }
 												/>
 											) }
-										</VStack>
+										</Stack>
 									</div>
 								</BaseControl>
 								<HorizontalRule />
-							</VStack>
+							</Stack>
 						</ToolsPanelItem>
 					) ) }
-					<ExternalLink href={ settingUrl }>
+					<Link href={ settingUrl } openInNewTab>
 						{ __( 'Plugin Setting', 'flexible-spacer-block' ) }
-					</ExternalLink>
+					</Link>
 				</ToolsPanel>
 			</InspectorControls>
 			<View { ...blockProps }>
