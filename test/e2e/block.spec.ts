@@ -144,6 +144,23 @@ test.describe( 'Block', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
+	test( 'should be converted to core spacer block by keeping metadata and CSS', async ( {
+		editor,
+	} ) => {
+		await editor.insertBlock( {
+			name: 'fsb/flexible-spacer',
+			attributes: {
+				metadata: {
+					name: 'My Spacer',
+					blockVisibility: { viewport: { mobile: false } },
+				},
+				style: { css: 'background: red;' },
+			},
+		} );
+		await editor.transformBlockTo( 'core/spacer' );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+	} );
+
 	test( 'should be converted to flexible spacer block', async ( { editor } ) => {
 		await editor.insertBlock( { name: 'core/spacer' } );
 		await editor.transformBlockTo( 'fsb/flexible-spacer' );
@@ -157,6 +174,23 @@ test.describe( 'Block', () => {
 		await editor.insertBlock( { name: 'core/spacer' } );
 		await editor.openDocumentSettingsSidebar();
 		await page.fill( '.block-editor-block-inspector input[type="number"]', '200' );
+		await editor.transformBlockTo( 'fsb/flexible-spacer' );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	test( 'should be converted to flexible spacer block by keeping metadata and CSS', async ( {
+		editor,
+	} ) => {
+		await editor.insertBlock( {
+			name: 'core/spacer',
+			attributes: {
+				metadata: {
+					name: 'My Spacer',
+					blockVisibility: { viewport: { mobile: false } },
+				},
+				style: { css: 'background: red;' },
+			},
+		} );
 		await editor.transformBlockTo( 'fsb/flexible-spacer' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
