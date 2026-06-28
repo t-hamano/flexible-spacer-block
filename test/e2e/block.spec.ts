@@ -16,7 +16,10 @@ test.describe( 'Block', () => {
 	test( 'should change all height', async ( { editor, page } ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		await editor.openDocumentSettingsSidebar();
-		await page.getByRole( 'spinbutton', { name: 'All heights' } ).fill( '200' );
+		await page
+			.getByRole( 'group', { name: 'All heights' } )
+			.getByRole( 'spinbutton', { name: 'Height' } )
+			.fill( '200' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -30,9 +33,18 @@ test.describe( 'Block', () => {
 	test( 'should change each height', async ( { editor, page } ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		await editor.openDocumentSettingsSidebar();
-		await page.getByRole( 'spinbutton', { name: 'Desktop height' } ).fill( '200' );
-		await page.getByRole( 'spinbutton', { name: 'Tablet height' } ).fill( '300' );
-		await page.getByRole( 'spinbutton', { name: 'Mobile height' } ).fill( '400' );
+		await page
+			.getByRole( 'group', { name: 'Desktop height' } )
+			.getByRole( 'spinbutton', { name: 'Height' } )
+			.fill( '200' );
+		await page
+			.getByRole( 'group', { name: 'Tablet height' } )
+			.getByRole( 'spinbutton', { name: 'Height' } )
+			.fill( '300' );
+		await page
+			.getByRole( 'group', { name: 'Mobile height' } )
+			.getByRole( 'spinbutton', { name: 'Height' } )
+			.fill( '400' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -48,9 +60,18 @@ test.describe( 'Block', () => {
 	test( 'should apply negative space', async ( { editor, page } ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		await editor.openDocumentSettingsSidebar();
-		await page.getByRole( 'spinbutton', { name: 'Desktop height' } ).fill( '200' );
-		await page.getByRole( 'spinbutton', { name: 'Tablet height' } ).fill( '300' );
-		await page.getByRole( 'spinbutton', { name: 'Mobile height' } ).fill( '400' );
+		await page
+			.getByRole( 'group', { name: 'Desktop height' } )
+			.getByRole( 'spinbutton', { name: 'Height' } )
+			.fill( '200' );
+		await page
+			.getByRole( 'group', { name: 'Tablet height' } )
+			.getByRole( 'spinbutton', { name: 'Height' } )
+			.fill( '300' );
+		await page
+			.getByRole( 'group', { name: 'Mobile height' } )
+			.getByRole( 'spinbutton', { name: 'Height' } )
+			.fill( '400' );
 		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 0 ).check();
 		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 1 ).check();
 		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 2 ).check();
@@ -60,9 +81,18 @@ test.describe( 'Block', () => {
 	test( 'should apply edged value correctly if the value is falsy', async ( { editor, page } ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		await editor.openDocumentSettingsSidebar();
-		await page.getByRole( 'spinbutton', { name: 'Desktop height' } ).fill( '0' );
-		await page.getByRole( 'spinbutton', { name: 'Tablet height' } ).fill( '' );
-		await page.getByRole( 'spinbutton', { name: 'Mobile height' } ).fill( '0' );
+		await page
+			.getByRole( 'group', { name: 'Desktop height' } )
+			.getByRole( 'spinbutton', { name: 'Height' } )
+			.fill( '0' );
+		await page
+			.getByRole( 'group', { name: 'Tablet height' } )
+			.getByRole( 'spinbutton', { name: 'Height' } )
+			.fill( '' );
+		await page
+			.getByRole( 'group', { name: 'Mobile height' } )
+			.getByRole( 'spinbutton', { name: 'Height' } )
+			.fill( '0' );
 		await page.getByRole( 'combobox', { name: 'Select unit' } ).nth( 3 ).selectOption( 'em' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -73,9 +103,18 @@ test.describe( 'Block', () => {
 	} ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		await editor.openDocumentSettingsSidebar();
-		await page.getByRole( 'spinbutton', { name: 'Desktop height' } ).fill( '0' );
-		await page.getByRole( 'spinbutton', { name: 'Tablet height' } ).fill( '' );
-		await page.getByRole( 'spinbutton', { name: 'Mobile height' } ).fill( '0' );
+		await page
+			.getByRole( 'group', { name: 'Desktop height' } )
+			.getByRole( 'spinbutton', { name: 'Height' } )
+			.fill( '0' );
+		await page
+			.getByRole( 'group', { name: 'Tablet height' } )
+			.getByRole( 'spinbutton', { name: 'Height' } )
+			.fill( '' );
+		await page
+			.getByRole( 'group', { name: 'Mobile height' } )
+			.getByRole( 'spinbutton', { name: 'Height' } )
+			.fill( '0' );
 		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 0 ).check();
 		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 1 ).check();
 		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 2 ).check();
@@ -95,7 +134,10 @@ test.describe( 'Block', () => {
 	} ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		await editor.openDocumentSettingsSidebar();
-		await page.getByRole( 'spinbutton', { name: 'Desktop height' } ).fill( '200' );
+		await page
+			.getByRole( 'group', { name: 'Desktop height' } )
+			.getByRole( 'spinbutton', { name: 'Height' } )
+			.fill( '200' );
 		await page.getByRole( 'combobox', { name: 'Select unit' } ).nth( 1 ).selectOption( 'em' );
 		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 0 ).check();
 		await editor.transformBlockTo( 'core/spacer' );
