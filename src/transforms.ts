@@ -15,13 +15,22 @@ const transforms = {
 		{
 			type: 'block',
 			blocks: [ 'core/spacer' ],
-			transform: ( { anchor, height }: { anchor?: string; height?: string } ) => {
+			transform: ( {
+				anchor,
+				height,
+				style,
+			}: {
+				anchor?: string;
+				height?: string;
+				style?: Record< string, unknown >;
+			} ) => {
 				const [ parsedQuantity = DEFAULT_SPACER_HEIGHT, parsedUnit = DEFAULT_SPACER_HEIGHT_UNIT ] =
 					parseQuantityAndUnitFromRawValue( height );
 				const newHeight = `${ parsedQuantity }${ parsedUnit }`;
 
 				return createBlock( metadata.name, {
 					anchor,
+					style,
 					heightLg: newHeight,
 					heightMd: newHeight,
 					heightSm: newHeight,
@@ -33,12 +42,21 @@ const transforms = {
 		{
 			type: 'block',
 			blocks: [ 'core/spacer' ],
-			transform: ( { anchor, heightLg }: { anchor?: string; heightLg?: string } ) => {
+			transform: ( {
+				anchor,
+				heightLg,
+				style,
+			}: {
+				anchor?: string;
+				heightLg?: string;
+				style?: Record< string, unknown >;
+			} ) => {
 				const [ parsedQuantity = DEFAULT_SPACER_HEIGHT, parsedUnit = DEFAULT_SPACER_HEIGHT_UNIT ] =
 					parseQuantityAndUnitFromRawValue( heightLg );
 				const newHeight = `${ parsedQuantity }${ parsedUnit }`;
 				return createBlock( 'core/spacer', {
 					anchor,
+					style,
 					height: newHeight,
 				} );
 			},
