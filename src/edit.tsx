@@ -8,7 +8,15 @@ import clsx from 'clsx';
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
+import {
+	InspectorControls,
+	BlockControls,
+	useBlockProps,
+	useSettings,
+	getSpacingPresetCssVar,
+	isValueSpacingPreset,
+	__experimentalSpacingSizesControl as SpacingSizesControl,
+} from '@wordpress/block-editor';
 import {
 	ResizableBox,
 	BaseControl,
@@ -20,13 +28,14 @@ import {
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
 	__experimentalUnitControl as UnitControl,
+	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 	__experimentalGrid as Grid,
 } from '@wordpress/components';
 import { Link, Stack } from '@wordpress/ui';
 import { useEffect, useState } from '@wordpress/element';
 import { View } from '@wordpress/primitives';
-import { Icon, settings, mobile, tablet, desktop } from '@wordpress/icons';
+import { Icon, mobile, tablet, desktop } from '@wordpress/icons';
 import { addQueryArgs } from '@wordpress/url';
 import { useViewportMatch } from '@wordpress/compose';
 import type { BlockEditProps } from '@wordpress/blocks';
@@ -36,6 +45,7 @@ import type { BlockEditProps } from '@wordpress/blocks';
  */
 import { responsive } from './icons';
 import { store } from './store';
+import useSpacingSizes, { type SpacingSize } from './use-spacing-sizes';
 import type { BlockAttributes } from './types';
 
 import {
@@ -49,15 +59,88 @@ type HeightValue = string | number | undefined;
 
 interface SpacerControl {
 	label: string;
-	icon: JSX.Element;
 	slug: string;
 	value: string | undefined;
 	quantity: number | undefined;
+	isResizing: boolean;
 	onChange: ( value: HeightValue ) => void;
+	onPresetChange: ( value: string ) => void;
 	isNegative?: boolean;
 	onNegativeChange?: ( value: boolean ) => void;
 	hasValue: () => boolean;
 	onDeselect: () => void;
+}
+
+// Renders the height input for a single device.
+function HeightControl( {
+	label,
+	value = '',
+	quantity,
+	isResizing,
+	spacingSizes,
+	units,
+	onChange,
+	onPresetChange,
+}: {
+	label: string;
+	value?: string;
+	quantity: number | undefined;
+	isResizing: boolean;
+	spacingSizes: SpacingSize[];
+	units: ReturnType< typeof useCustomUnits >;
+	onChange: ( value: HeightValue ) => void;
+	onPresetChange: ( value: string ) => void;
+} ) {
+	const [ parsedQuantity, parsedUnit ] = parseQuantityAndUnitFromRawValue( value );
+	// Force the unit to `px` while resizing.
+	const computedValue = isValueSpacingPreset( value )
+		? value
+		: [ parsedQuantity, isResizing ? 'px' : parsedUnit ].join( '' );
+
+	// With fewer than two presets there is nothing meaningful to pick, so fall
+	// back to free numeric input.
+	if ( spacingSizes.length < 2 ) {
+		return (
+			<Grid align="end" templateColumns="1fr 0.7fr">
+				<RangeControl
+					label={ __( 'Height', 'flexible-spacer-block' ) }
+					hideLabelFromVision
+					min={ MIN_SPACER_HEIGHT }
+					max={ MAX_SPACER_HEIGHT }
+					value={ quantity }
+					withInputField={ false }
+					onChange={ onChange }
+					__next40pxDefaultSize
+				/>
+				<UnitControl
+					hideLabelFromVision
+					label={ __( 'Height', 'flexible-spacer-block' ) }
+					value={ value }
+					min={ MIN_SPACER_HEIGHT }
+					onChange={ onChange }
+					size="__unstable-large"
+				/>
+			</Grid>
+		);
+	}
+
+	return (
+		<View className="fsb-flexible-spacer__spacing-sizes">
+			<SpacingSizesControl
+				// Remount on preset/custom change so the slider/custom view stays
+				// in sync when "All heights" pushes a preset into this device.
+				key={ isValueSpacingPreset( value ) ? 'preset' : 'custom' }
+				values={ { all: computedValue } }
+				onChange={ ( { all }: { all?: string } ) => onPresetChange( all ?? '' ) }
+				label={ label }
+				sides={ [ 'all' ] }
+				units={ units }
+				allowReset={ false }
+				splitOnAxis={ false }
+				showSideInLabel={ false }
+			/>
+		</View>
+	);
 }
 
 interface SpacerDevice {
@@ -93,6 +176,17 @@ export default function Edit( {
 	const isResponsive = useSelect( ( select ) => select( store ).getIsResponsive(), [] );
 	const { setIsResponsive } = useDispatch( store );
 	const isMobile = useViewportMatch( 'medium', '<' );
+
+	const spacingSizes = useSpacingSizes();
+	const [ spacingUnits ] = useSettings( 'spacing.units' );
+	// A spacer size cannot meaningfully be a percentage, so that unit is hidden.
+	const availableUnits = spacingUnits
+		? spacingUnits.filter( ( unit: string ) => unit !== '%' )
+		: [ 'px', 'em', 'rem', 'vw', 'vh' ];
+	const units = useCustomUnits( {
+		availableUnits,
+		defaultValues: { px: 100, em: 10, rem: 10, vw: 10, vh: 25 },
+	} );
 
 	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
 	const isShowBlock = fsbConf.showBlock;
@@ -194,11 +288,15 @@ export default function Edit( {
 	const SPACER_CONTROLS: SpacerControl[] = [
 		{
 			label: __( 'All heights', 'flexible-spacer-block' ),
-			icon: settings,
 			slug: 'all',
 			value: heightAll,
 			quantity: parseQuantityAndUnitFromRawValue( heightAll )[ 0 ],
+			isResizing: false,
 			onChange: ( value ) => onChangeHeightAll( heightAll, value ),
+			onPresetChange: ( value ) => {
+				setAttributes( { heightLg: value, heightMd: value, heightSm: value } );
+				setHeightAll( value );
+			},
 			hasValue: () =>
 				heightLg !== defaultLgValue ||
 				heightMd !== defaultMdValue ||
@@ -210,11 +308,18 @@ export default function Edit( {
 		},
 		{
 			label: __( 'Desktop height', 'flexible-spacer-block' ),
-			icon: desktop,
 			slug: 'lg',
-			value: heightLg,
+			value: temporaryWidthLg || heightLg,
 			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthLg || heightLg )[ 0 ],
+			isResizing: isResizingLg,
 			onChange: ( value ) => onChangeHeightLg( heightLg, value ),
+			onPresetChange: ( value ) => {
+				setAttributes( { heightLg: value } );
+				if ( ! isEnableMd ) {
+					setAttributes( { heightMd: value } );
+				}
+				setTemporaryWidthLg( null );
+			},
 			isNegative: isNegativeLg,
 			onNegativeChange: ( value ) => {
 				setAttributes( { isNegativeLg: value } );
@@ -227,11 +332,15 @@ export default function Edit( {
 		},
 		{
 			label: __( 'Tablet height', 'flexible-spacer-block' ),
-			icon: tablet,
 			slug: 'md',
-			value: heightMd,
+			value: temporaryWidthMd || heightMd,
 			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthMd || heightMd )[ 0 ],
+			isResizing: isResizingMd,
 			onChange: ( value ) => onChangeHeightMd( heightMd, value ),
+			onPresetChange: ( value ) => {
+				setAttributes( { heightMd: value } );
+				setTemporaryWidthMd( null );
+			},
 			isNegative: isNegativeMd,
 			onNegativeChange: ( value ) => setAttributes( { isNegativeMd: value } ),
 			hasValue: () => heightMd !== defaultMdValue || isNegativeMd,
@@ -239,11 +348,15 @@ export default function Edit( {
 		},
 		{
 			label: __( 'Mobile height', 'flexible-spacer-block' ),
-			icon: mobile,
 			slug: 'sm',
-			value: heightSm,
-			quantity: parseQuantityAndUnitFromRawValue( heightSm )[ 0 ],
+			value: temporaryWidthSm || heightSm,
+			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthSm || heightSm )[ 0 ],
+			isResizing: isResizingSm,
 			onChange: ( value ) => onChangeHeightSm( temporaryWidthSm || heightSm, value ),
+			onPresetChange: ( value ) => {
+				setAttributes( { heightSm: value } );
+				setTemporaryWidthSm( null );
+			},
 			isNegative: isNegativeSm,
 			onNegativeChange: ( value ) => setAttributes( { isNegativeSm: value } ),
 			hasValue: () => heightSm !== defaultSmValue || isNegativeSm,
@@ -341,35 +454,29 @@ export default function Edit( {
 								<BaseControl>
 									<div
 										role="group"
-										aria-labelledby={ `fsb-spacer-${ control.slug }__label` }
+										aria-labelledby={
+											spacingSizes.length < 2 ? `fsb-spacer-${ control.slug }__label` : undefined
+										}
 										onMouseEnter={ () => setActiveDevice( control.slug ) }
 										onMouseLeave={ () => setActiveDevice( undefined ) }
 									>
-										<BaseControl.VisualLabel id={ `fsb-spacer-${ control.slug }__label` }>
-											{ control.label }
-										</BaseControl.VisualLabel>
+										{ /* In preset mode the SpacingSizesControl renders its own label. */ }
+										{ spacingSizes.length < 2 && (
+											<BaseControl.VisualLabel id={ `fsb-spacer-${ control.slug }__label` }>
+												{ control.label }
+											</BaseControl.VisualLabel>
+										) }
 										<Stack direction="column" gap="sm">
-											<Grid align="end" templateColumns="1fr 0.7fr">
-												<RangeControl
-													label={ __( 'Height', 'flexible-spacer-block' ) }
-													hideLabelFromVision
-													beforeIcon={ <Icon icon={ control.icon } /> }
-													min={ MIN_SPACER_HEIGHT }
-													max={ MAX_SPACER_HEIGHT }
-													value={ control.quantity }
-													withInputField={ false }
-													onChange={ control.onChange }
-													__next40pxDefaultSize
-												/>
-												<UnitControl
-													hideLabelFromVision
-													label={ __( 'Height', 'flexible-spacer-block' ) }
-													value={ control.value }
-													min={ MIN_SPACER_HEIGHT }
-													onChange={ control.onChange }
-													size="__unstable-large"
-												/>
-											</Grid>
+											<HeightControl
+												label={ control.label }
+												value={ control.value }
+												quantity={ control.quantity }
+												isResizing={ control.isResizing }
+												spacingSizes={ spacingSizes }
+												units={ units }
+												onChange={ control.onChange }
+												onPresetChange={ control.onPresetChange }
+											/>
 											{ control.onNegativeChange && (
 												<ToggleControl
 													label={ __( 'Negative space', 'flexible-spacer-block' ) }
@@ -418,7 +525,7 @@ export default function Edit( {
 								<Icon icon={ device.icon } />
 								{ device.label }
 							</div>
-							<div style={ { height: device.height } }>
+							<div style={ { height: getSpacingPresetCssVar( device.height ) } }>
 								<ResizableBox
 									className={ clsx( 'fsb-flexible-spacer__device-resizer', {
 										'is-resizing': device.isResizing,
