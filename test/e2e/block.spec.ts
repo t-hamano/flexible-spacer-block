@@ -4,6 +4,10 @@
 import { test, expect } from '@wordpress/e2e-test-utils-playwright';
 
 test.describe( 'Block', () => {
+	test.beforeAll( async ( { requestUtils } ) => {
+		await requestUtils.activateTheme( 'twentytwentyfive' );
+	} );
+
 	test.beforeEach( async ( { admin } ) => {
 		await admin.createNewPost();
 	} );
@@ -102,6 +106,21 @@ test.describe( 'Block', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
+	test( 'should be converted to core spacer block by keeping spacing preset', async ( {
+		editor,
+	} ) => {
+		await editor.insertBlock( {
+			name: 'fsb/flexible-spacer',
+			attributes: {
+				heightLg: 'var:preset|spacing|50',
+				heightMd: 'var:preset|spacing|30',
+				heightSm: '150px',
+			},
+		} );
+		await editor.transformBlockTo( 'core/spacer' );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+	} );
+
 	test( 'should be converted to core spacer block by keeping metadata and CSS', async ( {
 		editor,
 	} ) => {
@@ -125,13 +144,22 @@ test.describe( 'Block', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test( 'should be converted to flexible spacer block by keeping height', async ( {
+	test( 'should be converted to flexible spacer block by keeping height', async ( { editor } ) => {
+		await editor.insertBlock( {
+			name: 'core/spacer',
+			attributes: { height: '200px' },
+		} );
+		await editor.transformBlockTo( 'fsb/flexible-spacer' );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	test( 'should be converted to flexible spacer block by keeping spacing preset', async ( {
 		editor,
-		page,
 	} ) => {
-		await editor.insertBlock( { name: 'core/spacer' } );
-		await editor.openDocumentSettingsSidebar();
-		await page.fill( '.block-editor-block-inspector input[type="number"]', '200' );
+		await editor.insertBlock( {
+			name: 'core/spacer',
+			attributes: { height: 'var:preset|spacing|50' },
+		} );
 		await editor.transformBlockTo( 'fsb/flexible-spacer' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );

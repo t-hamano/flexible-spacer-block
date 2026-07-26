@@ -5,6 +5,7 @@
 		"https://downloads.wordpress.org/plugin/wordpress-beta-tester.zip",
 		"https://downloads.wordpress.org/plugin/wp-downgrade.zip"
 	],
+	"themes": [ "https://downloads.wordpress.org/theme/twentytwentyfive.zip" ],
 	"testsEnvironment": false,
 	"port": 8889,
 	"phpmyadminPort": 9001,
