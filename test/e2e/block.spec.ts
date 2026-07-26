@@ -87,11 +87,16 @@ test.describe( 'Block', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test( 'should apply the none spacing preset as zero height', async ( { editor, page } ) => {
+	test( 'should apply spacing presets to each device', async ( { editor, page } ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		await editor.openDocumentSettingsSidebar();
 		await page.getByRole( 'button', { name: 'Use preset' } ).nth( 3 ).click();
+		await page.getByRole( 'button', { name: 'Use preset' } ).nth( 2 ).click();
+		await page.getByRole( 'button', { name: 'Use preset' } ).nth( 1 ).click();
+		await page.getByRole( 'slider', { name: 'Desktop height' } ).fill( '4' );
+		await page.getByRole( 'slider', { name: 'Tablet height' } ).fill( '2' );
 		await page.getByRole( 'slider', { name: 'Mobile height' } ).fill( '0' );
+		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 1 ).check();
 		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 2 ).check();
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
