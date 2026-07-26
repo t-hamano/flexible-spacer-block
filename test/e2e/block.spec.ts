@@ -95,6 +95,7 @@ test.describe( 'Block', () => {
 		await page.getByRole( 'button', { name: 'Use preset' } ).nth( 1 ).click();
 		await page.getByRole( 'slider', { name: 'Desktop height' } ).fill( '4' );
 		await page.getByRole( 'slider', { name: 'Tablet height' } ).fill( '2' );
+		await page.getByRole( 'slider', { name: 'Mobile height' } ).fill( '1' );
 		await page.getByRole( 'slider', { name: 'Mobile height' } ).fill( '0' );
 		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 1 ).check();
 		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 2 ).check();
