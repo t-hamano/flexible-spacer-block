@@ -64,7 +64,7 @@ interface SpacerControl {
 	quantity: number | undefined;
 	isResizing: boolean;
 	onChange: ( value: HeightValue ) => void;
-	onPresetChange: ( value: string ) => void;
+	onPresetChange: ( value: string | undefined ) => void;
 	isNegative?: boolean;
 	onNegativeChange?: ( value: boolean ) => void;
 	hasValue: () => boolean;
@@ -89,7 +89,7 @@ function HeightControl( {
 	spacingSizes: SpacingSize[];
 	units: ReturnType< typeof useCustomUnits >;
 	onChange: ( value: HeightValue ) => void;
-	onPresetChange: ( value: string ) => void;
+	onPresetChange: ( value: string | undefined ) => void;
 } ) {
 	const [ parsedQuantity, parsedUnit ] = parseQuantityAndUnitFromRawValue( value );
 	// Force the unit to `px` while resizing.
@@ -131,7 +131,7 @@ function HeightControl( {
 				// in sync when "All heights" pushes a preset into this device.
 				key={ isValueSpacingPreset( value ) ? 'preset' : 'custom' }
 				values={ { all: computedValue } }
-				onChange={ ( { all }: { all?: string } ) => onPresetChange( all ?? '' ) }
+				onChange={ ( { all }: { all?: string } ) => onPresetChange( all || undefined ) }
 				label={ label }
 				sides={ [ 'all' ] }
 				units={ units }

@@ -31,7 +31,7 @@ function getStyleObject(
 	defaultUnit: string
 ): React.CSSProperties {
 	// Return default value if the value is falsy.
-	if ( value === undefined ) {
+	if ( ! value ) {
 		return isNegative
 			? { marginBottom: `-${ defaultQuantity }${ defaultUnit }` }
 			: { height: `${ defaultQuantity }${ defaultUnit }` };
