@@ -61,6 +61,7 @@ interface SpacerControl {
 	value: string | undefined;
 	quantity: number | undefined;
 	isResizing: boolean;
+	syncKey?: number;
 	onChange: ( value: HeightValue ) => void;
 	onPresetChange: ( value: string | undefined ) => void;
 	isNegative?: boolean;
@@ -76,6 +77,7 @@ function HeightControl( {
 	quantity,
 	isResizing,
 	spacingSizes,
+	syncKey,
 	onChange,
 	onPresetChange,
 }: {
@@ -84,6 +86,7 @@ function HeightControl( {
 	quantity: number | undefined;
 	isResizing: boolean;
 	spacingSizes: SpacingSize[];
+	syncKey?: number;
 	onChange: ( value: HeightValue ) => void;
 	onPresetChange: ( value: string | undefined ) => void;
 } ) {
@@ -123,9 +126,8 @@ function HeightControl( {
 	return (
 		<View className="fsb-flexible-spacer__spacing-sizes">
 			<SpacingSizesControl
-				// Remount on preset/custom change so the slider/custom view stays
-				// in sync when "All heights" pushes a preset into this device.
-				key={ isValueSpacingPreset( value ) ? 'preset' : 'custom' }
+				// Remount when "All heights" writes into this device.
+				key={ syncKey }
 				values={ { all: computedValue } }
 				onChange={ ( { all }: { all?: string } ) => onPresetChange( all || undefined ) }
 				label={ label }
@@ -165,6 +167,9 @@ export default function Edit( {
 	const [ temporaryWidthLg, setTemporaryWidthLg ] = useState< string | null >( null );
 	const [ temporaryWidthMd, setTemporaryWidthMd ] = useState< string | null >( null );
 	const [ temporaryWidthSm, setTemporaryWidthSm ] = useState< string | null >( null );
+	// The device controls never switch back to the preset view on their own, so
+	// remount them when "All heights" writes a height into them.
+	const [ deviceSyncKey, setDeviceSyncKey ] = useState( 0 );
 
 	const isResponsive = useSelect( ( select ) => select( store ).getIsResponsive(), [] );
 	const { setIsResponsive } = useDispatch( store );
@@ -280,6 +285,7 @@ export default function Edit( {
 			onPresetChange: ( value ) => {
 				setAttributes( { heightLg: value, heightMd: value, heightSm: value } );
 				setHeightAll( value );
+				setDeviceSyncKey( ( key ) => key + 1 );
 			},
 			hasValue: () =>
 				heightLg !== defaultLgValue ||
@@ -296,6 +302,7 @@ export default function Edit( {
 			value: temporaryWidthLg || heightLg,
 			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthLg || heightLg )[ 0 ],
 			isResizing: isResizingLg,
+			syncKey: deviceSyncKey,
 			onChange: ( value ) => onChangeHeightLg( heightLg, value ),
 			onPresetChange: ( value ) => {
 				setAttributes( { heightLg: value } );
@@ -320,6 +327,7 @@ export default function Edit( {
 			value: temporaryWidthMd || heightMd,
 			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthMd || heightMd )[ 0 ],
 			isResizing: isResizingMd,
+			syncKey: deviceSyncKey,
 			onChange: ( value ) => onChangeHeightMd( heightMd, value ),
 			onPresetChange: ( value ) => {
 				setAttributes( { heightMd: value } );
@@ -336,6 +344,7 @@ export default function Edit( {
 			value: temporaryWidthSm || heightSm,
 			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthSm || heightSm )[ 0 ],
 			isResizing: isResizingSm,
+			syncKey: deviceSyncKey,
 			onChange: ( value ) => onChangeHeightSm( temporaryWidthSm || heightSm, value ),
 			onPresetChange: ( value ) => {
 				setAttributes( { heightSm: value } );
@@ -457,6 +466,7 @@ export default function Edit( {
 												quantity={ control.quantity }
 												isResizing={ control.isResizing }
 												spacingSizes={ spacingSizes }
+												syncKey={ control.syncKey }
 												onChange={ control.onChange }
 												onPresetChange={ control.onPresetChange }
 											/>
