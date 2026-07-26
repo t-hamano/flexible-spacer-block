@@ -92,9 +92,10 @@ function HeightControl( {
 } ) {
 	const [ parsedQuantity, parsedUnit ] = parseQuantityAndUnitFromRawValue( value );
 	// Force the unit to `px` while resizing.
-	const computedValue = isValueSpacingPreset( value )
-		? value
-		: [ parsedQuantity, isResizing ? 'px' : parsedUnit ].join( '' );
+	const computedValue =
+		( isValueSpacingPreset( value )
+			? value
+			: [ parsedQuantity, isResizing ? 'px' : parsedUnit ].join( '' ) ) || undefined;
 
 	// With fewer than two presets there is nothing meaningful to pick, so fall
 	// back to free numeric input.
@@ -159,7 +160,10 @@ export default function Edit( {
 	// Injected by the block editor at runtime; not part of `BlockEditProps`.
 	toggleSelection?: ( isSelectionEnabled: boolean ) => void;
 } ) {
-	const [ heightAll, setHeightAll ] = useState< string | undefined >( undefined );
+	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
+	const [ heightAll, setHeightAll ] = useState< string | undefined >(
+		heightLg === heightMd && heightMd === heightSm ? heightLg : undefined
+	);
 	const [ activeDevice, setActiveDevice ] = useState< string | undefined >( undefined );
 	const [ isResizingLg, setIsResizingLg ] = useState( false );
 	const [ isResizingMd, setIsResizingMd ] = useState( false );
@@ -180,8 +184,6 @@ export default function Edit( {
 	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
 	const isShowBlock = fsbConf.showBlock;
 	const defaultValue = fsbConf.defaultValue;
-
-	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
 
 	// Apply default values from the settings page when inserting a block.
 	useEffect( () => {
