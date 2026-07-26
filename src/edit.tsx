@@ -49,7 +49,6 @@ interface SpacerControl {
 	label: string;
 	slug: string;
 	value: string | undefined;
-	isResizing: boolean;
 	syncKey?: number;
 	onPresetChange: ( value: string | undefined ) => void;
 	isNegative?: boolean;
@@ -63,23 +62,20 @@ interface SpacerControl {
 function HeightControl( {
 	label,
 	value = '',
-	isResizing,
 	syncKey,
 	onPresetChange,
 }: {
 	label: string;
 	value?: string;
-	isResizing: boolean;
 	syncKey?: number;
 	onPresetChange: ( value: string | undefined ) => void;
 } ) {
 	const [ parsedQuantity, parsedUnit ] = parseQuantityAndUnitFromRawValue( value );
-	// Force the unit to `px` while resizing. An empty string is passed through so
-	// that an unset height renders as a blank custom input rather than as a preset
-	// slider parked on "None".
+	// An empty string is passed through so that an unset height renders as a blank
+	// custom input rather than as a preset slider parked on "None".
 	const computedValue = isValueSpacingPreset( value )
 		? value
-		: [ parsedQuantity, isResizing ? 'px' : parsedUnit ].join( '' );
+		: [ parsedQuantity, parsedUnit ].join( '' );
 
 	return (
 		<SpacingSizesControl
@@ -218,7 +214,6 @@ export default function Edit( {
 			label: __( 'All heights', 'flexible-spacer-block' ),
 			slug: 'all',
 			value: heightAll,
-			isResizing: false,
 			syncKey: allSyncKey,
 			onPresetChange: ( value ) => {
 				setAttributes( { heightLg: value, heightMd: value, heightSm: value } );
@@ -237,7 +232,6 @@ export default function Edit( {
 			label: __( 'Desktop height', 'flexible-spacer-block' ),
 			slug: 'lg',
 			value: heightLg,
-			isResizing: isResizingLg,
 			syncKey: deviceSyncKey,
 			onPresetChange: ( value ) => {
 				setDeviceHeights( { heightLg: value } );
@@ -259,7 +253,6 @@ export default function Edit( {
 			label: __( 'Tablet height', 'flexible-spacer-block' ),
 			slug: 'md',
 			value: heightMd,
-			isResizing: isResizingMd,
 			syncKey: deviceSyncKey,
 			onPresetChange: ( value ) => setDeviceHeights( { heightMd: value } ),
 			isNegative: isNegativeMd,
@@ -271,7 +264,6 @@ export default function Edit( {
 			label: __( 'Mobile height', 'flexible-spacer-block' ),
 			slug: 'sm',
 			value: heightSm,
-			isResizing: isResizingSm,
 			syncKey: deviceSyncKey,
 			onPresetChange: ( value ) => setDeviceHeights( { heightSm: value } ),
 			isNegative: isNegativeSm,
@@ -377,7 +369,6 @@ export default function Edit( {
 									<HeightControl
 										label={ control.label }
 										value={ control.value }
-										isResizing={ control.isResizing }
 										syncKey={ control.syncKey }
 										onPresetChange={ control.onPresetChange }
 									/>
