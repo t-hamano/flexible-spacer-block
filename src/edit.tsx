@@ -85,7 +85,7 @@ function HeightControl( {
 			// Remount when "All heights" writes into this device.
 			key={ syncKey }
 			values={ { all: computedValue } }
-			onChange={ ( { all }: { all?: string } ) => onPresetChange( all || undefined ) }
+			onChange={ ( { all } ) => onPresetChange( all || undefined ) }
 			label={ label }
 			sides={ [ 'all' ] }
 			showSideInLabel={ false }
