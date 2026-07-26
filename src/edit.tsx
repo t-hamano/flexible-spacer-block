@@ -12,7 +12,6 @@ import {
 	InspectorControls,
 	BlockControls,
 	useBlockProps,
-	useSettings,
 	getSpacingPresetCssVar,
 	isValueSpacingPreset,
 	__experimentalSpacingSizesControl as SpacingSizesControl,
@@ -28,7 +27,6 @@ import {
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
 	__experimentalUnitControl as UnitControl,
-	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 	__experimentalGrid as Grid,
 } from '@wordpress/components';
@@ -78,7 +76,6 @@ function HeightControl( {
 	quantity,
 	isResizing,
 	spacingSizes,
-	units,
 	onChange,
 	onPresetChange,
 }: {
@@ -87,7 +84,6 @@ function HeightControl( {
 	quantity: number | undefined;
 	isResizing: boolean;
 	spacingSizes: SpacingSize[];
-	units: ReturnType< typeof useCustomUnits >;
 	onChange: ( value: HeightValue ) => void;
 	onPresetChange: ( value: string | undefined ) => void;
 } ) {
@@ -134,9 +130,6 @@ function HeightControl( {
 				onChange={ ( { all }: { all?: string } ) => onPresetChange( all || undefined ) }
 				label={ label }
 				sides={ [ 'all' ] }
-				units={ units }
-				allowReset={ false }
-				splitOnAxis={ false }
 				showSideInLabel={ false }
 			/>
 		</View>
@@ -178,15 +171,6 @@ export default function Edit( {
 	const isMobile = useViewportMatch( 'medium', '<' );
 
 	const spacingSizes = useSpacingSizes();
-	const [ spacingUnits ] = useSettings( 'spacing.units' );
-	// A spacer size cannot meaningfully be a percentage, so that unit is hidden.
-	const availableUnits = spacingUnits
-		? spacingUnits.filter( ( unit: string ) => unit !== '%' )
-		: [ 'px', 'em', 'rem', 'vw', 'vh' ];
-	const units = useCustomUnits( {
-		availableUnits,
-		defaultValues: { px: 100, em: 10, rem: 10, vw: 10, vh: 25 },
-	} );
 
 	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
 	const isShowBlock = fsbConf.showBlock;
@@ -473,7 +457,6 @@ export default function Edit( {
 												quantity={ control.quantity }
 												isResizing={ control.isResizing }
 												spacingSizes={ spacingSizes }
-												units={ units }
 												onChange={ control.onChange }
 												onPresetChange={ control.onPresetChange }
 											/>

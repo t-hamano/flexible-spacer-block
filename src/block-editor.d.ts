@@ -9,14 +9,19 @@ import '@wordpress/block-editor';
 declare module '@wordpress/block-editor' {
 	export function getSpacingPresetCssVar( value?: string ): string | undefined;
 	export function isValueSpacingPreset( value?: string ): boolean;
+	// Mirrors the props the component actually accepts; any other prop is
+	// silently dropped, so keep this in sync with the installed version.
+	// @see https://github.com/WordPress/gutenberg/blob/trunk/packages/block-editor/src/components/spacing-sizes-control/index.js
 	export const __experimentalSpacingSizesControl: React.ComponentType< {
-		values?: Record< string, string | undefined >;
-		onChange?: ( values: Record< string, string | undefined > ) => void;
+		inputProps?: Record< string, unknown >;
 		label?: string;
-		sides?: string[];
-		units?: unknown;
-		allowReset?: boolean;
-		splitOnAxis?: boolean;
+		minimumCustomValue?: number;
+		onChange?: ( values: Record< string, string | undefined > ) => void;
+		onMouseOut?: () => void;
+		onMouseOver?: () => void;
 		showSideInLabel?: boolean;
+		sides?: string[];
+		useSelect?: boolean;
+		values?: Record< string, string | undefined >;
 	} >;
 }
