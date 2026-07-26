@@ -121,9 +121,6 @@ export default function Edit( {
 	const [ isResizingLg, setIsResizingLg ] = useState( false );
 	const [ isResizingMd, setIsResizingMd ] = useState( false );
 	const [ isResizingSm, setIsResizingSm ] = useState( false );
-	const [ temporaryWidthLg, setTemporaryWidthLg ] = useState< string | null >( null );
-	const [ temporaryWidthMd, setTemporaryWidthMd ] = useState< string | null >( null );
-	const [ temporaryWidthSm, setTemporaryWidthSm ] = useState< string | null >( null );
 	// A control picks its preset or custom view when it mounts and never switches
 	// back on its own, so remount the counterpart when the other side writes a
 	// height.
@@ -195,17 +192,14 @@ export default function Edit( {
 		if ( ! isEnableMd ) {
 			setDeviceHeights( { heightMd: getUpdatedHeight( currentValue, newValue ) } );
 		}
-		setTemporaryWidthLg( null );
 	};
 
 	const onChangeHeightMd = ( currentValue: HeightValue, newValue: HeightValue ) => {
 		setDeviceHeights( { heightMd: getUpdatedHeight( currentValue, newValue ) } );
-		setTemporaryWidthMd( null );
 	};
 
 	const onChangeHeightSm = ( currentValue: HeightValue, newValue: HeightValue ) => {
 		setDeviceHeights( { heightSm: getUpdatedHeight( currentValue, newValue ) } );
-		setTemporaryWidthSm( null );
 	};
 
 	const resetAll = () => {
@@ -242,7 +236,7 @@ export default function Edit( {
 		{
 			label: __( 'Desktop height', 'flexible-spacer-block' ),
 			slug: 'lg',
-			value: temporaryWidthLg || heightLg,
+			value: heightLg,
 			isResizing: isResizingLg,
 			syncKey: deviceSyncKey,
 			onPresetChange: ( value ) => {
@@ -250,7 +244,6 @@ export default function Edit( {
 				if ( ! isEnableMd ) {
 					setDeviceHeights( { heightMd: value } );
 				}
-				setTemporaryWidthLg( null );
 			},
 			isNegative: isNegativeLg,
 			onNegativeChange: ( value ) => {
@@ -265,13 +258,10 @@ export default function Edit( {
 		{
 			label: __( 'Tablet height', 'flexible-spacer-block' ),
 			slug: 'md',
-			value: temporaryWidthMd || heightMd,
+			value: heightMd,
 			isResizing: isResizingMd,
 			syncKey: deviceSyncKey,
-			onPresetChange: ( value ) => {
-				setDeviceHeights( { heightMd: value } );
-				setTemporaryWidthMd( null );
-			},
+			onPresetChange: ( value ) => setDeviceHeights( { heightMd: value } ),
 			isNegative: isNegativeMd,
 			onNegativeChange: ( value ) => setAttributes( { isNegativeMd: value } ),
 			hasValue: () => heightMd !== defaultMdValue || isNegativeMd,
@@ -280,13 +270,10 @@ export default function Edit( {
 		{
 			label: __( 'Mobile height', 'flexible-spacer-block' ),
 			slug: 'sm',
-			value: temporaryWidthSm || heightSm,
+			value: heightSm,
 			isResizing: isResizingSm,
 			syncKey: deviceSyncKey,
-			onPresetChange: ( value ) => {
-				setDeviceHeights( { heightSm: value } );
-				setTemporaryWidthSm( null );
-			},
+			onPresetChange: ( value ) => setDeviceHeights( { heightSm: value } ),
 			isNegative: isNegativeSm,
 			onNegativeChange: ( value ) => setAttributes( { isNegativeSm: value } ),
 			hasValue: () => heightSm !== defaultSmValue || isNegativeSm,
