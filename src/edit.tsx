@@ -18,17 +18,13 @@ import {
 } from '@wordpress/block-editor';
 import {
 	ResizableBox,
-	BaseControl,
-	RangeControl,
 	ToggleControl,
 	HorizontalRule,
 	ToolbarGroup,
 	ToolbarButton,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
-	__experimentalUnitControl as UnitControl,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
-	__experimentalGrid as Grid,
 } from '@wordpress/components';
 import { Link, Stack } from '@wordpress/ui';
 import { useEffect, useState } from '@wordpress/element';
@@ -43,15 +39,9 @@ import type { BlockEditProps } from '@wordpress/blocks';
  */
 import { responsive } from './icons';
 import { store } from './store';
-import useSpacingSizes, { type SpacingSize } from './use-spacing-sizes';
 import type { BlockAttributes } from './types';
 
-import {
-	MIN_SPACER_HEIGHT,
-	MAX_SPACER_HEIGHT,
-	DEFAULT_SPACER_HEIGHT,
-	DEFAULT_SPACER_HEIGHT_UNIT,
-} from './constants';
+import { MIN_SPACER_HEIGHT, DEFAULT_SPACER_HEIGHT, DEFAULT_SPACER_HEIGHT_UNIT } from './constants';
 
 type HeightValue = string | number | undefined;
 
@@ -59,10 +49,8 @@ interface SpacerControl {
 	label: string;
 	slug: string;
 	value: string | undefined;
-	quantity: number | undefined;
 	isResizing: boolean;
 	syncKey?: number;
-	onChange: ( value: HeightValue ) => void;
 	onPresetChange: ( value: string | undefined ) => void;
 	isNegative?: boolean;
 	onNegativeChange?: ( value: boolean ) => void;
@@ -70,24 +58,19 @@ interface SpacerControl {
 	onDeselect: () => void;
 }
 
-// Renders the height input for a single device.
+// Renders the height input for a single device. When the theme provides no
+// spacing presets the control degrades to a plain value input on its own.
 function HeightControl( {
 	label,
 	value = '',
-	quantity,
 	isResizing,
-	spacingSizes,
 	syncKey,
-	onChange,
 	onPresetChange,
 }: {
 	label: string;
 	value?: string;
-	quantity: number | undefined;
 	isResizing: boolean;
-	spacingSizes: SpacingSize[];
 	syncKey?: number;
-	onChange: ( value: HeightValue ) => void;
 	onPresetChange: ( value: string | undefined ) => void;
 } ) {
 	const [ parsedQuantity, parsedUnit ] = parseQuantityAndUnitFromRawValue( value );
@@ -97,45 +80,16 @@ function HeightControl( {
 			? value
 			: [ parsedQuantity, isResizing ? 'px' : parsedUnit ].join( '' ) ) || undefined;
 
-	// With fewer than two presets there is nothing meaningful to pick, so fall
-	// back to free numeric input.
-	if ( spacingSizes.length < 2 ) {
-		return (
-			<Grid align="end" templateColumns="1fr 0.7fr">
-				<RangeControl
-					label={ __( 'Height', 'flexible-spacer-block' ) }
-					hideLabelFromVision
-					min={ MIN_SPACER_HEIGHT }
-					max={ MAX_SPACER_HEIGHT }
-					value={ quantity }
-					withInputField={ false }
-					onChange={ onChange }
-					__next40pxDefaultSize
-				/>
-				<UnitControl
-					hideLabelFromVision
-					label={ __( 'Height', 'flexible-spacer-block' ) }
-					value={ value }
-					min={ MIN_SPACER_HEIGHT }
-					onChange={ onChange }
-					size="__unstable-large"
-				/>
-			</Grid>
-		);
-	}
-
 	return (
-		<View className="fsb-flexible-spacer__spacing-sizes">
-			<SpacingSizesControl
-				// Remount when "All heights" writes into this device.
-				key={ syncKey }
-				values={ { all: computedValue } }
-				onChange={ ( { all }: { all?: string } ) => onPresetChange( all || undefined ) }
-				label={ label }
-				sides={ [ 'all' ] }
-				showSideInLabel={ false }
-			/>
-		</View>
+		<SpacingSizesControl
+			// Remount when "All heights" writes into this device.
+			key={ syncKey }
+			values={ { all: computedValue } }
+			onChange={ ( { all }: { all?: string } ) => onPresetChange( all || undefined ) }
+			label={ label }
+			sides={ [ 'all' ] }
+			showSideInLabel={ false }
+		/>
 	);
 }
 
@@ -178,8 +132,6 @@ export default function Edit( {
 	const isResponsive = useSelect( ( select ) => select( store ).getIsResponsive(), [] );
 	const { setIsResponsive } = useDispatch( store );
 	const isMobile = useViewportMatch( 'medium', '<' );
-
-	const spacingSizes = useSpacingSizes();
 
 	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
 	const isShowBlock = fsbConf.showBlock;
@@ -236,16 +188,6 @@ export default function Edit( {
 		return newParsedQuantity + newUnit;
 	}
 
-	const onChangeHeightAll = ( currentValue: HeightValue, newValue: HeightValue ) => {
-		const updatedHeight = getUpdatedHeight( currentValue, newValue );
-		setAttributes( {
-			heightLg: updatedHeight,
-			heightMd: updatedHeight,
-			heightSm: updatedHeight,
-		} );
-		setHeightAll( updatedHeight );
-	};
-
 	const onChangeHeightLg = ( currentValue: HeightValue, newValue: HeightValue ) => {
 		setAttributes( { heightLg: getUpdatedHeight( currentValue, newValue ) } );
 		if ( ! isEnableMd ) {
@@ -281,9 +223,7 @@ export default function Edit( {
 			label: __( 'All heights', 'flexible-spacer-block' ),
 			slug: 'all',
 			value: heightAll,
-			quantity: parseQuantityAndUnitFromRawValue( heightAll )[ 0 ],
 			isResizing: false,
-			onChange: ( value ) => onChangeHeightAll( heightAll, value ),
 			onPresetChange: ( value ) => {
 				setAttributes( { heightLg: value, heightMd: value, heightSm: value } );
 				setHeightAll( value );
@@ -302,10 +242,8 @@ export default function Edit( {
 			label: __( 'Desktop height', 'flexible-spacer-block' ),
 			slug: 'lg',
 			value: temporaryWidthLg || heightLg,
-			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthLg || heightLg )[ 0 ],
 			isResizing: isResizingLg,
 			syncKey: deviceSyncKey,
-			onChange: ( value ) => onChangeHeightLg( heightLg, value ),
 			onPresetChange: ( value ) => {
 				setAttributes( { heightLg: value } );
 				if ( ! isEnableMd ) {
@@ -327,10 +265,8 @@ export default function Edit( {
 			label: __( 'Tablet height', 'flexible-spacer-block' ),
 			slug: 'md',
 			value: temporaryWidthMd || heightMd,
-			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthMd || heightMd )[ 0 ],
 			isResizing: isResizingMd,
 			syncKey: deviceSyncKey,
-			onChange: ( value ) => onChangeHeightMd( heightMd, value ),
 			onPresetChange: ( value ) => {
 				setAttributes( { heightMd: value } );
 				setTemporaryWidthMd( null );
@@ -344,10 +280,8 @@ export default function Edit( {
 			label: __( 'Mobile height', 'flexible-spacer-block' ),
 			slug: 'sm',
 			value: temporaryWidthSm || heightSm,
-			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthSm || heightSm )[ 0 ],
 			isResizing: isResizingSm,
 			syncKey: deviceSyncKey,
-			onChange: ( value ) => onChangeHeightSm( temporaryWidthSm || heightSm, value ),
 			onPresetChange: ( value ) => {
 				setAttributes( { heightSm: value } );
 				setTemporaryWidthSm( null );
@@ -446,42 +380,27 @@ export default function Edit( {
 							onDeselect={ control.onDeselect }
 						>
 							<Stack direction="column" gap="lg">
-								<BaseControl>
-									<div
-										role="group"
-										aria-labelledby={
-											spacingSizes.length < 2 ? `fsb-spacer-${ control.slug }__label` : undefined
-										}
-										onMouseEnter={ () => setActiveDevice( control.slug ) }
-										onMouseLeave={ () => setActiveDevice( undefined ) }
-									>
-										{ /* In preset mode the SpacingSizesControl renders its own label. */ }
-										{ spacingSizes.length < 2 && (
-											<BaseControl.VisualLabel id={ `fsb-spacer-${ control.slug }__label` }>
-												{ control.label }
-											</BaseControl.VisualLabel>
-										) }
-										<Stack direction="column" gap="sm">
-											<HeightControl
-												label={ control.label }
-												value={ control.value }
-												quantity={ control.quantity }
-												isResizing={ control.isResizing }
-												spacingSizes={ spacingSizes }
-												syncKey={ control.syncKey }
-												onChange={ control.onChange }
-												onPresetChange={ control.onPresetChange }
-											/>
-											{ control.onNegativeChange && (
-												<ToggleControl
-													label={ __( 'Negative space', 'flexible-spacer-block' ) }
-													checked={ control.isNegative }
-													onChange={ control.onNegativeChange }
-												/>
-											) }
-										</Stack>
-									</div>
-								</BaseControl>
+								<Stack
+									direction="column"
+									gap="md"
+									onMouseEnter={ () => setActiveDevice( control.slug ) }
+									onMouseLeave={ () => setActiveDevice( undefined ) }
+								>
+									<HeightControl
+										label={ control.label }
+										value={ control.value }
+										isResizing={ control.isResizing }
+										syncKey={ control.syncKey }
+										onPresetChange={ control.onPresetChange }
+									/>
+									{ control.onNegativeChange && (
+										<ToggleControl
+											label={ __( 'Negative space', 'flexible-spacer-block' ) }
+											checked={ control.isNegative }
+											onChange={ control.onNegativeChange }
+										/>
+									) }
+								</Stack>
 								<HorizontalRule />
 							</Stack>
 						</ToolsPanelItem>
