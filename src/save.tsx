@@ -37,6 +37,12 @@ function getStyleObject(
 			: { height: `${ defaultQuantity }${ defaultUnit }` };
 	}
 
+	// The "None" preset is stored as a bare `0`, which `isValueSpacingPreset()`
+	// reports as a preset even though it has no CSS var. Treat it as zero.
+	if ( value === '0' ) {
+		return { height: '0px' };
+	}
+
 	// Spacing preset reference (e.g. `var:preset|spacing|50`). Convert it to
 	// its CSS custom property (e.g. `var(--wp--preset--spacing--50)`).
 	if ( isValueSpacingPreset( value ) ) {

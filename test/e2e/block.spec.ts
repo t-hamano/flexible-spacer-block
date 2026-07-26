@@ -87,6 +87,15 @@ test.describe( 'Block', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
+	test( 'should apply the none spacing preset as zero height', async ( { editor, page } ) => {
+		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
+		await editor.openDocumentSettingsSidebar();
+		await page.getByRole( 'button', { name: 'Use preset' } ).nth( 3 ).click();
+		await page.getByRole( 'slider', { name: 'Mobile height' } ).fill( '0' );
+		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 2 ).check();
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+	} );
+
 	test( 'should be converted to core spacer block', async ( { editor } ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		await editor.transformBlockTo( 'core/spacer' );
