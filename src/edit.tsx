@@ -136,7 +136,6 @@ function HeightControl( {
 				label={ label }
 				sides={ [ 'all' ] }
 				showSideInLabel={ false }
-				// Also fired on focus and blur.
 				onMouseOver={ onMouseOver }
 				onMouseOut={ onMouseOut }
 			/>
