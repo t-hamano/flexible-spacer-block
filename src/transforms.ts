@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import { createBlock } from '@wordpress/blocks';
+import { isValueSpacingPreset } from '@wordpress/block-editor';
 import { __experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue } from '@wordpress/components';
 
 /**
@@ -9,6 +10,17 @@ import { __experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitF
  */
 import { DEFAULT_SPACER_HEIGHT, DEFAULT_SPACER_HEIGHT_UNIT } from './constants';
 import metadata from './block.json';
+
+function getTransformedHeight( height?: string ): string {
+	if ( height && isValueSpacingPreset( height ) ) {
+		return height;
+	}
+
+	const [ parsedQuantity = DEFAULT_SPACER_HEIGHT, parsedUnit = DEFAULT_SPACER_HEIGHT_UNIT ] =
+		parseQuantityAndUnitFromRawValue( height );
+
+	return `${ parsedQuantity }${ parsedUnit }`;
+}
 
 const transforms = {
 	from: [
@@ -24,9 +36,7 @@ const transforms = {
 				height?: string;
 				style?: Record< string, unknown >;
 			} ) => {
-				const [ parsedQuantity = DEFAULT_SPACER_HEIGHT, parsedUnit = DEFAULT_SPACER_HEIGHT_UNIT ] =
-					parseQuantityAndUnitFromRawValue( height );
-				const newHeight = `${ parsedQuantity }${ parsedUnit }`;
+				const newHeight = getTransformedHeight( height );
 
 				return createBlock( metadata.name, {
 					anchor,
@@ -51,13 +61,10 @@ const transforms = {
 				heightLg?: string;
 				style?: Record< string, unknown >;
 			} ) => {
-				const [ parsedQuantity = DEFAULT_SPACER_HEIGHT, parsedUnit = DEFAULT_SPACER_HEIGHT_UNIT ] =
-					parseQuantityAndUnitFromRawValue( heightLg );
-				const newHeight = `${ parsedQuantity }${ parsedUnit }`;
 				return createBlock( 'core/spacer', {
 					anchor,
 					style,
-					height: newHeight,
+					height: getTransformedHeight( heightLg ),
 				} );
 			},
 		},

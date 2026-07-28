@@ -8,10 +8,17 @@ import clsx from 'clsx';
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
+import {
+	InspectorControls,
+	BlockControls,
+	useBlockProps,
+	getSpacingPresetCssVar,
+	isValueSpacingPreset,
+	store as blockEditorStore,
+	__experimentalSpacingSizesControl as SpacingSizesControl,
+} from '@wordpress/block-editor';
 import {
 	ResizableBox,
-	BaseControl,
 	RangeControl,
 	ToggleControl,
 	HorizontalRule,
@@ -19,9 +26,7 @@ import {
 	ToolbarButton,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
-	__experimentalUnitControl as UnitControl,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
-	__experimentalGrid as Grid,
 } from '@wordpress/components';
 import { Link, Stack } from '@wordpress/ui';
 import { useEffect, useState } from '@wordpress/element';
@@ -52,12 +57,90 @@ interface SpacerControl {
 	icon: JSX.Element;
 	slug: string;
 	value: string | undefined;
-	quantity: number | undefined;
-	onChange: ( value: HeightValue ) => void;
+	syncKey?: number;
+	onChange: ( value: string | undefined ) => void;
 	isNegative?: boolean;
 	onNegativeChange?: ( value: boolean ) => void;
 	hasValue: () => boolean;
 	onDeselect: () => void;
+}
+
+// Renders the height input for a single device.
+function HeightControl( {
+	label,
+	icon,
+	value = '',
+	syncKey,
+	onChange,
+	onMouseOver,
+	onMouseOut,
+}: {
+	label: string;
+	icon: JSX.Element;
+	value?: string;
+	syncKey?: number;
+	onChange: ( value: string | undefined ) => void;
+	onMouseOver: () => void;
+	onMouseOut: () => void;
+} ) {
+	const disableCustomSpacingSizes = useSelect(
+		( select ) => select( blockEditorStore ).getSettings().disableCustomSpacingSizes,
+		[]
+	);
+	const [ parsedQuantity, parsedUnit ] = parseQuantityAndUnitFromRawValue( value );
+
+	// With custom values disabled the core control renders the preset UI alone, so
+	// custom values can no longer be edited. The core Spacer block behaves the same
+	// way, but restore a numeric input here for backward compatibility.
+	if ( disableCustomSpacingSizes ) {
+		return (
+			<div
+				onMouseEnter={ onMouseOver }
+				onMouseLeave={ onMouseOut }
+				onFocus={ onMouseOver }
+				onBlur={ onMouseOut }
+			>
+				<RangeControl
+					label={ label }
+					beforeIcon={ <Icon icon={ icon } /> }
+					min={ MIN_SPACER_HEIGHT }
+					max={ MAX_SPACER_HEIGHT }
+					value={ parsedQuantity }
+					onChange={ ( next ) =>
+						onChange(
+							next === undefined
+								? undefined
+								: `${ next }${ parsedUnit || DEFAULT_SPACER_HEIGHT_UNIT }`
+						)
+					}
+					__next40pxDefaultSize
+				/>
+			</div>
+		);
+	}
+
+	// An empty string renders as a blank custom input rather than as a preset
+	// slider parked on "None".
+	const computedValue = isValueSpacingPreset( value )
+		? value
+		: [ parsedQuantity, parsedUnit ].join( '' );
+
+	return (
+		<div className="fsb-flexible-spacer__height-control">
+			<Icon icon={ icon } />
+			<SpacingSizesControl
+				// Remount when the counterpart control changes this height.
+				key={ syncKey }
+				values={ { all: computedValue } }
+				onChange={ ( { all } ) => onChange( all || undefined ) }
+				label={ label }
+				sides={ [ 'all' ] }
+				showSideInLabel={ false }
+				onMouseOver={ onMouseOver }
+				onMouseOut={ onMouseOut }
+			/>
+		</div>
+	);
 }
 
 interface SpacerDevice {
@@ -81,14 +164,17 @@ export default function Edit( {
 	// Injected by the block editor at runtime; not part of `BlockEditProps`.
 	toggleSelection?: ( isSelectionEnabled: boolean ) => void;
 } ) {
-	const [ heightAll, setHeightAll ] = useState< string | undefined >( undefined );
+	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
+	const heightAll = heightLg === heightMd && heightMd === heightSm ? heightLg : undefined;
 	const [ activeDevice, setActiveDevice ] = useState< string | undefined >( undefined );
 	const [ isResizingLg, setIsResizingLg ] = useState( false );
 	const [ isResizingMd, setIsResizingMd ] = useState( false );
 	const [ isResizingSm, setIsResizingSm ] = useState( false );
-	const [ temporaryWidthLg, setTemporaryWidthLg ] = useState< string | null >( null );
-	const [ temporaryWidthMd, setTemporaryWidthMd ] = useState< string | null >( null );
-	const [ temporaryWidthSm, setTemporaryWidthSm ] = useState< string | null >( null );
+	// A control picks its preset or custom view when it mounts and never switches
+	// back on its own, so remount the counterpart when the other side writes a
+	// height.
+	const [ deviceSyncKey, setDeviceSyncKey ] = useState( 0 );
+	const [ allSyncKey, setAllSyncKey ] = useState( 0 );
 
 	const isResponsive = useSelect( ( select ) => select( store ).getIsResponsive(), [] );
 	const { setIsResponsive } = useDispatch( store );
@@ -97,8 +183,6 @@ export default function Edit( {
 	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
 	const isShowBlock = fsbConf.showBlock;
 	const defaultValue = fsbConf.defaultValue;
-
-	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
 
 	// Apply default values from the settings page when inserting a block.
 	useEffect( () => {
@@ -115,12 +199,6 @@ export default function Edit( {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
-
-	useEffect( () => {
-		if ( heightLg === heightMd && heightMd === heightSm ) {
-			setHeightAll( heightLg );
-		}
-	}, [ heightLg, heightMd, heightSm ] );
 
 	const defaultLgValue = defaultValue.lg + defaultValue.lg_unit;
 	const defaultMdValue = defaultValue.md + defaultValue.md_unit;
@@ -151,36 +229,32 @@ export default function Edit( {
 		return newParsedQuantity + newUnit;
 	}
 
-	const onChangeHeightAll = ( currentValue: HeightValue, newValue: HeightValue ) => {
-		const updatedHeight = getUpdatedHeight( currentValue, newValue );
-		setAttributes( {
-			heightLg: updatedHeight,
-			heightMd: updatedHeight,
-			heightSm: updatedHeight,
-		} );
-		setHeightAll( updatedHeight );
+	// Writing a device height leaves "All heights" on the view it mounted with,
+	// so remount it. Its own handler bumps the key in the other direction.
+	const setDeviceHeights = ( heights: Partial< BlockAttributes > ) => {
+		setAttributes( heights );
+		setAllSyncKey( ( key ) => key + 1 );
 	};
 
 	const onChangeHeightLg = ( currentValue: HeightValue, newValue: HeightValue ) => {
-		setAttributes( { heightLg: getUpdatedHeight( currentValue, newValue ) } );
-		if ( ! isEnableMd ) {
-			setAttributes( { heightMd: getUpdatedHeight( currentValue, newValue ) } );
-		}
-		setTemporaryWidthLg( null );
+		const updatedHeight = getUpdatedHeight( currentValue, newValue );
+		const newHeights = {
+			heightLg: updatedHeight,
+			...( ! isEnableMd && { heightMd: updatedHeight } ),
+		};
+		setDeviceHeights( newHeights );
 	};
 
 	const onChangeHeightMd = ( currentValue: HeightValue, newValue: HeightValue ) => {
-		setAttributes( { heightMd: getUpdatedHeight( currentValue, newValue ) } );
-		setTemporaryWidthMd( null );
+		setDeviceHeights( { heightMd: getUpdatedHeight( currentValue, newValue ) } );
 	};
 
 	const onChangeHeightSm = ( currentValue: HeightValue, newValue: HeightValue ) => {
-		setAttributes( { heightSm: getUpdatedHeight( currentValue, newValue ) } );
-		setTemporaryWidthSm( null );
+		setDeviceHeights( { heightSm: getUpdatedHeight( currentValue, newValue ) } );
 	};
 
 	const resetAll = () => {
-		setAttributes( {
+		setDeviceHeights( {
 			heightLg: defaultLgValue,
 			heightMd: isEnableMd ? defaultMdValue : defaultLgValue,
 			heightSm: defaultSmValue,
@@ -188,7 +262,6 @@ export default function Edit( {
 			isNegativeMd: false,
 			isNegativeSm: false,
 		} );
-		setHeightAll( defaultLgValue );
 	};
 
 	const SPACER_CONTROLS: SpacerControl[] = [
@@ -197,8 +270,11 @@ export default function Edit( {
 			icon: settings,
 			slug: 'all',
 			value: heightAll,
-			quantity: parseQuantityAndUnitFromRawValue( heightAll )[ 0 ],
-			onChange: ( value ) => onChangeHeightAll( heightAll, value ),
+			syncKey: allSyncKey,
+			onChange: ( value ) => {
+				setAttributes( { heightLg: value, heightMd: value, heightSm: value } );
+				setDeviceSyncKey( ( key ) => key + 1 );
+			},
 			hasValue: () =>
 				heightLg !== defaultLgValue ||
 				heightMd !== defaultMdValue ||
@@ -213,41 +289,45 @@ export default function Edit( {
 			icon: desktop,
 			slug: 'lg',
 			value: heightLg,
-			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthLg || heightLg )[ 0 ],
-			onChange: ( value ) => onChangeHeightLg( heightLg, value ),
+			syncKey: deviceSyncKey,
+			onChange: ( value ) => {
+				const newHeights = { heightLg: value, ...( ! isEnableMd && { heightMd: value } ) };
+				setDeviceHeights( newHeights );
+			},
 			isNegative: isNegativeLg,
 			onNegativeChange: ( value ) => {
-				setAttributes( { isNegativeLg: value } );
-				if ( ! isEnableMd ) {
-					setAttributes( { isNegativeMd: value } );
-				}
+				const newAttributes = {
+					isNegativeLg: value,
+					...( ! isEnableMd && { isNegativeMd: value } ),
+				};
+				setAttributes( newAttributes );
 			},
 			hasValue: () => heightLg !== defaultLgValue || isNegativeLg,
-			onDeselect: () => setAttributes( { heightLg: defaultLgValue, isNegativeLg: false } ),
+			onDeselect: () => setDeviceHeights( { heightLg: defaultLgValue, isNegativeLg: false } ),
 		},
 		{
 			label: __( 'Tablet height', 'flexible-spacer-block' ),
 			icon: tablet,
 			slug: 'md',
 			value: heightMd,
-			quantity: parseQuantityAndUnitFromRawValue( temporaryWidthMd || heightMd )[ 0 ],
-			onChange: ( value ) => onChangeHeightMd( heightMd, value ),
+			syncKey: deviceSyncKey,
+			onChange: ( value ) => setDeviceHeights( { heightMd: value } ),
 			isNegative: isNegativeMd,
 			onNegativeChange: ( value ) => setAttributes( { isNegativeMd: value } ),
 			hasValue: () => heightMd !== defaultMdValue || isNegativeMd,
-			onDeselect: () => setAttributes( { heightMd: defaultMdValue, isNegativeMd: false } ),
+			onDeselect: () => setDeviceHeights( { heightMd: defaultMdValue, isNegativeMd: false } ),
 		},
 		{
 			label: __( 'Mobile height', 'flexible-spacer-block' ),
 			icon: mobile,
 			slug: 'sm',
 			value: heightSm,
-			quantity: parseQuantityAndUnitFromRawValue( heightSm )[ 0 ],
-			onChange: ( value ) => onChangeHeightSm( temporaryWidthSm || heightSm, value ),
+			syncKey: deviceSyncKey,
+			onChange: ( value ) => setDeviceHeights( { heightSm: value } ),
 			isNegative: isNegativeSm,
 			onNegativeChange: ( value ) => setAttributes( { isNegativeSm: value } ),
 			hasValue: () => heightSm !== defaultSmValue || isNegativeSm,
-			onDeselect: () => setAttributes( { heightSm: defaultSmValue, isNegativeSm: false } ),
+			onDeselect: () => setDeviceHeights( { heightSm: defaultSmValue, isNegativeSm: false } ),
 		},
 	];
 
@@ -338,48 +418,24 @@ export default function Edit( {
 							onDeselect={ control.onDeselect }
 						>
 							<Stack direction="column" gap="lg">
-								<BaseControl>
-									<div
-										role="group"
-										aria-labelledby={ `fsb-spacer-${ control.slug }__label` }
-										onMouseEnter={ () => setActiveDevice( control.slug ) }
-										onMouseLeave={ () => setActiveDevice( undefined ) }
-									>
-										<BaseControl.VisualLabel id={ `fsb-spacer-${ control.slug }__label` }>
-											{ control.label }
-										</BaseControl.VisualLabel>
-										<Stack direction="column" gap="sm">
-											<Grid align="end" templateColumns="1fr 0.7fr">
-												<RangeControl
-													label={ __( 'Height', 'flexible-spacer-block' ) }
-													hideLabelFromVision
-													beforeIcon={ <Icon icon={ control.icon } /> }
-													min={ MIN_SPACER_HEIGHT }
-													max={ MAX_SPACER_HEIGHT }
-													value={ control.quantity }
-													withInputField={ false }
-													onChange={ control.onChange }
-													__next40pxDefaultSize
-												/>
-												<UnitControl
-													hideLabelFromVision
-													label={ __( 'Height', 'flexible-spacer-block' ) }
-													value={ control.value }
-													min={ MIN_SPACER_HEIGHT }
-													onChange={ control.onChange }
-													size="__unstable-large"
-												/>
-											</Grid>
-											{ control.onNegativeChange && (
-												<ToggleControl
-													label={ __( 'Negative space', 'flexible-spacer-block' ) }
-													checked={ control.isNegative }
-													onChange={ control.onNegativeChange }
-												/>
-											) }
-										</Stack>
-									</div>
-								</BaseControl>
+								<Stack direction="column" gap="md">
+									<HeightControl
+										label={ control.label }
+										icon={ control.icon }
+										value={ control.value }
+										syncKey={ control.syncKey }
+										onChange={ control.onChange }
+										onMouseOver={ () => setActiveDevice( control.slug ) }
+										onMouseOut={ () => setActiveDevice( undefined ) }
+									/>
+									{ control.onNegativeChange && (
+										<ToggleControl
+											label={ __( 'Negative space', 'flexible-spacer-block' ) }
+											checked={ control.isNegative }
+											onChange={ control.onNegativeChange }
+										/>
+									) }
+								</Stack>
 								<HorizontalRule />
 							</Stack>
 						</ToolsPanelItem>
@@ -418,7 +474,7 @@ export default function Edit( {
 								<Icon icon={ device.icon } />
 								{ device.label }
 							</div>
-							<div style={ { height: device.height } }>
+							<div style={ { height: getSpacingPresetCssVar( device.height ) } }>
 								<ResizableBox
 									className={ clsx( 'fsb-flexible-spacer__device-resizer', {
 										'is-resizing': device.isResizing,

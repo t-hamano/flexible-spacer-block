@@ -5,6 +5,20 @@
 	margin: 0;
 }
 
+.fsb-flexible-spacer__height-control {
+	position: relative;
+
+	> svg {
+		position: absolute;
+		top: calc(-1 * variables.$grid-unit-05);
+		left: 0;
+	}
+
+	.spacing-sizes-control__header {
+		padding-left: variables.$grid-unit-40;
+	}
+}
+
 .fsb-flexible-spacer__inner {
 	display: flex;
 	gap: 8px;

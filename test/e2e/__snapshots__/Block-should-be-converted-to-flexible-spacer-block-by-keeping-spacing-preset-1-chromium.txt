@@ -1,0 +1,3 @@
+<!-- wp:fsb/flexible-spacer {"heightLg":"var:preset|spacing|50","heightMd":"var:preset|spacing|50","heightSm":"var:preset|spacing|50"} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:var(--wp--preset--spacing--50)"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:var(--wp--preset--spacing--50)"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:var(--wp--preset--spacing--50)"></div></div>
+<!-- /wp:fsb/flexible-spacer -->
