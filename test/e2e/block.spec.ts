@@ -102,6 +102,36 @@ test.describe( 'Block', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
+	test( 'should switch each device control to the preset view when all heights uses a preset', async ( {
+		editor,
+		page,
+	} ) => {
+		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
+		await editor.openDocumentSettingsSidebar();
+		await page.getByRole( 'button', { name: 'Use preset' } ).nth( 0 ).click();
+		await page.getByRole( 'slider', { name: 'All heights' } ).fill( '4' );
+		await expect( page.getByRole( 'spinbutton', { name: 'Desktop height' } ) ).toBeHidden();
+		await expect( page.getByRole( 'spinbutton', { name: 'Tablet height' } ) ).toBeHidden();
+		await expect( page.getByRole( 'spinbutton', { name: 'Mobile height' } ) ).toBeHidden();
+	} );
+
+	test( 'should empty the all heights control when a device height diverges', async ( {
+		editor,
+		page,
+	} ) => {
+		await editor.insertBlock( {
+			name: 'fsb/flexible-spacer',
+			attributes: {
+				heightLg: 'var:preset|spacing|50',
+				heightMd: 'var:preset|spacing|50',
+				heightSm: 'var:preset|spacing|50',
+			},
+		} );
+		await editor.openDocumentSettingsSidebar();
+		await page.getByRole( 'slider', { name: 'Desktop height' } ).fill( '2' );
+		await expect( page.getByRole( 'spinbutton', { name: 'All heights' } ) ).toHaveValue( '' );
+	} );
+
 	test( 'should be converted to core spacer block', async ( { editor } ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		await editor.transformBlockTo( 'core/spacer' );
