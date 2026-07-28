@@ -29,7 +29,7 @@ import {
 import { Link, Stack } from '@wordpress/ui';
 import { useEffect, useState } from '@wordpress/element';
 import { View } from '@wordpress/primitives';
-import { Icon, mobile, tablet, desktop } from '@wordpress/icons';
+import { Icon, settings, mobile, tablet, desktop } from '@wordpress/icons';
 import { addQueryArgs } from '@wordpress/url';
 import { useViewportMatch } from '@wordpress/compose';
 import type { BlockEditProps } from '@wordpress/blocks';
@@ -47,6 +47,7 @@ type HeightValue = string | number | undefined;
 
 interface SpacerControl {
 	label: string;
+	icon: JSX.Element;
 	slug: string;
 	value: string | undefined;
 	syncKey?: number;
@@ -61,11 +62,13 @@ interface SpacerControl {
 // spacing presets the control degrades to a plain value input on its own.
 function HeightControl( {
 	label,
+	icon,
 	value = '',
 	syncKey,
 	onPresetChange,
 }: {
 	label: string;
+	icon: JSX.Element;
 	value?: string;
 	syncKey?: number;
 	onPresetChange: ( value: string | undefined ) => void;
@@ -78,15 +81,18 @@ function HeightControl( {
 		: [ parsedQuantity, parsedUnit ].join( '' );
 
 	return (
-		<SpacingSizesControl
-			// Remount when the counterpart control changes this height.
-			key={ syncKey }
-			values={ { all: computedValue } }
-			onChange={ ( { all } ) => onPresetChange( all || undefined ) }
-			label={ label }
-			sides={ [ 'all' ] }
-			showSideInLabel={ false }
-		/>
+		<div className="fsb-flexible-spacer__height-control">
+			<Icon icon={ icon } />
+			<SpacingSizesControl
+				// Remount when the counterpart control changes this height.
+				key={ syncKey }
+				values={ { all: computedValue } }
+				onChange={ ( { all } ) => onPresetChange( all || undefined ) }
+				label={ label }
+				sides={ [ 'all' ] }
+				showSideInLabel={ false }
+			/>
+		</div>
 	);
 }
 
@@ -214,6 +220,7 @@ export default function Edit( {
 	const SPACER_CONTROLS: SpacerControl[] = [
 		{
 			label: __( 'All heights', 'flexible-spacer-block' ),
+			icon: settings,
 			slug: 'all',
 			value: heightAll,
 			syncKey: allSyncKey,
@@ -232,6 +239,7 @@ export default function Edit( {
 		},
 		{
 			label: __( 'Desktop height', 'flexible-spacer-block' ),
+			icon: desktop,
 			slug: 'lg',
 			value: heightLg,
 			syncKey: deviceSyncKey,
@@ -252,6 +260,7 @@ export default function Edit( {
 		},
 		{
 			label: __( 'Tablet height', 'flexible-spacer-block' ),
+			icon: tablet,
 			slug: 'md',
 			value: heightMd,
 			syncKey: deviceSyncKey,
@@ -263,6 +272,7 @@ export default function Edit( {
 		},
 		{
 			label: __( 'Mobile height', 'flexible-spacer-block' ),
+			icon: mobile,
 			slug: 'sm',
 			value: heightSm,
 			syncKey: deviceSyncKey,
@@ -369,6 +379,7 @@ export default function Edit( {
 								>
 									<HeightControl
 										label={ control.label }
+										icon={ control.icon }
 										value={ control.value }
 										syncKey={ control.syncKey }
 										onPresetChange={ control.onPresetChange }
