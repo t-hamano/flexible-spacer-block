@@ -66,12 +66,16 @@ function HeightControl( {
 	value = '',
 	syncKey,
 	onPresetChange,
+	onMouseOver,
+	onMouseOut,
 }: {
 	label: string;
 	icon: JSX.Element;
 	value?: string;
 	syncKey?: number;
 	onPresetChange: ( value: string | undefined ) => void;
+	onMouseOver: () => void;
+	onMouseOut: () => void;
 } ) {
 	const [ parsedQuantity, parsedUnit ] = parseQuantityAndUnitFromRawValue( value );
 	// An empty string is passed through so that an unset height renders as a blank
@@ -91,6 +95,10 @@ function HeightControl( {
 				label={ label }
 				sides={ [ 'all' ] }
 				showSideInLabel={ false }
+				// Also fired on focus and blur, so the device highlights for
+				// keyboard users too.
+				onMouseOver={ onMouseOver }
+				onMouseOut={ onMouseOut }
 			/>
 		</div>
 	);
@@ -371,18 +379,15 @@ export default function Edit( {
 							onDeselect={ control.onDeselect }
 						>
 							<Stack direction="column" gap="lg">
-								<Stack
-									direction="column"
-									gap="md"
-									onMouseEnter={ () => setActiveDevice( control.slug ) }
-									onMouseLeave={ () => setActiveDevice( undefined ) }
-								>
+								<Stack direction="column" gap="md">
 									<HeightControl
 										label={ control.label }
 										icon={ control.icon }
 										value={ control.value }
 										syncKey={ control.syncKey }
 										onPresetChange={ control.onPresetChange }
+										onMouseOver={ () => setActiveDevice( control.slug ) }
+										onMouseOut={ () => setActiveDevice( undefined ) }
 									/>
 									{ control.onNegativeChange && (
 										<ToggleControl

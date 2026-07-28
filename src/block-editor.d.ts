@@ -14,6 +14,9 @@ declare module '@wordpress/block-editor' {
 	export const __experimentalSpacingSizesControl: React.ComponentType< {
 		label: string;
 		onChange: ( values: Record< string, string | undefined > ) => void;
+		// Both are fired on focus and blur as well as on the pointer events.
+		onMouseOut?: () => void;
+		onMouseOver?: () => void;
 		showSideInLabel: boolean;
 		sides: string[];
 		values: Record< string, string | undefined >;
