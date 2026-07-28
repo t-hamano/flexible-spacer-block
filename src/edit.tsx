@@ -14,10 +14,12 @@ import {
 	useBlockProps,
 	getSpacingPresetCssVar,
 	isValueSpacingPreset,
+	store as blockEditorStore,
 	__experimentalSpacingSizesControl as SpacingSizesControl,
 } from '@wordpress/block-editor';
 import {
 	ResizableBox,
+	RangeControl,
 	ToggleControl,
 	HorizontalRule,
 	ToolbarGroup,
@@ -41,7 +43,12 @@ import { responsive } from './icons';
 import { store } from './store';
 import type { BlockAttributes } from './types';
 
-import { MIN_SPACER_HEIGHT, DEFAULT_SPACER_HEIGHT, DEFAULT_SPACER_HEIGHT_UNIT } from './constants';
+import {
+	MIN_SPACER_HEIGHT,
+	MAX_SPACER_HEIGHT,
+	DEFAULT_SPACER_HEIGHT,
+	DEFAULT_SPACER_HEIGHT_UNIT,
+} from './constants';
 
 type HeightValue = string | number | undefined;
 
@@ -51,21 +58,20 @@ interface SpacerControl {
 	slug: string;
 	value: string | undefined;
 	syncKey?: number;
-	onPresetChange: ( value: string | undefined ) => void;
+	onChange: ( value: string | undefined ) => void;
 	isNegative?: boolean;
 	onNegativeChange?: ( value: boolean ) => void;
 	hasValue: () => boolean;
 	onDeselect: () => void;
 }
 
-// Renders the height input for a single device. When the theme provides no
-// spacing presets the control degrades to a plain value input on its own.
+// Renders the height input for a single device.
 function HeightControl( {
 	label,
 	icon,
 	value = '',
 	syncKey,
-	onPresetChange,
+	onChange,
 	onMouseOver,
 	onMouseOut,
 }: {
@@ -73,13 +79,48 @@ function HeightControl( {
 	icon: JSX.Element;
 	value?: string;
 	syncKey?: number;
-	onPresetChange: ( value: string | undefined ) => void;
+	onChange: ( value: string | undefined ) => void;
 	onMouseOver: () => void;
 	onMouseOut: () => void;
 } ) {
+	const disableCustomSpacingSizes = useSelect(
+		( select ) => select( blockEditorStore ).getSettings().disableCustomSpacingSizes,
+		[]
+	);
 	const [ parsedQuantity, parsedUnit ] = parseQuantityAndUnitFromRawValue( value );
-	// An empty string is passed through so that an unset height renders as a blank
-	// custom input rather than as a preset slider parked on "None".
+
+	// With custom values disabled the core control renders the preset UI alone, so
+	// custom values can no longer be edited. The core Spacer block behaves the same
+	// way, but restore a numeric input here for backward compatibility.
+	if ( disableCustomSpacingSizes ) {
+		return (
+			<div
+				onMouseEnter={ onMouseOver }
+				onMouseLeave={ onMouseOut }
+				onFocus={ onMouseOver }
+				onBlur={ onMouseOut }
+			>
+				<RangeControl
+					label={ label }
+					beforeIcon={ <Icon icon={ icon } /> }
+					min={ MIN_SPACER_HEIGHT }
+					max={ MAX_SPACER_HEIGHT }
+					value={ parsedQuantity }
+					onChange={ ( next ) =>
+						onChange(
+							next === undefined
+								? undefined
+								: `${ next }${ parsedUnit || DEFAULT_SPACER_HEIGHT_UNIT }`
+						)
+					}
+					__next40pxDefaultSize
+				/>
+			</div>
+		);
+	}
+
+	// An empty string renders as a blank custom input rather than as a preset
+	// slider parked on "None".
 	const computedValue = isValueSpacingPreset( value )
 		? value
 		: [ parsedQuantity, parsedUnit ].join( '' );
@@ -91,12 +132,11 @@ function HeightControl( {
 				// Remount when the counterpart control changes this height.
 				key={ syncKey }
 				values={ { all: computedValue } }
-				onChange={ ( { all } ) => onPresetChange( all || undefined ) }
+				onChange={ ( { all } ) => onChange( all || undefined ) }
 				label={ label }
 				sides={ [ 'all' ] }
 				showSideInLabel={ false }
-				// Also fired on focus and blur, so the device highlights for
-				// keyboard users too.
+				// Also fired on focus and blur.
 				onMouseOver={ onMouseOver }
 				onMouseOut={ onMouseOut }
 			/>
@@ -232,7 +272,7 @@ export default function Edit( {
 			slug: 'all',
 			value: heightAll,
 			syncKey: allSyncKey,
-			onPresetChange: ( value ) => {
+			onChange: ( value ) => {
 				setAttributes( { heightLg: value, heightMd: value, heightSm: value } );
 				setDeviceSyncKey( ( key ) => key + 1 );
 			},
@@ -251,7 +291,7 @@ export default function Edit( {
 			slug: 'lg',
 			value: heightLg,
 			syncKey: deviceSyncKey,
-			onPresetChange: ( value ) => {
+			onChange: ( value ) => {
 				const newHeights = { heightLg: value, ...( ! isEnableMd && { heightMd: value } ) };
 				setDeviceHeights( newHeights );
 			},
@@ -272,7 +312,7 @@ export default function Edit( {
 			slug: 'md',
 			value: heightMd,
 			syncKey: deviceSyncKey,
-			onPresetChange: ( value ) => setDeviceHeights( { heightMd: value } ),
+			onChange: ( value ) => setDeviceHeights( { heightMd: value } ),
 			isNegative: isNegativeMd,
 			onNegativeChange: ( value ) => setAttributes( { isNegativeMd: value } ),
 			hasValue: () => heightMd !== defaultMdValue || isNegativeMd,
@@ -284,7 +324,7 @@ export default function Edit( {
 			slug: 'sm',
 			value: heightSm,
 			syncKey: deviceSyncKey,
-			onPresetChange: ( value ) => setDeviceHeights( { heightSm: value } ),
+			onChange: ( value ) => setDeviceHeights( { heightSm: value } ),
 			isNegative: isNegativeSm,
 			onNegativeChange: ( value ) => setAttributes( { isNegativeSm: value } ),
 			hasValue: () => heightSm !== defaultSmValue || isNegativeSm,
@@ -385,7 +425,7 @@ export default function Edit( {
 										icon={ control.icon }
 										value={ control.value }
 										syncKey={ control.syncKey }
-										onPresetChange={ control.onPresetChange }
+										onChange={ control.onChange }
 										onMouseOver={ () => setActiveDevice( control.slug ) }
 										onMouseOut={ () => setActiveDevice( undefined ) }
 									/>
