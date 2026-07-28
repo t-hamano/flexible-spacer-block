@@ -3,8 +3,8 @@ Contributors: wildworks
 Tags: gutenberg, block, spacer, responsive
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 7.0
-Tested up to: 7.0
-Stable tag: 2.8.0
+Tested up to: 7.1
+Stable tag: 2.9.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -47,6 +47,12 @@ License: CC0 Public Domain
 Source: https://pxhere.com/ja/photo/245
 
 == Changelog ==
+
+= 2.9.0 =
+* Tested to WordPress 7.1
+* Drop support for WordPress 6.9
+* Enhancement: Add spacing preset support
+* Fix: Plugin default value setting is not deleted upon uninstallation
 
 = 2.8.0 =
 * Tested to WordPress 7.0
