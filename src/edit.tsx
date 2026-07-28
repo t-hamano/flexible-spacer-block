@@ -184,10 +184,12 @@ export default function Edit( {
 	};
 
 	const onChangeHeightLg = ( currentValue: HeightValue, newValue: HeightValue ) => {
-		setDeviceHeights( { heightLg: getUpdatedHeight( currentValue, newValue ) } );
-		if ( ! isEnableMd ) {
-			setDeviceHeights( { heightMd: getUpdatedHeight( currentValue, newValue ) } );
-		}
+		const updatedHeight = getUpdatedHeight( currentValue, newValue );
+		const newHeights = {
+			heightLg: updatedHeight,
+			...( ! isEnableMd && { heightMd: updatedHeight } ),
+		};
+		setDeviceHeights( newHeights );
 	};
 
 	const onChangeHeightMd = ( currentValue: HeightValue, newValue: HeightValue ) => {
@@ -234,17 +236,16 @@ export default function Edit( {
 			value: heightLg,
 			syncKey: deviceSyncKey,
 			onPresetChange: ( value ) => {
-				setDeviceHeights( { heightLg: value } );
-				if ( ! isEnableMd ) {
-					setDeviceHeights( { heightMd: value } );
-				}
+				const newHeights = { heightLg: value, ...( ! isEnableMd && { heightMd: value } ) };
+				setDeviceHeights( newHeights );
 			},
 			isNegative: isNegativeLg,
 			onNegativeChange: ( value ) => {
-				setAttributes( { isNegativeLg: value } );
-				if ( ! isEnableMd ) {
-					setAttributes( { isNegativeMd: value } );
-				}
+				const newAttributes = {
+					isNegativeLg: value,
+					...( ! isEnableMd && { isNegativeMd: value } ),
+				};
+				setAttributes( newAttributes );
 			},
 			hasValue: () => heightLg !== defaultLgValue || isNegativeLg,
 			onDeselect: () => setDeviceHeights( { heightLg: defaultLgValue, isNegativeLg: false } ),
