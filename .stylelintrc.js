@@ -3,6 +3,5 @@ module.exports = {
 	rules: {
 		'no-descending-specificity': null,
 		'selector-class-pattern': null,
-		'font-weight-notation': null,
 	},
 };
