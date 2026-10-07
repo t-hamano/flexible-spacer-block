@@ -383,7 +383,7 @@ export default function Edit( {
 					placement: 'left-start' as const,
 					offset: 259,
 				},
-		  }
+			}
 		: {};
 
 	return (
