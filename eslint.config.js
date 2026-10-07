@@ -23,6 +23,19 @@ module.exports = [
 			'@wordpress/no-unsafe-wp-apis': 'off',
 			'@wordpress/no-setting-ds-tokens': 'off',
 			'@wordpress/no-unknown-ds-tokens': 'off',
+			'@wordpress/use-import-as': [
+				'error',
+				{
+					'@wordpress/block-editor': {
+						__experimentalSpacingSizesControl: 'SpacingSizesControl',
+					},
+					'@wordpress/components': {
+						__experimentalParseQuantityAndUnitFromRawValue: 'parseQuantityAndUnitFromRawValue',
+						__experimentalToolsPanel: 'ToolsPanel',
+						__experimentalToolsPanelItem: 'ToolsPanelItem',
+					},
+				},
+			],
 			'@wordpress/i18n-text-domain': [
 				'error',
 				{
