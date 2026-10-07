@@ -54,7 +54,7 @@ type HeightValue = string | number | undefined;
 
 interface SpacerControl {
 	label: string;
-	icon: JSX.Element;
+	icon: React.JSX.Element;
 	slug: string;
 	value: string | undefined;
 	syncKey?: number;
@@ -76,7 +76,7 @@ function HeightControl( {
 	onMouseOut,
 }: {
 	label: string;
-	icon: JSX.Element;
+	icon: React.JSX.Element;
 	value?: string;
 	syncKey?: number;
 	onChange: ( value: string | undefined ) => void;
@@ -146,7 +146,7 @@ function HeightControl( {
 interface SpacerDevice {
 	label: string;
 	slug: string;
-	icon: JSX.Element;
+	icon: React.JSX.Element;
 	isNegative: boolean;
 	height: string;
 	onResizeStart: () => void;
