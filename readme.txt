@@ -2,7 +2,7 @@
 Contributors: wildworks
 Tags: gutenberg, block, spacer, responsive
 Donate link: https://www.paypal.me/thamanoJP
-Requires at least: 7.0
+Requires at least: 7.1
 Tested up to: 7.1
 Stable tag: 2.9.0
 Requires PHP: 8.0
