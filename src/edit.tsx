@@ -113,7 +113,6 @@ function HeightControl( {
 								: `${ next }${ parsedUnit || DEFAULT_SPACER_HEIGHT_UNIT }`
 						)
 					}
-					__next40pxDefaultSize
 				/>
 			</div>
 		);
