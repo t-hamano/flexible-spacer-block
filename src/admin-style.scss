@@ -46,8 +46,7 @@
 	}
 
 	span {
-		display: flex;
-		align-items: center;
+		align-content: center;
 		padding: 0 var(--wpds-dimension-padding-sm);
 		background: var(--wpds-color-background-surface-neutral-strong);
 		border: var(--wpds-border-width-xs) solid var(--wpds-color-stroke-interactive-neutral);
