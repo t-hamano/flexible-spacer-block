@@ -116,7 +116,7 @@
 		}
 
 		&.is-negative.is-active {
-			background: #f0a0a0;
+			background: var(--wpds-color-stroke-surface-error);
 		}
 	}
 }
