@@ -30,9 +30,6 @@
 	top: var(--wpds-dimension-gap-xs);
 	left: 0;
 	z-index: 1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	width: 100%;
 	font-size: var(--wpds-typography-font-size-sm);
 	font-weight: var(--wpds-typography-font-weight-emphasis);
@@ -46,10 +43,6 @@
 	@media not (prefers-reduced-motion) {
 		transition: opacity var(--wpds-motion-duration-sm) var(--wpds-motion-easing-subtle);
 	}
-
-	svg {
-		margin-right: 2px;
-	}
 }
 
 .fsb-flexible-spacer__breakpoint {
@@ -57,8 +50,6 @@
 	top: -14px;
 	left: 0;
 	z-index: 2;
-	display: flex;
-	justify-content: center;
 	width: 100%;
 	pointer-events: none;
 	user-select: none;
@@ -70,9 +61,6 @@
 }
 
 .fsb-flexible-spacer__breakpoint-item {
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	width: 72px;
 	height: var(--wpds-dimension-size-xs);
 	font-size: var(--wpds-typography-font-size-xs);
