@@ -444,7 +444,12 @@ export default function Edit( {
 				</ToolsPanel>
 			</InspectorControls>
 			<View { ...blockProps }>
-				<div className="fsb-flexible-spacer__inner">
+				<Stack
+					direction="row"
+					gap="sm"
+					justify="space-between"
+					className="fsb-flexible-spacer__inner"
+				>
 					<div className="fsb-flexible-spacer__breakpoint">
 						<div className="fsb-flexible-spacer__breakpoint-item">
 							{ sprintf(
@@ -508,7 +513,7 @@ export default function Edit( {
 							</div>
 						</div>
 					) ) }
-				</div>
+				</Stack>
 			</View>
 		</>
 	);
