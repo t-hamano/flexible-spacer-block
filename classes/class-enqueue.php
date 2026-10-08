@@ -69,7 +69,7 @@ class Enqueue {
 		if ( ! str_contains( $hook, 'flexible-spacer-block' ) ) {
 			return;
 		}
-		wp_enqueue_style( 'flexible-spacer-block-option', FSB_URL . '/build/css/admin-style.css' );
+		wp_enqueue_style( 'flexible-spacer-block-option', FSB_URL . '/build/css/admin-style.css', array( 'wp-theme' ) );
 	}
 
 	/**

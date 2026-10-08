@@ -1,19 +1,13 @@
-@use "@wordpress/base-styles/variables" as variables;
-@use "@wordpress/base-styles/colors" as colors;
-
-.fsb-option-form {
-
-	ul {
-		padding-left: 1.5em;
-		list-style: disc outside;
-	}
+.fsb-option-form ul {
+	padding-left: 1.5em;
+	list-style: disc outside;
 }
 
 .fsb-option-breakpoint {
 	display: flex;
-	gap: variables.$grid-unit-20;
+	gap: var(--wpds-dimension-gap-lg);
 	align-items: center;
-	margin-bottom: variables.$grid-unit-20;
+	margin-bottom: var(--wpds-dimension-gap-lg);
 
 	@media screen and (max-width: 782px) {
 		flex-direction: column;
@@ -26,12 +20,12 @@
 	align-items: center;
 
 	svg {
-		fill: colors.$gray-800;
+		color: var(--wpds-color-foreground-content-neutral);
 	}
 }
 
 .fsb-option-breakpoint__sign {
-	font-size: 20px;
+	font-size: var(--wpds-typography-font-size-xl);
 
 	@media screen and (max-width: 782px) {
 		transform: rotate(90deg);
@@ -43,9 +37,8 @@
 	align-items: stretch;
 
 	input {
-		max-width: 100%;
 		margin: 0;
-		border-radius: variables.$radius-small 0 0 variables.$radius-small;
+		border-radius: var(--wpds-border-radius-sm) 0 0 var(--wpds-border-radius-sm);
 
 		&:focus {
 			z-index: 1;
@@ -55,18 +48,18 @@
 	span {
 		display: flex;
 		align-items: center;
-		padding: 0 variables.$grid-unit-10;
-		background: colors.$white;
-		border: variables.$border-width solid colors.$gray-600;
+		padding: 0 var(--wpds-dimension-padding-sm);
+		background: var(--wpds-color-background-surface-neutral-strong);
+		border: var(--wpds-border-width-xs) solid var(--wpds-color-stroke-interactive-neutral);
 		border-left: none;
-		border-radius: 0 variables.$radius-small variables.$radius-small 0;
+		border-radius: 0 var(--wpds-border-radius-sm) var(--wpds-border-radius-sm) 0;
 	}
 }
 
 .fsb-option-default-values {
 	display: flex;
 	align-items: center;
-	gap: variables.$grid-unit-40;
+	gap: var(--wpds-dimension-gap-2xl);
 
 	@media screen and (max-width: 782px) {
 		flex-direction: column;
@@ -75,7 +68,7 @@
 
 .fsb-option-default-values__col {
 	display: flex;
-	gap: variables.$grid-unit-10;
+	gap: var(--wpds-dimension-gap-sm);
 	align-items: center;
 }
 
@@ -90,9 +83,8 @@
 	align-items: stretch;
 
 	input {
-		max-width: 100%;
 		margin: 0;
-		border-radius: variables.$radius-small 0 0 variables.$radius-small;
+		border-radius: var(--wpds-border-radius-sm) 0 0 var(--wpds-border-radius-sm);
 
 		&:focus {
 			z-index: 1;
@@ -102,6 +94,6 @@
 	select {
 		margin: 0;
 		border-left: none;
-		border-radius: 0 variables.$radius-small variables.$radius-small 0;
+		border-radius: 0 var(--wpds-border-radius-sm) var(--wpds-border-radius-sm) 0;
 	}
 }
