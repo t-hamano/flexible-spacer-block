@@ -55,9 +55,9 @@ test.describe( 'Block', () => {
 		await page.getByRole( 'spinbutton', { name: 'Desktop height' } ).fill( '200' );
 		await page.getByRole( 'spinbutton', { name: 'Tablet height' } ).fill( '300' );
 		await page.getByRole( 'spinbutton', { name: 'Mobile height' } ).fill( '400' );
-		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 0 ).check();
-		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 1 ).check();
-		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 2 ).check();
+		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 0 ).check();
+		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 1 ).check();
+		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 2 ).check();
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -80,9 +80,9 @@ test.describe( 'Block', () => {
 		await page.getByRole( 'spinbutton', { name: 'Desktop height' } ).fill( '0' );
 		await page.getByRole( 'spinbutton', { name: 'Tablet height' } ).fill( '' );
 		await page.getByRole( 'spinbutton', { name: 'Mobile height' } ).fill( '0' );
-		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 0 ).check();
-		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 1 ).check();
-		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 2 ).check();
+		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 0 ).check();
+		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 1 ).check();
+		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 2 ).check();
 		await page.getByRole( 'combobox', { name: 'Select unit' } ).nth( 3 ).selectOption( 'em' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -97,8 +97,8 @@ test.describe( 'Block', () => {
 		await page.getByRole( 'slider', { name: 'Tablet height' } ).fill( '2' );
 		await page.getByRole( 'slider', { name: 'Mobile height' } ).fill( '1' );
 		await page.getByRole( 'slider', { name: 'Mobile height' } ).fill( '0' );
-		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 1 ).check();
-		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 2 ).check();
+		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 1 ).check();
+		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 2 ).check();
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -146,7 +146,7 @@ test.describe( 'Block', () => {
 		await editor.openDocumentSettingsSidebar();
 		await page.getByRole( 'spinbutton', { name: 'Desktop height' } ).fill( '200' );
 		await page.getByRole( 'combobox', { name: 'Select unit' } ).nth( 1 ).selectOption( 'em' );
-		await page.getByRole( 'checkbox', { name: 'Negative space' } ).nth( 0 ).check();
+		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 0 ).check();
 		await editor.transformBlockTo( 'core/spacer' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
