@@ -23,6 +23,7 @@ module.exports = [
 			'@wordpress/no-unsafe-wp-apis': 'off',
 			'@wordpress/no-setting-ds-tokens': 'off',
 			'@wordpress/no-unknown-ds-tokens': 'off',
+			'@wordpress/use-recommended-components': [ 'error', { allowUseWithCaution: true } ],
 			'@wordpress/use-import-as': [
 				'error',
 				{

@@ -20,7 +20,6 @@ import {
 import {
 	ResizableBox,
 	RangeControl,
-	ToggleControl,
 	HorizontalRule,
 	ToolbarGroup,
 	ToolbarButton,
@@ -28,7 +27,7 @@ import {
 	__experimentalToolsPanelItem as ToolsPanelItem,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
-import { Link, Stack } from '@wordpress/ui';
+import { Link, Stack, SwitchControl } from '@wordpress/ui';
 import { useEffect, useState } from '@wordpress/element';
 import { View } from '@wordpress/primitives';
 import { Icon, settings, mobile, tablet, desktop } from '@wordpress/icons';
@@ -428,10 +427,10 @@ export default function Edit( {
 										onMouseOut={ () => setActiveDevice( undefined ) }
 									/>
 									{ control.onNegativeChange && (
-										<ToggleControl
+										<SwitchControl
 											label={ __( 'Negative space', 'flexible-spacer-block' ) }
 											checked={ control.isNegative }
-											onChange={ control.onNegativeChange }
+											onCheckedChange={ control.onNegativeChange }
 										/>
 									) }
 								</Stack>
