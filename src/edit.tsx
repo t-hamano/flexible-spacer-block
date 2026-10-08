@@ -444,34 +444,55 @@ export default function Edit( {
 				</ToolsPanel>
 			</InspectorControls>
 			<View { ...blockProps }>
-				<div className="fsb-flexible-spacer__inner">
-					<div className="fsb-flexible-spacer__breakpoint">
-						<div className="fsb-flexible-spacer__breakpoint-item">
+				<Stack
+					direction="row"
+					gap="sm"
+					justify="space-between"
+					className="fsb-flexible-spacer__inner"
+				>
+					<Stack direction="row" justify="center" className="fsb-flexible-spacer__breakpoint">
+						<Stack
+							direction="row"
+							align="center"
+							justify="center"
+							className="fsb-flexible-spacer__breakpoint-item"
+						>
 							{ sprintf(
 								/* translators: %d: Breakpoint width in pixels. */
 								__( '≤ %dpx <', 'flexible-spacer-block' ),
 								Number( fsbConf.breakpoint.sm )
 							) }
-						</div>
+						</Stack>
 						{ isEnableMd && (
-							<div className="fsb-flexible-spacer__breakpoint-item">
+							<Stack
+								direction="row"
+								align="center"
+								justify="center"
+								className="fsb-flexible-spacer__breakpoint-item"
+							>
 								{ sprintf(
 									/* translators: %d: Breakpoint width in pixels. */
 									__( '≤ %dpx <', 'flexible-spacer-block' ),
 									Number( fsbConf.breakpoint.md )
 								) }
-							</div>
+							</Stack>
 						) }
-					</div>
+					</Stack>
 					{ SPACER_DEVICES.map( ( device, index ) => (
 						<div
 							key={ index }
 							className={ `fsb-flexible-spacer__device fsb-flexible-spacer__device--${ device.slug }` }
 						>
-							<div className="fsb-flexible-spacer__device-ttl">
+							<Stack
+								direction="row"
+								align="center"
+								justify="center"
+								gap="xs"
+								className="fsb-flexible-spacer__device-ttl"
+							>
 								<Icon icon={ device.icon } />
 								{ device.label }
-							</div>
+							</Stack>
 							<div style={ { height: getSpacingPresetCssVar( device.height ) } }>
 								<ResizableBox
 									className={ clsx( 'fsb-flexible-spacer__device-resizer', {
@@ -508,7 +529,7 @@ export default function Edit( {
 							</div>
 						</div>
 					) ) }
-				</div>
+				</Stack>
 			</View>
 		</>
 	);
