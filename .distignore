@@ -25,5 +25,5 @@ playwright.config.js
 tsconfig.json
 package-lock.json
 package.json
-phpcs.ruleset.xml
+phpcs.xml.dist
 README.md
