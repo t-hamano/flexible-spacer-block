@@ -37,7 +37,7 @@ npm run build
 
 Filters media query breakpoints.
 
-#### Parameters
+**Parameters:**
 
 - `$breakpoint`
 
@@ -47,11 +47,11 @@ Filters media query breakpoints.
 
 *(bool)* Whether it is rendered on the editor.
 
-#### Return
+**Return:**
 
 *(array)* New media query breakpoints.
 
-#### Example
+**Example:**
 
 ```php
 function custom_flexible_spacer_block_breakpoint( $breakpoint, $is_editor ) {
@@ -68,7 +68,7 @@ add_filter( 'flexible_spacer_block_breakpoint', 'custom_flexible_spacer_block_br
 
 Filters Generated inline styles.
 
-#### Parameters
+**Parameters:**
 
 - `$css`
 
@@ -78,11 +78,11 @@ Filters Generated inline styles.
 
 *(bool)* Whether it is rendered on the editor.
 
-#### Return
+**Return:**
 
 *(string)* New inline styles.
 
-#### Example
+**Example:**
 
 ```php
 function custom_flexible_spacer_block_inline_css( $css, $is_editor ) {
