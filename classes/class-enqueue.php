@@ -13,8 +13,8 @@ class Enqueue {
 	 * Constructor
 	 */
 	public function __construct() {
-		// Add block CSS to the front-end style
-		add_action( 'wp_enqueue_scripts', array( $this, 'add_block_css_to_view_style' ) );
+		// Add block CSS to the editor or front-end style
+		add_action( 'enqueue_block_assets', array( $this, 'add_block_css' ) );
 
 		// Enqueue admin option page scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
@@ -22,23 +22,19 @@ class Enqueue {
 		// Register block
 		add_action( 'init', array( $this, 'register_block' ) );
 
-		// Add block CSS and settings to the editor assets registered by the block
-		add_action( 'init', array( $this, 'add_block_css_to_editor_style' ) );
+		// Add settings to the editor script
 		add_action( 'init', array( $this, 'add_config_to_editor_script' ) );
 	}
 
 	/**
-	 * Add block CSS to the front-end style
+	 * Add block CSS to the editor or front-end style
 	 */
-	public function add_block_css_to_view_style() {
-		wp_add_inline_style( 'fsb-flexible-spacer-style', $this->create_inline_style( false ) );
-	}
-
-	/**
-	 * Add block CSS to the editor style
-	 */
-	public function add_block_css_to_editor_style() {
-		wp_add_inline_style( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorStyle' ), $this->create_inline_style( true ) );
+	public function add_block_css() {
+		if ( is_admin() ) {
+			wp_add_inline_style( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorStyle' ), $this->create_inline_style( true ) );
+		} else {
+			wp_add_inline_style( 'fsb-flexible-spacer-style', $this->create_inline_style( false ) );
+		}
 	}
 
 	/**
