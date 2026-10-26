@@ -13,7 +13,7 @@ class Enqueue {
 	 * Constructor
 	 */
 	public function __construct() {
-		// Enqueue front-end inline styles
+		// Add front-end inline styles
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		if ( is_admin() ) {
@@ -28,11 +28,9 @@ class Enqueue {
 	}
 
 	/**
-	 * Enqueue front-end scripts
+	 * Add front-end inline styles
 	 */
 	public function enqueue_scripts() {
-		wp_register_style( 'fsb-flexible-spacer-style', false );
-		wp_enqueue_style( 'fsb-flexible-spacer-style' );
 		wp_add_inline_style( 'fsb-flexible-spacer-style', $this->create_inline_style( false ) );
 	}
 
@@ -40,26 +38,19 @@ class Enqueue {
 	 * Enqueue block assets
 	 */
 	public function enqueue_block_assets() {
-		$asset_file = include FSB_PATH . '/build/js/index.asset.php';
+		$block_type = \WP_Block_Type_Registry::get_instance()->get_registered( 'fsb/flexible-spacer' );
 
-		wp_register_style(
-			'fsb-flexible-spacer-editor',
-			FSB_URL . '/build/css/editor-style.css',
-			array(),
-			filemtime( FSB_PATH . '/build/css/editor-style.css' )
-		);
+		if ( ! $block_type ) {
+			return;
+		}
 
-		wp_add_inline_style( 'fsb-flexible-spacer-editor', $this->create_inline_style( true ) );
+		foreach ( $block_type->editor_style_handles as $handle ) {
+			wp_add_inline_style( $handle, $this->create_inline_style( true ) );
+		}
 
-		wp_register_script(
-			'fsb-flexible-spacer-editor',
-			FSB_URL . '/build/js/index.js',
-			$asset_file['dependencies'],
-			filemtime( FSB_PATH . '/build/js/index.js' )
-		);
-
-		wp_localize_script( 'fsb-flexible-spacer-editor', 'fsbConf', $this->create_editor_config() );
-		wp_set_script_translations( 'fsb-flexible-spacer-editor', 'flexible-spacer-block' );
+		foreach ( $block_type->editor_script_handles as $handle ) {
+			wp_localize_script( $handle, 'fsbConf', $this->create_editor_config() );
+		}
 	}
 
 	/**
@@ -76,6 +67,9 @@ class Enqueue {
 	 * Register block
 	 */
 	public function register_block() {
+		// Front-end styles have no file and are generated from the plugin settings.
+		wp_register_style( 'fsb-flexible-spacer-style', false );
+
 		register_block_type( FSB_PATH . '/build/js' );
 	}
 

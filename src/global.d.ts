@@ -15,3 +15,5 @@ interface FsbConf {
 }
 
 declare const fsbConf: FsbConf;
+
+declare module '*.scss';
