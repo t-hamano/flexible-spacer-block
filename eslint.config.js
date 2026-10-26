@@ -14,7 +14,7 @@ module.exports = [
 		},
 		languageOptions: {
 			globals: {
-				fsbConf: true,
+				fsbConf: 'readonly',
 			},
 		},
 		rules: {
