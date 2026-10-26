@@ -13,8 +13,8 @@ class Enqueue {
 	 * Constructor
 	 */
 	public function __construct() {
-		// Add front-end inline styles
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		// Add block CSS to the front-end style
+		add_action( 'wp_enqueue_scripts', array( $this, 'add_block_css_to_view_style' ) );
 
 		// Enqueue admin option page scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
@@ -24,9 +24,9 @@ class Enqueue {
 	}
 
 	/**
-	 * Add front-end inline styles
+	 * Add block CSS to the front-end style
 	 */
-	public function enqueue_scripts() {
+	public function add_block_css_to_view_style() {
 		wp_add_inline_style( 'fsb-flexible-spacer-style', $this->create_inline_style( false ) );
 	}
 
