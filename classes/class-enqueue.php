@@ -27,7 +27,7 @@ class Enqueue {
 	 * Add front-end inline styles
 	 */
 	public function enqueue_scripts() {
-		wp_add_inline_style( generate_block_asset_handle( 'fsb/flexible-spacer', 'viewStyle' ), $this->create_inline_style( false ) );
+		wp_add_inline_style( 'fsb-flexible-spacer-style', $this->create_inline_style( false ) );
 	}
 
 	/**
@@ -44,6 +44,9 @@ class Enqueue {
 	 * Register block
 	 */
 	public function register_block() {
+		// Front-end styles have no file and are generated from the plugin settings.
+		wp_register_style( 'fsb-flexible-spacer-style', false );
+
 		register_block_type( FSB_PATH . '/build/js' );
 
 		wp_add_inline_style( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorStyle' ), $this->create_inline_style( true ) );
@@ -151,6 +154,13 @@ class Enqueue {
 			EOM;
 		} else {
 			// Fonrt-end inline styles.
+			$css .= <<<EOM
+			.fsb-style-show-front {
+				position: relative;
+				z-index: 2;
+			}
+			EOM;
+
 			$css .= <<<EOM
 			@media screen and (min-width:{$breakpoint_lg_min}px) {
 				.fsb-flexible-spacer__device--md,
