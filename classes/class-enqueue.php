@@ -21,6 +21,10 @@ class Enqueue {
 
 		// Register block
 		add_action( 'init', array( $this, 'register_block' ) );
+
+		// Add block CSS and settings to the editor assets registered by the block
+		add_action( 'init', array( $this, 'add_block_css_to_editor_style' ) );
+		add_action( 'init', array( $this, 'add_config_to_editor_script' ) );
 	}
 
 	/**
@@ -28,6 +32,20 @@ class Enqueue {
 	 */
 	public function add_block_css_to_view_style() {
 		wp_add_inline_style( 'fsb-flexible-spacer-style', $this->create_inline_style( false ) );
+	}
+
+	/**
+	 * Add block CSS to the editor style
+	 */
+	public function add_block_css_to_editor_style() {
+		wp_add_inline_style( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorStyle' ), $this->create_inline_style( true ) );
+	}
+
+	/**
+	 * Add settings to the editor script
+	 */
+	public function add_config_to_editor_script() {
+		wp_localize_script( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorScript' ), 'fsbConf', $this->create_editor_config() );
 	}
 
 	/**
@@ -48,9 +66,6 @@ class Enqueue {
 		wp_register_style( 'fsb-flexible-spacer-style', false );
 
 		register_block_type( FSB_PATH . '/build/js' );
-
-		wp_add_inline_style( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorStyle' ), $this->create_inline_style( true ) );
-		wp_localize_script( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorScript' ), 'fsbConf', $this->create_editor_config() );
 	}
 
 	/**
