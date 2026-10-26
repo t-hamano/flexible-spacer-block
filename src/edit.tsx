@@ -29,7 +29,6 @@ import {
 } from '@wordpress/components';
 import { Link, Stack, SwitchControl } from '@wordpress/ui';
 import { useEffect, useState } from '@wordpress/element';
-import { View } from '@wordpress/primitives';
 import { Icon, settings, mobile, tablet, desktop } from '@wordpress/icons';
 import { addQueryArgs } from '@wordpress/url';
 import { useViewportMatch } from '@wordpress/compose';
@@ -177,6 +176,7 @@ export default function Edit( {
 	const isMobile = useViewportMatch( 'medium', '<' );
 
 	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
+	const breakpoints = [ fsbConf.breakpoint.sm, ...( isEnableMd ? [ fsbConf.breakpoint.md ] : [] ) ];
 	const isShowBlock = fsbConf.showBlock;
 	const defaultValue = fsbConf.defaultValue;
 
@@ -406,7 +406,7 @@ export default function Edit( {
 					</Link>
 				</ToolsPanel>
 			</InspectorControls>
-			<View { ...blockProps }>
+			<div { ...blockProps }>
 				<Stack
 					direction="row"
 					gap="sm"
@@ -414,20 +414,9 @@ export default function Edit( {
 					className="fsb-flexible-spacer__inner"
 				>
 					<Stack direction="row" justify="center" className="fsb-flexible-spacer__breakpoint">
-						<Stack
-							direction="row"
-							align="center"
-							justify="center"
-							className="fsb-flexible-spacer__breakpoint-item"
-						>
-							{ sprintf(
-								/* translators: %d: Breakpoint width in pixels. */
-								__( '≤ %dpx <', 'flexible-spacer-block' ),
-								Number( fsbConf.breakpoint.sm )
-							) }
-						</Stack>
-						{ isEnableMd && (
+						{ breakpoints.map( ( breakpoint ) => (
 							<Stack
+								key={ breakpoint }
 								direction="row"
 								align="center"
 								justify="center"
@@ -436,14 +425,14 @@ export default function Edit( {
 								{ sprintf(
 									/* translators: %d: Breakpoint width in pixels. */
 									__( '≤ %dpx <', 'flexible-spacer-block' ),
-									Number( fsbConf.breakpoint.md )
+									Number( breakpoint )
 								) }
 							</Stack>
-						) }
+						) ) }
 					</Stack>
-					{ SPACER_DEVICES.map( ( device, index ) => (
+					{ SPACER_DEVICES.map( ( device ) => (
 						<div
-							key={ index }
+							key={ device.slug }
 							className={ `fsb-flexible-spacer__device fsb-flexible-spacer__device--${ device.slug }` }
 						>
 							<Stack
@@ -484,16 +473,12 @@ export default function Edit( {
 										position: 'bottom',
 										isVisible: device.isResizing,
 									} }
-								>
-									{ /* `children` is required by the type, but is not actually needed here, so render a dummy element. */ }
-									{ /* TODO: Remove this once https://github.com/WordPress/gutenberg/pull/79370 is merged. */ }
-									<></>
-								</ResizableBox>
+								/>
 							</div>
 						</div>
 					) ) }
 				</Stack>
-			</View>
+			</div>
 		</>
 	);
 }
