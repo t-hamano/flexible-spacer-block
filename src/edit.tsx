@@ -49,7 +49,7 @@ import {
 	DEFAULT_SPACER_HEIGHT_UNIT,
 } from './constants';
 
-type HeightValue = string | number | undefined;
+type DeviceSlug = 'lg' | 'md' | 'sm';
 
 interface SpacerControl {
 	label: string;
@@ -143,7 +143,7 @@ function HeightControl( {
 
 interface SpacerDevice {
 	label: string;
-	slug: string;
+	slug: DeviceSlug;
 	icon: React.JSX.Element;
 	isNegative: boolean;
 	height: string;
@@ -165,9 +165,7 @@ export default function Edit( {
 	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
 	const heightAll = heightLg === heightMd && heightMd === heightSm ? heightLg : undefined;
 	const [ activeDevice, setActiveDevice ] = useState< string | undefined >( undefined );
-	const [ isResizingLg, setIsResizingLg ] = useState( false );
-	const [ isResizingMd, setIsResizingMd ] = useState( false );
-	const [ isResizingSm, setIsResizingSm ] = useState( false );
+	const [ resizingDevice, setResizingDevice ] = useState< DeviceSlug | undefined >( undefined );
 	// A control picks its preset or custom view when it mounts and never switches
 	// back on its own, so remount the counterpart when the other side writes a
 	// height.
@@ -213,42 +211,11 @@ export default function Edit( {
 		} ),
 	} );
 
-	function getUpdatedHeight(
-		currentValue: HeightValue,
-		newValue: HeightValue
-	): string | undefined {
-		if ( ! newValue ) {
-			return undefined;
-		}
-
-		const [ newParsedQuantity, newParsedUnit ] = parseQuantityAndUnitFromRawValue( newValue );
-		const [ , currentParsedUnit ] = parseQuantityAndUnitFromRawValue( currentValue );
-		const newUnit = newParsedUnit || currentParsedUnit || 'px';
-		return newParsedQuantity + newUnit;
-	}
-
 	// Writing a device height leaves "All heights" on the view it mounted with,
 	// so remount it. Its own handler bumps the key in the other direction.
 	const setDeviceHeights = ( heights: Partial< BlockAttributes > ) => {
 		setAttributes( heights );
 		setAllSyncKey( ( key ) => key + 1 );
-	};
-
-	const onChangeHeightLg = ( currentValue: HeightValue, newValue: HeightValue ) => {
-		const updatedHeight = getUpdatedHeight( currentValue, newValue );
-		const newHeights = {
-			heightLg: updatedHeight,
-			...( ! isEnableMd && { heightMd: updatedHeight } ),
-		};
-		setDeviceHeights( newHeights );
-	};
-
-	const onChangeHeightMd = ( currentValue: HeightValue, newValue: HeightValue ) => {
-		setDeviceHeights( { heightMd: getUpdatedHeight( currentValue, newValue ) } );
-	};
-
-	const onChangeHeightSm = ( currentValue: HeightValue, newValue: HeightValue ) => {
-		setDeviceHeights( { heightSm: getUpdatedHeight( currentValue, newValue ) } );
 	};
 
 	const resetAll = () => {
@@ -332,48 +299,44 @@ export default function Edit( {
 	const SPACER_DEVICES: SpacerDevice[] = [
 		{
 			label: __( 'Mobile', 'flexible-spacer-block' ),
-			slug: 'sm',
+			slug: 'sm' as const,
 			icon: mobile,
 			isNegative: isNegativeSm,
 			height: heightSm || defaultValue.sm,
-			isResizing: isResizingSm,
-			setIsResizing: setIsResizingSm,
-			onChangeHeight: onChangeHeightSm,
 			enabled: true,
 		},
 		{
 			label: __( 'Tablet', 'flexible-spacer-block' ),
-			slug: 'md',
+			slug: 'md' as const,
 			icon: tablet,
 			isNegative: isNegativeMd,
 			height: heightMd || defaultValue.md,
-			isResizing: isResizingMd,
-			setIsResizing: setIsResizingMd,
-			onChangeHeight: onChangeHeightMd,
 			enabled: isEnableMd,
 		},
 		{
 			label: __( 'Desktop', 'flexible-spacer-block' ),
-			slug: 'lg',
+			slug: 'lg' as const,
 			icon: desktop,
 			isNegative: isNegativeLg,
 			height: heightLg || defaultValue.lg,
-			isResizing: isResizingLg,
-			setIsResizing: setIsResizingLg,
-			onChangeHeight: onChangeHeightLg,
 			enabled: true,
 		},
 	]
 		.filter( ( device ) => device.enabled )
-		.map( ( { enabled, setIsResizing, onChangeHeight, ...device } ) => ( {
-			...device,
-			onResizeStart: () => toggleSelection?.( false ),
-			onResize: () => setIsResizing( true ),
-			onResizeStop: ( _event: unknown, _direction: unknown, elt: HTMLElement ) => {
-				onChangeHeight( undefined, `${ elt.clientHeight }px` );
-				setIsResizing( false );
-			},
-		} ) );
+		.map( ( { enabled, ...device } ) => {
+			// Resizing writes the height through the same handler as the height control.
+			const control = SPACER_CONTROLS.find( ( { slug } ) => slug === device.slug );
+			return {
+				...device,
+				isResizing: resizingDevice === device.slug,
+				onResizeStart: () => toggleSelection?.( false ),
+				onResize: () => setResizingDevice( device.slug ),
+				onResizeStop: ( _event: unknown, _direction: unknown, elt: HTMLElement ) => {
+					control?.onChange( `${ elt.clientHeight }px` );
+					setResizingDevice( undefined );
+				},
+			};
+		} );
 
 	const dropdownMenuProps = ! isMobile
 		? {
