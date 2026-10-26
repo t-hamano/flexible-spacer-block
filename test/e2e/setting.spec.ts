@@ -6,6 +6,24 @@ import { test, expect } from '@wordpress/e2e-test-utils-playwright';
 test.describe( 'Setting', () => {
 	const submitButton = 'input[id="submit"]';
 
+	// Restore the initial settings so that other tests do not depend on the execution order.
+	test.afterEach( async ( { admin, page } ) => {
+		await admin.visitAdminPage( '/options-general.php', `page=flexible-spacer-block-option` );
+		await page.locator( 'input[name="flexible_spacer_block_breakpoint[sm]"]' ).fill( '599' );
+		await page.locator( 'input[name="flexible_spacer_block_breakpoint[md]"]' ).fill( '1024' );
+		for ( const device of [ 'sm', 'md', 'lg' ] ) {
+			await page
+				.locator( `input[name="flexible_spacer_block_default_value[${ device }]"]` )
+				.fill( '100' );
+			await page
+				.locator( `select[name="flexible_spacer_block_default_value[${ device }_unit]"]` )
+				.selectOption( 'px' );
+		}
+		await page.locator( 'input[name="flexible_spacer_block_show_block"]' ).uncheck();
+		await page.locator( submitButton ).click();
+		await expect( page.locator( '#setting-error-settings_updated' ) ).toBeVisible();
+	} );
+
 	test.describe( 'breakpoints', () => {
 		test( 'should be saved', async ( { admin, page } ) => {
 			const smSelector = 'input[name="flexible_spacer_block_breakpoint[sm]"]';
@@ -61,13 +79,6 @@ test.describe( 'Setting', () => {
 		await expect( page.locator( mdSelector ) ).toHaveValue( '500' );
 		await expect( page.locator( smUnitSelector ) ).toHaveValue( '%' );
 		await expect( page.locator( mdUnitSelector ) ).toHaveValue( 'em' );
-
-		// Finally update with default values.
-		await page.locator( smSelector ).fill( '100' );
-		await page.locator( mdSelector ).fill( '100' );
-		await page.locator( smUnitSelector ).selectOption( 'px' );
-		await page.locator( mdUnitSelector ).selectOption( 'px' );
-		await page.locator( submitButton ).click();
 	} );
 
 	test( 'block editor should be toggled', async ( { admin, page } ) => {
