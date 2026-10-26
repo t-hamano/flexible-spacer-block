@@ -74,8 +74,15 @@
 	}
 }
 
-.fsb-flexible-spacer.is-selected,
-.fsb-flexible-spacer--is-show-block {
+.fsb-flexible-spacer--is-responsive {
+
+	.fsb-flexible-spacer__breakpoint {
+		display: none;
+	}
+}
+
+.fsb-flexible-spacer--is-show-block,
+.fsb-flexible-spacer.is-selected {
 
 	.fsb-flexible-spacer__device-ttl,
 	.fsb-flexible-spacer__breakpoint {
@@ -100,12 +107,5 @@
 		&.is-negative.is-active {
 			background: var(--wpds-color-stroke-surface-error);
 		}
-	}
-}
-
-.fsb-flexible-spacer--is-responsive {
-
-	.fsb-flexible-spacer__breakpoint {
-		display: none;
 	}
 }

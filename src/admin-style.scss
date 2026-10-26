@@ -39,10 +39,6 @@
 	input {
 		margin: 0;
 		border-radius: var(--wpds-border-radius-sm) 0 0 var(--wpds-border-radius-sm);
-
-		&:focus {
-			z-index: 1;
-		}
 	}
 
 	span {
@@ -84,10 +80,6 @@
 	input {
 		margin: 0;
 		border-radius: var(--wpds-border-radius-sm) 0 0 var(--wpds-border-radius-sm);
-
-		&:focus {
-			z-index: 1;
-		}
 	}
 
 	select {
@@ -95,4 +87,9 @@
 		border-left: none;
 		border-radius: 0 var(--wpds-border-radius-sm) var(--wpds-border-radius-sm) 0;
 	}
+}
+
+.fsb-option-breakpoint__input input:focus,
+.fsb-option-default-values__input input:focus {
+	z-index: 1;
 }
