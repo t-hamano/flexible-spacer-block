@@ -323,18 +323,20 @@ export default function Edit( {
 		},
 	]
 		.filter( ( device ) => device.enabled )
-		.map( ( { enabled, ...device } ) => ( {
-			...device,
-			isResizing: resizingDevice === device.slug,
-			onResizeStart: () => toggleSelection?.( false ),
-			onResize: () => setResizingDevice( device.slug ),
-			onResizeStop: ( _event: unknown, _direction: unknown, elt: HTMLElement ) => {
-				SPACER_CONTROLS.find( ( control ) => control.slug === device.slug )?.onChange(
-					`${ elt.clientHeight }px`
-				);
-				setResizingDevice( undefined );
-			},
-		} ) );
+		.map( ( { enabled, ...device } ) => {
+			// Resizing writes the height through the same handler as the height control.
+			const control = SPACER_CONTROLS.find( ( { slug } ) => slug === device.slug );
+			return {
+				...device,
+				isResizing: resizingDevice === device.slug,
+				onResizeStart: () => toggleSelection?.( false ),
+				onResize: () => setResizingDevice( device.slug ),
+				onResizeStop: ( _event: unknown, _direction: unknown, elt: HTMLElement ) => {
+					control?.onChange( `${ elt.clientHeight }px` );
+					setResizingDevice( undefined );
+				},
+			};
+		} );
 
 	const dropdownMenuProps = ! isMobile
 		? {
