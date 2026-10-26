@@ -16,10 +16,6 @@ class Enqueue {
 		// Add front-end inline styles
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		if ( is_admin() ) {
-			add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_assets' ) );
-		}
-
 		// Enqueue admin option page scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 
@@ -32,14 +28,6 @@ class Enqueue {
 	 */
 	public function enqueue_scripts() {
 		wp_add_inline_style( generate_block_asset_handle( 'fsb/flexible-spacer', 'viewStyle' ), $this->create_inline_style( false ) );
-	}
-
-	/**
-	 * Enqueue block assets
-	 */
-	public function enqueue_block_assets() {
-		wp_add_inline_style( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorStyle' ), $this->create_inline_style( true ) );
-		wp_localize_script( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorScript' ), 'fsbConf', $this->create_editor_config() );
 	}
 
 	/**
@@ -57,6 +45,9 @@ class Enqueue {
 	 */
 	public function register_block() {
 		register_block_type( FSB_PATH . '/build/js' );
+
+		wp_add_inline_style( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorStyle' ), $this->create_inline_style( true ) );
+		wp_localize_script( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorScript' ), 'fsbConf', $this->create_editor_config() );
 	}
 
 	/**
