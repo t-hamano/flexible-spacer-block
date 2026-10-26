@@ -40,5 +40,5 @@
 	},
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
-	"style": "fsb-flexible-spacer-style"
+	"viewStyle": "fsb-flexible-spacer-style"
 }
