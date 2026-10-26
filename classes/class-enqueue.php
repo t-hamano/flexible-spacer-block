@@ -38,19 +38,8 @@ class Enqueue {
 	 * Enqueue block assets
 	 */
 	public function enqueue_block_assets() {
-		$block_type = \WP_Block_Type_Registry::get_instance()->get_registered( 'fsb/flexible-spacer' );
-
-		if ( ! $block_type ) {
-			return;
-		}
-
-		foreach ( $block_type->editor_style_handles as $handle ) {
-			wp_add_inline_style( $handle, $this->create_inline_style( true ) );
-		}
-
-		foreach ( $block_type->editor_script_handles as $handle ) {
-			wp_localize_script( $handle, 'fsbConf', $this->create_editor_config() );
-		}
+		wp_add_inline_style( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorStyle' ), $this->create_inline_style( true ) );
+		wp_localize_script( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorScript' ), 'fsbConf', $this->create_editor_config() );
 	}
 
 	/**
