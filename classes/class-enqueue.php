@@ -152,8 +152,8 @@ class Enqueue {
 			// Editor inline styles.
 			$css .= <<<EOM
 			@media screen and (min-width:{$breakpoint_lg_min}px) {
-				.fsb-flexible-spacer--is-responsive .fsb-flexible-spacer__device--md,
-				.fsb-flexible-spacer--is-responsive .fsb-flexible-spacer__device--sm {
+				.fsb-flexible-spacer.is-responsive .fsb-flexible-spacer__device--md,
+				.fsb-flexible-spacer.is-responsive .fsb-flexible-spacer__device--sm {
 					display: none;
 				}
 			}
@@ -162,8 +162,8 @@ class Enqueue {
 			if ( $breakpoint['md'] !== $breakpoint['sm'] ) {
 				$css .= <<<EOM
 				@media screen and (min-width:{$breakpoint_md_min}px) and (max-width:{$breakpoint_md_max}px) {
-					.fsb-flexible-spacer--is-responsive .fsb-flexible-spacer__device--lg,
-					.fsb-flexible-spacer--is-responsive .fsb-flexible-spacer__device--sm {
+					.fsb-flexible-spacer.is-responsive .fsb-flexible-spacer__device--lg,
+					.fsb-flexible-spacer.is-responsive .fsb-flexible-spacer__device--sm {
 						display: none;
 					}
 				}
@@ -172,8 +172,8 @@ class Enqueue {
 
 			$css .= <<<EOM
 			@media screen and (max-width:{$breakpoint_sm_max}px) {
-				.fsb-flexible-spacer--is-responsive .fsb-flexible-spacer__device--lg,
-				.fsb-flexible-spacer--is-responsive .fsb-flexible-spacer__device--md {
+				.fsb-flexible-spacer.is-responsive .fsb-flexible-spacer__device--lg,
+				.fsb-flexible-spacer.is-responsive .fsb-flexible-spacer__device--md {
 					display: none;
 				}
 			}

@@ -208,8 +208,8 @@ export default function Edit( {
 
 	const blockProps = useBlockProps( {
 		className: clsx( 'fsb-flexible-spacer', {
-			'fsb-flexible-spacer--is-show-block': !! isShowBlock,
-			'fsb-flexible-spacer--is-responsive': !! isResponsive,
+			'is-show-block': !! isShowBlock,
+			'is-responsive': !! isResponsive,
 		} ),
 	} );
 
