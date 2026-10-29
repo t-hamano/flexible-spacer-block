@@ -302,7 +302,7 @@ export default function Edit( {
 			slug: 'sm' as const,
 			icon: mobile,
 			isNegative: isNegativeSm,
-			height: heightSm || defaultValue.sm,
+			height: heightSm || defaultSmValue,
 			enabled: true,
 		},
 		{
@@ -310,7 +310,7 @@ export default function Edit( {
 			slug: 'md' as const,
 			icon: tablet,
 			isNegative: isNegativeMd,
-			height: heightMd || defaultValue.md,
+			height: heightMd || defaultMdValue,
 			enabled: isEnableMd,
 		},
 		{
@@ -318,7 +318,7 @@ export default function Edit( {
 			slug: 'lg' as const,
 			icon: desktop,
 			isNegative: isNegativeLg,
-			height: heightLg || defaultValue.lg,
+			height: heightLg || defaultLgValue,
 			enabled: true,
 		},
 	]
