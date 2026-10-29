@@ -10,7 +10,6 @@
 .distignore
 .editorconfig
 .gitignore
-.markdownlint.json
 .npmrc
 .nvmrc
 .prettierrc.js
@@ -21,9 +20,9 @@
 composer.json
 composer.lock
 eslint.config.js
-playwright.config.js
-tsconfig.json
 package-lock.json
 package.json
 phpcs.xml.dist
+playwright.config.js
 README.md
+tsconfig.json
