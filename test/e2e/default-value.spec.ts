@@ -31,36 +31,17 @@ test.describe( 'Default value', () => {
 		} );
 	} );
 
-	test( 'should be applied to a newly inserted block', async ( { admin, editor, page } ) => {
-		await saveDefaultValues( admin, {
-			sm: [ '50', '%' ],
-			md: [ '10', 'em' ],
-			lg: [ '200', 'px' ],
-		} );
-
-		await admin.createNewPost();
-		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
-
-		await expect
-			.poll( async () => ( await editor.getBlocks() )[ 0 ].attributes )
-			.toMatchObject( {
-				heightLg: '200px',
-				heightMd: '10em',
-				heightSm: '50%',
-			} );
-
-		await editor.openDocumentSettingsSidebar();
-		await expect( page.getByRole( 'spinbutton', { name: 'Desktop height' } ) ).toHaveValue( '200' );
-		await expect( page.getByRole( 'spinbutton', { name: 'Tablet height' } ) ).toHaveValue( '10' );
-		await expect( page.getByRole( 'spinbutton', { name: 'Mobile height' } ) ).toHaveValue( '50' );
-	} );
-
-	test( 'should not change an existing block', async ( { admin, editor, requestUtils } ) => {
-		const content = `<!-- wp:fsb/flexible-spacer {"heightLg":"200px","heightMd":"300px","heightSm":"400px"} -->
-<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:300px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:400px"></div></div>
+	test( 'should be applied to a new block without changing existing blocks', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
+		const existingBlock = `<!-- wp:fsb/flexible-spacer {"heightLg":"300px","heightMd":"400px","heightSm":"500px"} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:300px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:400px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:500px"></div></div>
 <!-- /wp:fsb/flexible-spacer -->`;
 		const post = await requestUtils.createPost( {
-			content,
+			content: existingBlock,
 			status: 'draft',
 			date_gmt: new Date().toISOString(),
 		} );
@@ -72,14 +53,19 @@ test.describe( 'Default value', () => {
 		} );
 
 		await admin.editPost( post.id );
+		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 
 		await expect
-			.poll( async () => ( await editor.getBlocks() )[ 0 ]?.attributes )
-			.toMatchObject( {
-				heightLg: '200px',
-				heightMd: '300px',
-				heightSm: '400px',
-			} );
-		expect( await editor.getEditedPostContent() ).toBe( content );
+			.poll( async () => ( await editor.getBlocks() ).map( ( block ) => block.attributes ) )
+			.toMatchObject( [
+				{ heightLg: '300px', heightMd: '400px', heightSm: '500px' },
+				{ heightLg: '200px', heightMd: '10em', heightSm: '50%' },
+			] );
+		expect( await editor.getEditedPostContent() ).toContain( existingBlock );
+
+		await editor.openDocumentSettingsSidebar();
+		await expect( page.getByRole( 'spinbutton', { name: 'Desktop height' } ) ).toHaveValue( '200' );
+		await expect( page.getByRole( 'spinbutton', { name: 'Tablet height' } ) ).toHaveValue( '10' );
+		await expect( page.getByRole( 'spinbutton', { name: 'Mobile height' } ) ).toHaveValue( '50' );
 	} );
 } );
