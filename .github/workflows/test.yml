@@ -46,13 +46,13 @@ jobs:
       - name: Running lint check
         run: npm run lint
 
-  unit-test:
+  js-unit-test:
     runs-on: ubuntu-latest
     permissions:
       contents: read
     timeout-minutes: 15
 
-    name: Unit test
+    name: JavaScript Unit Test
 
     steps:
       - name: Checkout
@@ -67,7 +67,7 @@ jobs:
       - name: Npm install
         run: npm ci
 
-      - name: Running unit tests
+      - name: Running JavaScript unit tests
         run: npm run test:unit
 
   e2e-test:
