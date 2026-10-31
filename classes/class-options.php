@@ -32,6 +32,28 @@ class Options {
 	}
 
 	/**
+	 * Get devices
+	 *
+	 * @return array
+	 */
+	private function get_devices() {
+		return array(
+			'sm' => array(
+				'label' => __( 'Mobile', 'flexible-spacer-block' ),
+				'icon'  => 'core/mobile',
+			),
+			'md' => array(
+				'label' => __( 'Tablet', 'flexible-spacer-block' ),
+				'icon'  => 'core/tablet',
+			),
+			'lg' => array(
+				'label' => __( 'Desktop', 'flexible-spacer-block' ),
+				'icon'  => 'core/desktop',
+			),
+		);
+	}
+
+	/**
 	 * Add option page
 	 */
 	public function add_options_page() {
@@ -128,34 +150,26 @@ class Options {
 	 * Display field (Responsive Setting)
 	 */
 	public function flexible_spacer_block_breakpoint_display_field() {
-		$breakpoint_sm = $this->breakpoints['sm'] ?? FSB_BREAKPOINT_SM;
-		$breakpoint_md = $this->breakpoints['md'] ?? FSB_BREAKPOINT_MD;
+		$breakpoints = array(
+			'sm' => $this->breakpoints['sm'] ?? FSB_BREAKPOINT_SM,
+			'md' => $this->breakpoints['md'] ?? FSB_BREAKPOINT_MD,
+		);
 		?>
 		<div class="fsb-option-breakpoint">
-			<div class="fsb-option-breakpoint__device">
-				<?php echo wp_get_icon( 'core/mobile', array( 'size' => 48 ) ); ?>
-				<?php _e( 'Mobile', 'flexible-spacer-block' ); ?>
-			</div>
-			<span class="fsb-option-breakpoint__sign">&le;</span>
-			<div class="fsb-option-breakpoint__input-wrapper">
-				<input class="fsb-option-breakpoint__input" type="number" name="flexible_spacer_block_breakpoint[sm]" min="<?php echo FSB_BREAKPOINT_MIN; ?>" max="<?php echo FSB_BREAKPOINT_MAX; ?>" value="<?php echo esc_attr( $breakpoint_sm ); ?>">
-				<span class="fsb-option-breakpoint__unit">px</span>
-			</div>
-			<span class="fsb-option-breakpoint__sign">&lt;</span>
-			<div class="fsb-option-breakpoint__device">
-				<?php echo wp_get_icon( 'core/tablet', array( 'size' => 48 ) ); ?>
-				<?php _e( 'Tablet', 'flexible-spacer-block' ); ?>
-			</div>
-			<span class="fsb-option-breakpoint__sign">&le;</span>
-			<div class="fsb-option-breakpoint__input-wrapper">
-				<input class="fsb-option-breakpoint__input" type="number" name="flexible_spacer_block_breakpoint[md]" min="<?php echo FSB_BREAKPOINT_MIN; ?>" max="<?php echo FSB_BREAKPOINT_MAX; ?>" value="<?php echo esc_attr( $breakpoint_md ); ?>">
-				<span class="fsb-option-breakpoint__unit">px</span>
-			</div>
-			<span class="fsb-option-breakpoint__sign">&lt;</span>
-			<div class="fsb-option-breakpoint__device">
-				<?php echo wp_get_icon( 'core/desktop', array( 'size' => 48 ) ); ?>
-				<?php _e( 'Desktop', 'flexible-spacer-block' ); ?>
-			</div>
+			<?php foreach ( $this->get_devices() as $slug => $device ) : ?>
+				<div class="fsb-option-breakpoint__device">
+					<?php echo wp_get_icon( $device['icon'], array( 'size' => 48 ) ); ?>
+					<?php echo esc_html( $device['label'] ); ?>
+				</div>
+				<?php if ( isset( $breakpoints[ $slug ] ) ) : ?>
+					<span class="fsb-option-breakpoint__sign">&le;</span>
+					<div class="fsb-option-breakpoint__input-wrapper">
+						<input class="fsb-option-breakpoint__input" type="number" name="flexible_spacer_block_breakpoint[<?php echo esc_attr( $slug ); ?>]" min="<?php echo FSB_BREAKPOINT_MIN; ?>" max="<?php echo FSB_BREAKPOINT_MAX; ?>" value="<?php echo esc_attr( $breakpoints[ $slug ] ); ?>">
+						<span class="fsb-option-breakpoint__unit">px</span>
+					</div>
+					<span class="fsb-option-breakpoint__sign">&lt;</span>
+				<?php endif; ?>
+			<?php endforeach; ?>
 		</div>
 		<ul>
 			<li><?php _e( 'Enter the screen width (breakpoint) that will be the basis for switching between each device.', 'flexible-spacer-block' ); ?></li>
@@ -169,63 +183,30 @@ class Options {
 	 * Display field (Default Values)
 	 */
 	public function flexible_spacer_block_default_value_display_field() {
-		$default_value_sm = $this->default_value['sm'] ?? FSB_DEFAULT_SPACER_HEIGHT;
-		$default_value_md = $this->default_value['md'] ?? FSB_DEFAULT_SPACER_HEIGHT;
-		$default_value_lg = $this->default_value['lg'] ?? FSB_DEFAULT_SPACER_HEIGHT;
-
-		$default_value_sm_unit = $this->default_value['sm_unit'] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT;
-		$default_value_md_unit = $this->default_value['md_unit'] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT;
-		$default_value_lg_unit = $this->default_value['lg_unit'] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT;
 		?>
 		<div class="fsb-option-default-values">
-			<div class="fsb-option-default-values__col">
-				<div class="fsb-option-breakpoint__device">
-					<?php echo wp_get_icon( 'core/mobile', array( 'size' => 48 ) ); ?>
-					<?php _e( 'Mobile', 'flexible-spacer-block' ); ?>
+			<?php foreach ( $this->get_devices() as $slug => $device ) : ?>
+				<?php
+				$value = $this->default_value[ $slug ] ?? FSB_DEFAULT_SPACER_HEIGHT;
+				$unit  = $this->default_value[ $slug . '_unit' ] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT;
+				?>
+				<div class="fsb-option-default-values__col">
+					<div class="fsb-option-breakpoint__device">
+						<?php echo wp_get_icon( $device['icon'], array( 'size' => 48 ) ); ?>
+						<?php echo esc_html( $device['label'] ); ?>
+					</div>
+					<div class="fsb-option-default-values__input-wrapper">
+						<input class="fsb-option-default-values__input" type="number" name="flexible_spacer_block_default_value[<?php echo esc_attr( $slug ); ?>]" min="<?php echo FSB_MIN_SPACER_HEIGHT; ?>" max="<?php echo FSB_MAX_SPACER_HEIGHT; ?>" value="<?php echo esc_attr( $value ); ?>">
+						<select class="fsb-option-default-values__unit" name="flexible_spacer_block_default_value[<?php echo esc_attr( $slug ); ?>_unit]">
+							<?php
+							foreach ( $this->units as $option_unit ) {
+								echo '<option value="' . esc_attr( $option_unit ) . '"' . selected( $option_unit, $unit, false ) . '>' . esc_html( $option_unit ) . '</option>';
+							}
+							?>
+						</select>
+					</div>
 				</div>
-				<div class="fsb-option-default-values__input-wrapper">
-					<input class="fsb-option-default-values__input" type="number" name="flexible_spacer_block_default_value[sm]" min="<?php echo FSB_MIN_SPACER_HEIGHT; ?>" max="<?php echo FSB_MAX_SPACER_HEIGHT; ?>" value="<?php echo esc_attr( $default_value_sm ); ?>">
-					<select class="fsb-option-default-values__unit" name="flexible_spacer_block_default_value[sm_unit]">
-						<?php
-						foreach ( $this->units as $unit ) {
-							echo '<option value="' . esc_attr( $unit ) . '"' . selected( $unit, $default_value_sm_unit, false ) . '>' . esc_html( $unit ) . '</option>';
-						}
-						?>
-					</select>
-				</div>
-			</div>
-			<div class="fsb-option-default-values__col">
-				<div class="fsb-option-breakpoint__device">
-					<?php echo wp_get_icon( 'core/tablet', array( 'size' => 48 ) ); ?>
-					<?php _e( 'Tablet', 'flexible-spacer-block' ); ?>
-				</div>
-				<div class="fsb-option-default-values__input-wrapper">
-					<input class="fsb-option-default-values__input" type="number" name="flexible_spacer_block_default_value[md]" min="<?php echo FSB_MIN_SPACER_HEIGHT; ?>" max="<?php echo FSB_MAX_SPACER_HEIGHT; ?>" value="<?php echo esc_attr( $default_value_md ); ?>">
-					<select class="fsb-option-default-values__unit" name="flexible_spacer_block_default_value[md_unit]">
-						<?php
-						foreach ( $this->units as $unit ) {
-							echo '<option value="' . esc_attr( $unit ) . '"' . selected( $unit, $default_value_md_unit, false ) . '>' . esc_html( $unit ) . '</option>';
-						}
-						?>
-					</select>
-				</div>
-			</div>
-			<div class="fsb-option-default-values__col">
-				<div class="fsb-option-breakpoint__device">
-					<?php echo wp_get_icon( 'core/desktop', array( 'size' => 48 ) ); ?>
-					<?php _e( 'Desktop', 'flexible-spacer-block' ); ?>
-				</div>
-				<div class="fsb-option-default-values__input-wrapper">
-					<input class="fsb-option-default-values__input" type="number" name="flexible_spacer_block_default_value[lg]" min="<?php echo FSB_MIN_SPACER_HEIGHT; ?>" max="<?php echo FSB_MAX_SPACER_HEIGHT; ?>" value="<?php echo esc_attr( $default_value_lg ); ?>">
-					<select class="fsb-option-default-values__unit" name="flexible_spacer_block_default_value[lg_unit]">
-						<?php
-						foreach ( $this->units as $unit ) {
-							echo '<option value="' . esc_attr( $unit ) . '"' . selected( $unit, $default_value_lg_unit, false ) . '>' . esc_html( $unit ) . '</option>';
-						}
-						?>
-					</select>
-				</div>
-			</div>
+			<?php endforeach; ?>
 		</div>
 		<?php
 	}
@@ -298,40 +279,42 @@ class Options {
 	public function sanitize_default_value( $input ) {
 		$this->default_value = get_option( 'flexible_spacer_block_default_value' );
 
-		$new_input = array();
+		$devices   = array_keys( $this->get_devices() );
+		$values    = array();
+		$units     = array();
+		$has_empty = false;
 
-		$default_value_sm = isset( $input['sm'] ) ? absint( $input['sm'] ) : '';
-		$default_value_md = isset( $input['md'] ) ? absint( $input['md'] ) : '';
-		$default_value_lg = isset( $input['lg'] ) ? absint( $input['lg'] ) : '';
+		foreach ( $devices as $slug ) {
+			$values[ $slug ] = isset( $input[ $slug ] ) ? absint( $input[ $slug ] ) : '';
+			$units[ $slug ]  = isset( $input[ $slug . '_unit' ] ) && in_array( $input[ $slug . '_unit' ], $this->units, true ) ? $input[ $slug . '_unit' ] : 'px';
 
-		$default_value_sm_unit = isset( $input['sm_unit'] ) && in_array( $input['sm_unit'], $this->units, true ) ? $input['sm_unit'] : 'px';
-		$default_value_md_unit = isset( $input['md_unit'] ) && in_array( $input['md_unit'], $this->units, true ) ? $input['md_unit'] : 'px';
-		$default_value_lg_unit = isset( $input['lg_unit'] ) && in_array( $input['lg_unit'], $this->units, true ) ? $input['lg_unit'] : 'px';
+			if ( 0 === $values[ $slug ] ) {
+				$has_empty = true;
+			}
+		}
 
-		if ( 0 === $default_value_sm || 0 === $default_value_md || 0 === $default_value_lg ) {
+		if ( $has_empty ) {
 			add_settings_error(
 				'flexible-spacer-block-default-values',
 				'flexible-spacer-block-default-values-null',
 				__( 'Default Value: Fill in all fields.', 'flexible-spacer-block' )
 			);
-			$new_input = array(
-				'sm'      => $this->default_value['sm'] ?? FSB_DEFAULT_SPACER_HEIGHT,
-				'md'      => $this->default_value['md'] ?? FSB_DEFAULT_SPACER_HEIGHT,
-				'lg'      => $this->default_value['lg'] ?? FSB_DEFAULT_SPACER_HEIGHT,
-				'sm_unit' => $this->default_value['sm_unit'] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT,
-				'md_unit' => $this->default_value['md_unit'] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT,
-				'lg_unit' => $this->default_value['lg_unit'] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT,
-			);
-		} else {
-			$new_input = array(
-				'sm'      => min( max( $default_value_sm, FSB_MIN_SPACER_HEIGHT ), FSB_MAX_SPACER_HEIGHT ),
-				'md'      => min( max( $default_value_md, FSB_MIN_SPACER_HEIGHT ), FSB_MAX_SPACER_HEIGHT ),
-				'lg'      => min( max( $default_value_lg, FSB_MIN_SPACER_HEIGHT ), FSB_MAX_SPACER_HEIGHT ),
-				'sm_unit' => $default_value_sm_unit,
-				'md_unit' => $default_value_md_unit,
-				'lg_unit' => $default_value_lg_unit,
-			);
 		}
+
+		$new_input = array();
+
+		foreach ( $devices as $slug ) {
+			$new_input[ $slug ] = $has_empty
+				? ( $this->default_value[ $slug ] ?? FSB_DEFAULT_SPACER_HEIGHT )
+				: min( max( $values[ $slug ], FSB_MIN_SPACER_HEIGHT ), FSB_MAX_SPACER_HEIGHT );
+		}
+
+		foreach ( $devices as $slug ) {
+			$new_input[ $slug . '_unit' ] = $has_empty
+				? ( $this->default_value[ $slug . '_unit' ] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT )
+				: $units[ $slug ];
+		}
+
 		return $new_input;
 	}
 
