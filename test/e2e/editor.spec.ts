@@ -157,23 +157,18 @@ test.describe( 'Block', () => {
 		const blocks = editor.canvas.getByRole( 'document', { name: 'Block: Flexible Spacer' } );
 		const toolbar = page.getByRole( 'toolbar', { name: 'Block tools' } );
 
-		async function expectDisplayedDevices( devices: string[] ) {
-			for ( const block of [ blocks.nth( 0 ), blocks.nth( 1 ) ] ) {
-				for ( const device of [ 'Desktop', 'Tablet', 'Mobile' ] ) {
-					const title = block.getByText( device, { exact: true } );
-					if ( devices.includes( device ) ) {
-						await expect( title ).toBeVisible();
-					} else {
-						await expect( title ).toBeHidden();
-					}
-				}
-			}
+		for ( const block of [ blocks.nth( 0 ), blocks.nth( 1 ) ] ) {
+			await expect( block.getByText( 'Desktop', { exact: true } ) ).toBeVisible();
+			await expect( block.getByText( 'Tablet', { exact: true } ) ).toBeVisible();
+			await expect( block.getByText( 'Mobile', { exact: true } ) ).toBeVisible();
 		}
 
-		await expectDisplayedDevices( [ 'Desktop', 'Tablet', 'Mobile' ] );
-
 		await toolbar.getByRole( 'button', { name: 'Enable responsive view' } ).click();
-		await expectDisplayedDevices( [ 'Desktop' ] );
+		for ( const block of [ blocks.nth( 0 ), blocks.nth( 1 ) ] ) {
+			await expect( block.getByText( 'Desktop', { exact: true } ) ).toBeVisible();
+			await expect( block.getByText( 'Tablet', { exact: true } ) ).toBeHidden();
+			await expect( block.getByText( 'Mobile', { exact: true } ) ).toBeHidden();
+		}
 
 		// The other block uses the same state.
 		await editor.selectBlocks( blocks.nth( 0 ) );
@@ -182,7 +177,11 @@ test.describe( 'Block', () => {
 		).toHaveAttribute( 'aria-pressed', 'true' );
 
 		await toolbar.getByRole( 'button', { name: 'Disable responsive view' } ).click();
-		await expectDisplayedDevices( [ 'Desktop', 'Tablet', 'Mobile' ] );
+		for ( const block of [ blocks.nth( 0 ), blocks.nth( 1 ) ] ) {
+			await expect( block.getByText( 'Desktop', { exact: true } ) ).toBeVisible();
+			await expect( block.getByText( 'Tablet', { exact: true } ) ).toBeVisible();
+			await expect( block.getByText( 'Mobile', { exact: true } ) ).toBeVisible();
+		}
 	} );
 
 	test( 'should change the height with the range control if custom spacing sizes are disabled', async ( {
