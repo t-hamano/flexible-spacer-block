@@ -159,19 +159,21 @@ test.describe( 'Block', () => {
 
 		async function expectDisplayedDevices( devices: string[] ) {
 			for ( const block of [ blocks.nth( 0 ), blocks.nth( 1 ) ] ) {
-				for ( const device of [ 'lg', 'md', 'sm' ] ) {
-					await expect( block.locator( `.fsb-flexible-spacer__device--${ device }` ) ).toHaveCSS(
-						'display',
-						devices.includes( device ) ? 'block' : 'none'
-					);
+				for ( const device of [ 'Desktop', 'Tablet', 'Mobile' ] ) {
+					const title = block.getByText( device, { exact: true } );
+					if ( devices.includes( device ) ) {
+						await expect( title ).toBeVisible();
+					} else {
+						await expect( title ).toBeHidden();
+					}
 				}
 			}
 		}
 
-		await expectDisplayedDevices( [ 'lg', 'md', 'sm' ] );
+		await expectDisplayedDevices( [ 'Desktop', 'Tablet', 'Mobile' ] );
 
 		await toolbar.getByRole( 'button', { name: 'Enable responsive view' } ).click();
-		await expectDisplayedDevices( [ 'lg' ] );
+		await expectDisplayedDevices( [ 'Desktop' ] );
 
 		// The other block uses the same state.
 		await editor.selectBlocks( blocks.nth( 0 ) );
@@ -180,7 +182,7 @@ test.describe( 'Block', () => {
 		).toHaveAttribute( 'aria-pressed', 'true' );
 
 		await toolbar.getByRole( 'button', { name: 'Disable responsive view' } ).click();
-		await expectDisplayedDevices( [ 'lg', 'md', 'sm' ] );
+		await expectDisplayedDevices( [ 'Desktop', 'Tablet', 'Mobile' ] );
 	} );
 
 	test( 'should change the height with the range control if custom spacing sizes are disabled', async ( {
