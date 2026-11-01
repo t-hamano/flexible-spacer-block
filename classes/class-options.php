@@ -141,6 +141,24 @@ class Options {
 				'show_in_rest'      => true,
 			)
 		);
+
+		// Values saved by older versions may lack some properties, such as the units added in 2.1.0.
+		add_filter( 'option_flexible_spacer_block_breakpoint', array( $this, 'fill_missing_values' ), 10, 2 );
+		add_filter( 'option_flexible_spacer_block_default_value', array( $this, 'fill_missing_values' ), 10, 2 );
+	}
+
+	/**
+	 * Fill properties missing from a saved setting with the registered defaults
+	 *
+	 * @param mixed  $value  Saved setting value.
+	 * @param string $option Option name.
+	 *
+	 * @return array
+	 */
+	public function fill_missing_values( $value, $option ) {
+		$default = get_registered_settings()[ $option ]['default'];
+
+		return is_array( $value ) ? array_merge( $default, $value ) : $default;
 	}
 
 	/**
