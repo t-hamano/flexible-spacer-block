@@ -85,23 +85,10 @@ class Enqueue {
 	 * @return array
 	 */
 	private function create_editor_config() {
-		$breakpoint_defaults    = array(
-			'md' => FSB_BREAKPOINT_MD,
-			'sm' => FSB_BREAKPOINT_SM,
-		);
-		$default_value_defaults = array(
-			'lg'      => FSB_DEFAULT_SPACER_HEIGHT,
-			'md'      => FSB_DEFAULT_SPACER_HEIGHT,
-			'sm'      => FSB_DEFAULT_SPACER_HEIGHT,
-			'lg_unit' => FSB_DEFAULT_SPACER_HEIGHT_UNIT,
-			'md_unit' => FSB_DEFAULT_SPACER_HEIGHT_UNIT,
-			'sm_unit' => FSB_DEFAULT_SPACER_HEIGHT_UNIT,
-		);
-
 		$config = array(
-			'breakpoint'   => get_option( 'flexible_spacer_block_breakpoint', $breakpoint_defaults ),
-			'defaultValue' => get_option( 'flexible_spacer_block_default_value', $default_value_defaults ),
-			'showBlock'    => get_option( 'flexible_spacer_block_show_block', false ),
+			'breakpoint'   => get_option( 'flexible_spacer_block_breakpoint' ),
+			'defaultValue' => get_option( 'flexible_spacer_block_default_value' ),
+			'showBlock'    => get_option( 'flexible_spacer_block_show_block' ),
 		);
 
 		return $config;
@@ -114,12 +101,7 @@ class Enqueue {
 	 */
 	private function create_inline_style( $is_editor = true ) {
 		// Generate media query breakpoints.
-		$defaults = array(
-			'md' => FSB_BREAKPOINT_MD,
-			'sm' => FSB_BREAKPOINT_SM,
-		);
-
-		$breakpoint = get_option( 'flexible_spacer_block_breakpoint', $defaults );
+		$breakpoint = get_option( 'flexible_spacer_block_breakpoint' );
 
 		/**
 		 * Filters media query breakpoints.
