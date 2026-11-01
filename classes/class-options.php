@@ -80,9 +80,7 @@ class Options {
 				'type'     => 'integer',
 				'required' => true,
 			);
-		}
 
-		foreach ( $devices as $slug ) {
 			$height_defaults[ $slug . '_unit' ]   = FSB_DEFAULT_SPACER_HEIGHT_UNIT;
 			$height_properties[ $slug . '_unit' ] = array(
 				'type'     => 'string',
