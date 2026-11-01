@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { test, expect, type Admin } from '@wordpress/e2e-test-utils-playwright';
+import { test, expect, type Admin, type Editor } from '@wordpress/e2e-test-utils-playwright';
 
 test.describe( 'Default value', () => {
 	const submitButton = 'input[id="submit"]';
@@ -31,6 +31,16 @@ test.describe( 'Default value', () => {
 		} );
 	} );
 
+	// The default values are applied by the default block variation, which is used by
+	// the inserter but not by `createBlock()`, so insert the block through the UI.
+	async function insertBlockFromInserter( editor: Editor ) {
+		const { page } = editor;
+		await editor.insertBlock( { name: 'core/paragraph' } );
+		await page.keyboard.type( '/flexible spacer' );
+		await expect( page.getByRole( 'option', { name: 'Flexible Spacer' } ) ).toBeVisible();
+		await page.keyboard.press( 'Enter' );
+	}
+
 	test( 'should be applied to a new block without changing existing blocks', async ( {
 		admin,
 		editor,
@@ -53,7 +63,7 @@ test.describe( 'Default value', () => {
 		} );
 
 		await admin.editPost( post.id );
-		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
+		await insertBlockFromInserter( editor );
 
 		await expect
 			.poll( async () => ( await editor.getBlocks() ).map( ( block ) => block.attributes ) )
@@ -67,5 +77,58 @@ test.describe( 'Default value', () => {
 		await expect( page.getByRole( 'spinbutton', { name: 'Desktop height' } ) ).toHaveValue( '200' );
 		await expect( page.getByRole( 'spinbutton', { name: 'Tablet height' } ) ).toHaveValue( '10' );
 		await expect( page.getByRole( 'spinbutton', { name: 'Mobile height' } ) ).toHaveValue( '50' );
+	} );
+
+	test( 'should not change existing blocks with all heights at 100px', async ( {
+		admin,
+		editor,
+		requestUtils,
+	} ) => {
+		const existingBlock = `<!-- wp:fsb/flexible-spacer -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:100px"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`;
+		const post = await requestUtils.createPost( {
+			content: existingBlock,
+			status: 'draft',
+			date_gmt: new Date().toISOString(),
+		} );
+
+		await saveDefaultValues( admin, {
+			sm: [ '50', '%' ],
+			md: [ '10', 'em' ],
+			lg: [ '200', 'px' ],
+		} );
+
+		await admin.editPost( post.id );
+
+		await expect
+			.poll( () => editor.getBlocks( { full: true } ) )
+			.toMatchObject( [
+				{
+					isValid: true,
+					attributes: { heightLg: '100px', heightMd: '100px', heightSm: '100px' },
+				},
+			] );
+		expect( await editor.getEditedPostContent() ).toBe( existingBlock );
+	} );
+
+	test( 'should accept 0', async ( { admin, editor, page } ) => {
+		await saveDefaultValues( admin, {
+			sm: [ '0', 'px' ],
+			md: [ '0', 'px' ],
+			lg: [ '0', 'px' ],
+		} );
+		for ( const device of [ 'sm', 'md', 'lg' ] ) {
+			await expect(
+				page.locator( `input[name="flexible_spacer_block_default_value[${ device }]"]` )
+			).toHaveValue( '0' );
+		}
+
+		await admin.createNewPost();
+		await insertBlockFromInserter( editor );
+
+		await expect
+			.poll( async () => ( await editor.getBlocks() ).map( ( block ) => block.attributes ) )
+			.toMatchObject( [ { heightLg: '0px', heightMd: '0px', heightSm: '0px' } ] );
 	} );
 } );
