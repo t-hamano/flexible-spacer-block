@@ -71,20 +71,20 @@ class Options {
 	public function register_settings() {
 		$devices = array_keys( $this->get_devices() );
 
-		$default_value_default    = array();
-		$default_value_properties = array();
+		$height_defaults   = array();
+		$height_properties = array();
 
 		foreach ( $devices as $slug ) {
-			$default_value_default[ $slug ]    = FSB_DEFAULT_SPACER_HEIGHT;
-			$default_value_properties[ $slug ] = array(
+			$height_defaults[ $slug ]   = FSB_DEFAULT_SPACER_HEIGHT;
+			$height_properties[ $slug ] = array(
 				'type'     => 'integer',
 				'required' => true,
 			);
 		}
 
 		foreach ( $devices as $slug ) {
-			$default_value_default[ $slug . '_unit' ]    = FSB_DEFAULT_SPACER_HEIGHT_UNIT;
-			$default_value_properties[ $slug . '_unit' ] = array(
+			$height_defaults[ $slug . '_unit' ]   = FSB_DEFAULT_SPACER_HEIGHT_UNIT;
+			$height_properties[ $slug . '_unit' ] = array(
 				'type'     => 'string',
 				'enum'     => $this->units,
 				'required' => true,
@@ -123,11 +123,11 @@ class Options {
 			'flexible_spacer_block_default_value',
 			array(
 				'type'              => 'object',
-				'default'           => $default_value_default,
+				'default'           => $height_defaults,
 				'sanitize_callback' => array( $this, 'sanitize_default_value' ),
 				'show_in_rest'      => array(
 					'schema' => array(
-						'properties' => $default_value_properties,
+						'properties' => $height_properties,
 					),
 				),
 			)
