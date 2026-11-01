@@ -9,9 +9,6 @@ namespace Flexible_Spacer_Block;
 
 class Options {
 
-	private $breakpoints;
-	private $default_value;
-
 	private $units = array(
 		'px',
 		'%',
@@ -181,8 +178,6 @@ class Options {
 	 * Create option page
 	 */
 	public function create_options_page() {
-		$this->breakpoints   = get_option( 'flexible_spacer_block_breakpoint' );
-		$this->default_value = get_option( 'flexible_spacer_block_default_value' );
 		?>
 		<div class="wrap">
 			<h1><?php _e( 'Flexible Spacer Block', 'flexible-spacer-block' ); ?></h1>
@@ -207,9 +202,10 @@ class Options {
 	 * Display field (Responsive Setting)
 	 */
 	public function flexible_spacer_block_breakpoint_display_field() {
+		$breakpoints = get_option( 'flexible_spacer_block_breakpoint' );
 		$breakpoints = array(
-			'sm' => $this->breakpoints['sm'],
-			'md' => $this->breakpoints['md'],
+			'sm' => $breakpoints['sm'],
+			'md' => $breakpoints['md'],
 		);
 		?>
 		<div class="fsb-option-breakpoint">
@@ -240,12 +236,13 @@ class Options {
 	 * Display field (Default Values)
 	 */
 	public function flexible_spacer_block_default_value_display_field() {
+		$default_value = get_option( 'flexible_spacer_block_default_value' );
 		?>
 		<div class="fsb-option-default-values">
 			<?php foreach ( $this->get_devices() as $slug => $device ) : ?>
 				<?php
-				$value = $this->default_value[ $slug ];
-				$unit  = $this->default_value[ $slug . '_unit' ];
+				$value = $default_value[ $slug ];
+				$unit  = $default_value[ $slug . '_unit' ];
 				?>
 				<div class="fsb-option-default-values__col">
 					<div class="fsb-option-breakpoint__device">
@@ -291,7 +288,7 @@ class Options {
 	 * @return array
 	 */
 	public function sanitize_breakpoint( $input ) {
-		$this->breakpoints = get_option( 'flexible_spacer_block_breakpoint' );
+		$breakpoints = get_option( 'flexible_spacer_block_breakpoint' );
 
 		$new_input = array();
 
@@ -305,8 +302,8 @@ class Options {
 				__( 'Responsive Setting: Fill in both fields.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
-				'md' => $this->breakpoints['md'],
-				'sm' => $this->breakpoints['sm'],
+				'md' => $breakpoints['md'],
+				'sm' => $breakpoints['sm'],
 			);
 		} elseif ( $breakpoint_md < $breakpoint_sm ) {
 			$this->add_settings_error(
@@ -315,8 +312,8 @@ class Options {
 				__( 'Responsive Setting: the screen width value in the left field must be equal to or smaller than the value in the right field.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
-				'md' => $this->breakpoints['md'],
-				'sm' => $this->breakpoints['sm'],
+				'md' => $breakpoints['md'],
+				'sm' => $breakpoints['sm'],
 			);
 		} else {
 			$new_input = array(
@@ -334,7 +331,7 @@ class Options {
 	 * @return array
 	 */
 	public function sanitize_default_value( $input ) {
-		$this->default_value = get_option( 'flexible_spacer_block_default_value' );
+		$default_value = get_option( 'flexible_spacer_block_default_value' );
 
 		$devices   = array_keys( $this->get_devices() );
 		$values    = array();
@@ -362,13 +359,13 @@ class Options {
 
 		foreach ( $devices as $slug ) {
 			$new_input[ $slug ] = $has_empty
-				? $this->default_value[ $slug ]
+				? $default_value[ $slug ]
 				: min( max( $values[ $slug ], FSB_MIN_SPACER_HEIGHT ), FSB_MAX_SPACER_HEIGHT );
 		}
 
 		foreach ( $devices as $slug ) {
 			$new_input[ $slug . '_unit' ] = $has_empty
-				? $this->default_value[ $slug . '_unit' ]
+				? $default_value[ $slug . '_unit' ]
 				: $units[ $slug ];
 		}
 
