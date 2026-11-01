@@ -23,7 +23,7 @@ class Enqueue {
 		add_action( 'init', array( $this, 'register_block' ) );
 
 		// Add settings to the editor script
-		add_action( 'init', array( $this, 'add_config_to_editor_script' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'add_config_to_editor_script' ) );
 	}
 
 	/**
