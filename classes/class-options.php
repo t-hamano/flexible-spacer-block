@@ -71,22 +71,11 @@ class Options {
 	public function register_settings() {
 		$devices = array_keys( $this->get_devices() );
 
-		$height_defaults   = array();
-		$height_properties = array();
+		$height_defaults = array();
 
 		foreach ( $devices as $slug ) {
-			$height_defaults[ $slug ]   = FSB_DEFAULT_SPACER_HEIGHT;
-			$height_properties[ $slug ] = array(
-				'type'     => 'integer',
-				'required' => true,
-			);
-
-			$height_defaults[ $slug . '_unit' ]   = FSB_DEFAULT_SPACER_HEIGHT_UNIT;
-			$height_properties[ $slug . '_unit' ] = array(
-				'type'     => 'string',
-				'enum'     => $this->units,
-				'required' => true,
-			);
+			$height_defaults[ $slug ]           = FSB_DEFAULT_SPACER_HEIGHT;
+			$height_defaults[ $slug . '_unit' ] = FSB_DEFAULT_SPACER_HEIGHT_UNIT;
 		}
 
 		register_setting(
@@ -99,20 +88,6 @@ class Options {
 					'sm' => FSB_BREAKPOINT_SM,
 				),
 				'sanitize_callback' => array( $this, 'sanitize_breakpoint' ),
-				'show_in_rest'      => array(
-					'schema' => array(
-						'properties' => array(
-							'md' => array(
-								'type'     => 'integer',
-								'required' => true,
-							),
-							'sm' => array(
-								'type'     => 'integer',
-								'required' => true,
-							),
-						),
-					),
-				),
 			)
 		);
 
@@ -123,11 +98,6 @@ class Options {
 				'type'              => 'object',
 				'default'           => $height_defaults,
 				'sanitize_callback' => array( $this, 'sanitize_default_value' ),
-				'show_in_rest'      => array(
-					'schema' => array(
-						'properties' => $height_properties,
-					),
-				),
 			)
 		);
 
@@ -138,7 +108,6 @@ class Options {
 				'type'              => 'boolean',
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
-				'show_in_rest'      => true,
 			)
 		);
 
@@ -319,7 +288,7 @@ class Options {
 		$breakpoint_sm = isset( $input['sm'] ) ? absint( $input['sm'] ) : '';
 
 		if ( 0 === $breakpoint_md || 0 === $breakpoint_sm ) {
-			$this->add_settings_error(
+			add_settings_error(
 				'flexible-spacer-block-breakpoint',
 				'flexible-spacer-block-breakpoint-null',
 				__( 'Responsive Setting: Fill in both fields.', 'flexible-spacer-block' )
@@ -329,7 +298,7 @@ class Options {
 				'sm' => $breakpoints['sm'],
 			);
 		} elseif ( $breakpoint_md < $breakpoint_sm ) {
-			$this->add_settings_error(
+			add_settings_error(
 				'flexible-spacer-block-breakpoint',
 				'flexible-spacer-block-breakpoint-compare',
 				__( 'Responsive Setting: the screen width value in the left field must be equal to or smaller than the value in the right field.', 'flexible-spacer-block' )
@@ -371,7 +340,7 @@ class Options {
 		}
 
 		if ( $has_empty ) {
-			$this->add_settings_error(
+			add_settings_error(
 				'flexible-spacer-block-default-values',
 				'flexible-spacer-block-default-values-null',
 				__( 'Default Value: Fill in all fields.', 'flexible-spacer-block' )
@@ -393,21 +362,5 @@ class Options {
 		}
 
 		return $new_input;
-	}
-
-	/**
-	 * Register a settings error
-	 *
-	 * add_settings_error() is only loaded in the admin, but the sanitizers also
-	 * run when the settings are updated via the REST API.
-	 *
-	 * @param string $setting Slug title of the setting to which this error applies.
-	 * @param string $code    Slug-name to identify the error.
-	 * @param string $message The formatted message text to display to the user.
-	 */
-	private function add_settings_error( $setting, $code, $message ) {
-		if ( function_exists( 'add_settings_error' ) ) {
-			add_settings_error( $setting, $code, $message );
-		}
 	}
 }
