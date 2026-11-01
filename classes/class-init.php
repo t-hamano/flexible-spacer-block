@@ -15,7 +15,7 @@ class Init {
 		// Add a link to this plugin settings page in plugin list
 		add_filter( 'plugin_action_links_' . FSB_BASENAME, array( $this, 'add_action_links' ) );
 
-		// Load classes
+		// Load and instantiate classes
 		$this->init_classes();
 	}
 
