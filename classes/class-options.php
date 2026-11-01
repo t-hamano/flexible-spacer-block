@@ -22,6 +22,8 @@ class Options {
 	 * Constructor
 	 */
 	public function __construct() {
+		// Register settings
+		add_action( 'init', array( $this, 'register_settings' ) );
 		// Add option page
 		add_action( 'admin_menu', array( $this, 'add_options_page' ) );
 		// Initialize option page
@@ -64,27 +66,74 @@ class Options {
 	}
 
 	/**
-	 * Initialize option page
+	 * Register settings
 	 */
-	public function init_options_page() {
+	public function register_settings() {
+		$devices = array_keys( $this->get_devices() );
+
+		$height_defaults = array();
+
+		foreach ( $devices as $slug ) {
+			$height_defaults[ $slug ]           = FSB_DEFAULT_SPACER_HEIGHT;
+			$height_defaults[ $slug . '_unit' ] = FSB_DEFAULT_SPACER_HEIGHT_UNIT;
+		}
+
 		register_setting(
 			'flexible-spacer-block-group',
 			'flexible_spacer_block_breakpoint',
-			array( $this, 'sanitize_breakpoint' )
+			array(
+				'type'              => 'object',
+				'default'           => array(
+					'md' => FSB_BREAKPOINT_MD,
+					'sm' => FSB_BREAKPOINT_SM,
+				),
+				'sanitize_callback' => array( $this, 'sanitize_breakpoint' ),
+			)
 		);
 
 		register_setting(
 			'flexible-spacer-block-group',
 			'flexible_spacer_block_default_value',
-			array( $this, 'sanitize_default_value' )
+			array(
+				'type'              => 'object',
+				'default'           => $height_defaults,
+				'sanitize_callback' => array( $this, 'sanitize_default_value' ),
+			)
 		);
 
 		register_setting(
 			'flexible-spacer-block-group',
 			'flexible_spacer_block_show_block',
-			array( $this, 'sanitize_checkbox' )
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+			)
 		);
 
+		// Values saved by older versions may lack some properties, such as the units added in 2.1.0.
+		add_filter( 'option_flexible_spacer_block_breakpoint', array( $this, 'merge_option_defaults' ), 10, 2 );
+		add_filter( 'option_flexible_spacer_block_default_value', array( $this, 'merge_option_defaults' ), 10, 2 );
+	}
+
+	/**
+	 * Fill properties missing from a saved setting with the registered defaults
+	 *
+	 * @param mixed  $value  Saved setting value.
+	 * @param string $option Option name.
+	 *
+	 * @return array
+	 */
+	public function merge_option_defaults( $value, $option ) {
+		$default = get_registered_settings()[ $option ]['default'];
+
+		return is_array( $value ) ? array_merge( $default, $value ) : $default;
+	}
+
+	/**
+	 * Initialize option page
+	 */
+	public function init_options_page() {
 		add_settings_section(
 			'flexible_spacer_block_section',
 			'',
@@ -147,8 +196,8 @@ class Options {
 	public function flexible_spacer_block_breakpoint_display_field() {
 		$breakpoints = get_option( 'flexible_spacer_block_breakpoint' );
 		$breakpoints = array(
-			'sm' => $breakpoints['sm'] ?? FSB_BREAKPOINT_SM,
-			'md' => $breakpoints['md'] ?? FSB_BREAKPOINT_MD,
+			'sm' => $breakpoints['sm'],
+			'md' => $breakpoints['md'],
 		);
 		?>
 		<div class="fsb-option-breakpoint">
@@ -184,8 +233,8 @@ class Options {
 		<div class="fsb-option-default-values">
 			<?php foreach ( $this->get_devices() as $slug => $device ) : ?>
 				<?php
-				$value = $default_value[ $slug ] ?? FSB_DEFAULT_SPACER_HEIGHT;
-				$unit  = $default_value[ $slug . '_unit' ] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT;
+				$value = $default_value[ $slug ];
+				$unit  = $default_value[ $slug . '_unit' ];
 				?>
 				<div class="fsb-option-default-values__col">
 					<div class="fsb-option-breakpoint__device">
@@ -216,7 +265,7 @@ class Options {
 		?>
 		<fieldset>
 			<label>
-				<input type="checkbox" name="flexible_spacer_block_show_block" value="1" <?php checked( get_option( 'flexible_spacer_block_show_block', false ) ); ?>>
+				<input type="checkbox" name="flexible_spacer_block_show_block" value="1" <?php checked( get_option( 'flexible_spacer_block_show_block' ) ); ?>>
 				<?php _e( 'Always show blocks in the block editor', 'flexible-spacer-block' ); ?>
 			</label>
 			<p class="description"><?php _e( 'The block will always be visible even when it is not selected.', 'flexible-spacer-block' ); ?></p>
@@ -245,8 +294,8 @@ class Options {
 				__( 'Responsive Setting: Fill in both fields.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
-				'md' => $breakpoints['md'] ?? FSB_BREAKPOINT_MD,
-				'sm' => $breakpoints['sm'] ?? FSB_BREAKPOINT_SM,
+				'md' => $breakpoints['md'],
+				'sm' => $breakpoints['sm'],
 			);
 		} elseif ( $breakpoint_md < $breakpoint_sm ) {
 			add_settings_error(
@@ -255,8 +304,8 @@ class Options {
 				__( 'Responsive Setting: the screen width value in the left field must be equal to or smaller than the value in the right field.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
-				'md' => $breakpoints['md'] ?? '',
-				'sm' => $breakpoints['sm'] ?? '',
+				'md' => $breakpoints['md'],
+				'sm' => $breakpoints['sm'],
 			);
 		} else {
 			$new_input = array(
@@ -302,26 +351,16 @@ class Options {
 
 		foreach ( $devices as $slug ) {
 			$new_input[ $slug ] = $has_empty
-				? ( $default_value[ $slug ] ?? FSB_DEFAULT_SPACER_HEIGHT )
+				? $default_value[ $slug ]
 				: min( max( $values[ $slug ], FSB_MIN_SPACER_HEIGHT ), FSB_MAX_SPACER_HEIGHT );
 		}
 
 		foreach ( $devices as $slug ) {
 			$new_input[ $slug . '_unit' ] = $has_empty
-				? ( $default_value[ $slug . '_unit' ] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT )
+				? $default_value[ $slug . '_unit' ]
 				: $units[ $slug ];
 		}
 
 		return $new_input;
-	}
-
-	/**
-	 * Sanitizer (Chechbox)
-	 * @param string $value input value.
-	 *
-	 * @return boolean
-	 */
-	public static function sanitize_checkbox( $value ) {
-		return isset( $value );
 	}
 }

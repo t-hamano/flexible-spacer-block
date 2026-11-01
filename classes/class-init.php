@@ -27,10 +27,7 @@ class Init {
 		require_once FSB_PATH . '/classes/class-options.php';
 
 		new Enqueue();
-
-		if ( is_admin() ) {
-			new Options();
-		}
+		new Options();
 	}
 
 	/**
