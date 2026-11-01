@@ -1,0 +1,15 @@
+[
+	{
+		"name": "fsb/flexible-spacer",
+		"isValid": true,
+		"attributes": {
+			"heightLg": "200px",
+			"heightMd": "30px",
+			"heightSm": "50%",
+			"isNegativeLg": false,
+			"isNegativeMd": false,
+			"isNegativeSm": true
+		},
+		"innerBlocks": []
+	}
+]

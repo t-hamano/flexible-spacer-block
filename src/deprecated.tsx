@@ -92,20 +92,17 @@ const v1 = {
 	},
 };
 
-// Stop depending on the default values from the settings page. When a height
-// was empty, the output used the default value from the settings at save time
-// while the height was not saved, so the block became invalid on reload.
-const v2 = {
-	attributes: {
-		heightLg: {
-			type: 'string',
-		},
-		heightMd: {
-			type: 'string',
-		},
-		heightSm: {
-			type: 'string',
-		},
+// Builds the attributes of the format that used the default values from the
+// settings page as the fallback for empty heights.
+function getV2Attributes( heightDefault?: string ) {
+	const height = {
+		type: 'string',
+		...( heightDefault !== undefined && { default: heightDefault } ),
+	};
+	return {
+		heightLg: height,
+		heightMd: height,
+		heightSm: height,
 		isNegativeLg: {
 			type: 'boolean',
 			default: false,
@@ -118,7 +115,14 @@ const v2 = {
 			type: 'boolean',
 			default: false,
 		},
-	},
+	};
+}
+
+// Stop depending on the default values from the settings page. An empty height
+// was output with the default value from the settings at save time, so the
+// output changed when the settings changed.
+const v2 = {
+	attributes: getV2Attributes( '100px' ),
 	migrate( attributes: BlockAttributes ): BlockAttributes {
 		const { heightLg, heightMd, heightSm } = attributes;
 		const defaultValue = fsbConf.defaultValue;
@@ -162,4 +166,11 @@ const v2 = {
 	},
 };
 
-export default [ v2, v1 ];
+// An empty height was not saved, so it was parsed as `100px` on reload and the
+// block became invalid. Parse omitted heights as empty to recover such content.
+const v2WithoutHeightDefaults = {
+	...v2,
+	attributes: getV2Attributes(),
+};
+
+export default [ v2, v2WithoutHeightDefaults, v1 ];
