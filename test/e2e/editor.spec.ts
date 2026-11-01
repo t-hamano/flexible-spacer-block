@@ -14,21 +14,33 @@ test.describe( 'Block', () => {
 
 	test( 'should be created', async ( { editor } ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:fsb/flexible-spacer -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:100px"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`
+		);
 	} );
 
 	test( 'should change all height', async ( { editor, page } ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		await editor.openDocumentSettingsSidebar();
 		await page.getByRole( 'spinbutton', { name: 'All heights' } ).fill( '200' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:fsb/flexible-spacer {"heightLg":"200px","heightMd":"200px","heightSm":"200px"} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:200px"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`
+		);
 	} );
 
 	test( 'should change all height unit', async ( { editor, page } ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		await editor.openDocumentSettingsSidebar();
 		await page.getByRole( 'combobox', { name: 'Select unit' } ).nth( 0 ).selectOption( 'em' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:fsb/flexible-spacer {"heightLg":"100em","heightMd":"100em","heightSm":"100em"} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:100em"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:100em"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:100em"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`
+		);
 	} );
 
 	test( 'should change each height', async ( { editor, page } ) => {
@@ -37,7 +49,11 @@ test.describe( 'Block', () => {
 		await page.getByRole( 'spinbutton', { name: 'Desktop height' } ).fill( '200' );
 		await page.getByRole( 'spinbutton', { name: 'Tablet height' } ).fill( '300' );
 		await page.getByRole( 'spinbutton', { name: 'Mobile height' } ).fill( '400' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:fsb/flexible-spacer {"heightLg":"200px","heightMd":"300px","heightSm":"400px"} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:300px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:400px"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`
+		);
 	} );
 
 	test( 'should change each height unit', async ( { editor, page } ) => {
@@ -46,7 +62,11 @@ test.describe( 'Block', () => {
 		await page.getByRole( 'combobox', { name: 'Select unit' } ).nth( 1 ).selectOption( '%' );
 		await page.getByRole( 'combobox', { name: 'Select unit' } ).nth( 2 ).selectOption( 'em' );
 		await page.getByRole( 'combobox', { name: 'Select unit' } ).nth( 3 ).selectOption( 'rem' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:fsb/flexible-spacer {"heightLg":"100%","heightMd":"100em","heightSm":"100rem"} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:100%"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:100em"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:100rem"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`
+		);
 	} );
 
 	test( 'should apply negative space', async ( { editor, page } ) => {
@@ -58,7 +78,11 @@ test.describe( 'Block', () => {
 		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 0 ).check();
 		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 1 ).check();
 		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 2 ).check();
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:fsb/flexible-spacer {"heightLg":"200px","heightMd":"300px","heightSm":"400px","isNegativeLg":true,"isNegativeMd":true,"isNegativeSm":true} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="margin-bottom:-200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="margin-bottom:-300px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="margin-bottom:-400px"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`
+		);
 	} );
 
 	test( 'should apply edged value correctly if the value is falsy', async ( { editor, page } ) => {
@@ -68,7 +92,11 @@ test.describe( 'Block', () => {
 		await page.getByRole( 'spinbutton', { name: 'Tablet height' } ).fill( '' );
 		await page.getByRole( 'spinbutton', { name: 'Mobile height' } ).fill( '0' );
 		await page.getByRole( 'combobox', { name: 'Select unit' } ).nth( 3 ).selectOption( 'em' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:fsb/flexible-spacer {"heightLg":"0px","heightSm":"0em"} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:0px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:0em"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`
+		);
 	} );
 
 	test( 'should apply edged value correctly if the value is falsy and negative', async ( {
@@ -84,7 +112,11 @@ test.describe( 'Block', () => {
 		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 1 ).check();
 		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 2 ).check();
 		await page.getByRole( 'combobox', { name: 'Select unit' } ).nth( 3 ).selectOption( 'em' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:fsb/flexible-spacer {"heightLg":"0px","heightSm":"0em","isNegativeLg":true,"isNegativeMd":true,"isNegativeSm":true} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:0px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="margin-bottom:-100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:0em"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`
+		);
 	} );
 
 	test( 'should apply spacing presets to each device', async ( { editor, page } ) => {
@@ -99,7 +131,11 @@ test.describe( 'Block', () => {
 		await page.getByRole( 'slider', { name: 'Mobile height' } ).fill( '0' );
 		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 1 ).check();
 		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 2 ).check();
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:fsb/flexible-spacer {"heightLg":"var:preset|spacing|50","heightMd":"var:preset|spacing|30","heightSm":"0","isNegativeMd":true,"isNegativeSm":true} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:var(--wp--preset--spacing--50)"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="margin-bottom:calc(-1 * var(--wp--preset--spacing--30))"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:0px"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`
+		);
 	} );
 
 	test( 'should switch each device control to the preset view when all heights uses a preset', async ( {
@@ -216,7 +252,11 @@ test.describe( 'Block', () => {
 	test( 'should be converted to core spacer block', async ( { editor } ) => {
 		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
 		await editor.transformBlockTo( 'core/spacer' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:spacer -->
+<div style="height:100px" aria-hidden="true" class="wp-block-spacer"></div>
+<!-- /wp:spacer -->`
+		);
 	} );
 
 	test( 'should be converted to core spacer block by keeping desktop height', async ( {
@@ -229,7 +269,11 @@ test.describe( 'Block', () => {
 		await page.getByRole( 'combobox', { name: 'Select unit' } ).nth( 1 ).selectOption( 'em' );
 		await page.getByRole( 'switch', { name: 'Negative space' } ).nth( 0 ).check();
 		await editor.transformBlockTo( 'core/spacer' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:spacer {"height":"200em"} -->
+<div style="height:200em" aria-hidden="true" class="wp-block-spacer"></div>
+<!-- /wp:spacer -->`
+		);
 	} );
 
 	test( 'should be converted to core spacer block by keeping spacing preset', async ( {
@@ -244,7 +288,11 @@ test.describe( 'Block', () => {
 			},
 		} );
 		await editor.transformBlockTo( 'core/spacer' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:spacer {"height":"var:preset|spacing|50"} -->
+<div style="height:var(--wp--preset--spacing--50)" aria-hidden="true" class="wp-block-spacer"></div>
+<!-- /wp:spacer -->`
+		);
 	} );
 
 	test( 'should be converted to core spacer block by keeping metadata and CSS', async ( {
@@ -261,13 +309,21 @@ test.describe( 'Block', () => {
 			},
 		} );
 		await editor.transformBlockTo( 'core/spacer' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:spacer {"metadata":{"name":"My Spacer","blockVisibility":{"viewport":{"mobile":false}}},"style":{"css":"background: red;"}} -->
+<div style="height:100px" aria-hidden="true" class="wp-block-spacer has-custom-css"></div>
+<!-- /wp:spacer -->`
+		);
 	} );
 
 	test( 'should be converted to flexible spacer block', async ( { editor } ) => {
 		await editor.insertBlock( { name: 'core/spacer' } );
 		await editor.transformBlockTo( 'fsb/flexible-spacer' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:fsb/flexible-spacer -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:100px"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`
+		);
 	} );
 
 	test( 'should be converted to flexible spacer block by keeping height', async ( { editor } ) => {
@@ -276,7 +332,11 @@ test.describe( 'Block', () => {
 			attributes: { height: '200px' },
 		} );
 		await editor.transformBlockTo( 'fsb/flexible-spacer' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:fsb/flexible-spacer {"heightLg":"200px","heightMd":"200px","heightSm":"200px"} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:200px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:200px"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`
+		);
 	} );
 
 	test( 'should be converted to flexible spacer block by keeping spacing preset', async ( {
@@ -287,7 +347,11 @@ test.describe( 'Block', () => {
 			attributes: { height: 'var:preset|spacing|50' },
 		} );
 		await editor.transformBlockTo( 'fsb/flexible-spacer' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:fsb/flexible-spacer {"heightLg":"var:preset|spacing|50","heightMd":"var:preset|spacing|50","heightSm":"var:preset|spacing|50"} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:var(--wp--preset--spacing--50)"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:var(--wp--preset--spacing--50)"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:var(--wp--preset--spacing--50)"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`
+		);
 	} );
 
 	test( 'should be converted to flexible spacer block by keeping metadata and CSS', async ( {
@@ -304,6 +368,10 @@ test.describe( 'Block', () => {
 			},
 		} );
 		await editor.transformBlockTo( 'fsb/flexible-spacer' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:fsb/flexible-spacer {"metadata":{"name":"My Spacer","blockVisibility":{"viewport":{"mobile":false}}},"style":{"css":"background: red;"}} -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer has-custom-css"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:100px"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`
+		);
 	} );
 } );
