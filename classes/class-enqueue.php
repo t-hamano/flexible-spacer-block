@@ -70,23 +70,10 @@ class Enqueue {
 	 * @return array
 	 */
 	private function create_editor_config() {
-		$breakpoint_defaults    = array(
-			'md' => FSB_BREAKPOINT_MD,
-			'sm' => FSB_BREAKPOINT_SM,
-		);
-		$default_value_defaults = array(
-			'lg'      => FSB_DEFAULT_SPACER_HEIGHT,
-			'md'      => FSB_DEFAULT_SPACER_HEIGHT,
-			'sm'      => FSB_DEFAULT_SPACER_HEIGHT,
-			'lg_unit' => FSB_DEFAULT_SPACER_HEIGHT_UNIT,
-			'md_unit' => FSB_DEFAULT_SPACER_HEIGHT_UNIT,
-			'sm_unit' => FSB_DEFAULT_SPACER_HEIGHT_UNIT,
-		);
-
 		$config = array(
-			'breakpoint'   => get_option( 'flexible_spacer_block_breakpoint', $breakpoint_defaults ),
-			'defaultValue' => get_option( 'flexible_spacer_block_default_value', $default_value_defaults ),
-			'showBlock'    => get_option( 'flexible_spacer_block_show_block', false ),
+			'breakpoint'   => get_option( 'flexible_spacer_block_breakpoint' ),
+			'defaultValue' => get_option( 'flexible_spacer_block_default_value' ),
+			'showBlock'    => get_option( 'flexible_spacer_block_show_block' ),
 		);
 
 		return $config;
@@ -99,12 +86,7 @@ class Enqueue {
 	 */
 	private function create_inline_style( $is_editor = true ) {
 		// Generate media query breakpoints.
-		$defaults = array(
-			'md' => FSB_BREAKPOINT_MD,
-			'sm' => FSB_BREAKPOINT_SM,
-		);
-
-		$breakpoint = get_option( 'flexible_spacer_block_breakpoint', $defaults );
+		$breakpoint = get_option( 'flexible_spacer_block_breakpoint' );
 
 		/**
 		 * Filters media query breakpoints.
@@ -131,82 +113,25 @@ class Enqueue {
 		$breakpoint_md_min = $breakpoint['sm'] + 1;
 		$breakpoint_sm_max = $breakpoint['sm'];
 
+		// The editor only hides devices of spacers with responsive mode enabled.
+		$prefix = $is_editor ? '.fsb-flexible-spacer.is-responsive ' : '';
+		$lg     = "{$prefix}.fsb-flexible-spacer__device--lg";
+		$md     = "{$prefix}.fsb-flexible-spacer__device--md";
+		$sm     = "{$prefix}.fsb-flexible-spacer__device--sm";
+
 		$css = '';
 
-		if ( $is_editor ) {
-			// Editor inline styles.
-			$css .= <<<EOM
-			@media screen and (min-width:{$breakpoint_lg_min}px) {
-				.fsb-flexible-spacer.is-responsive .fsb-flexible-spacer__device--md,
-				.fsb-flexible-spacer.is-responsive .fsb-flexible-spacer__device--sm {
-					display: none;
-				}
-			}
-			EOM;
-
-			if ( $breakpoint['md'] !== $breakpoint['sm'] ) {
-				$css .= <<<EOM
-				@media screen and (min-width:{$breakpoint_md_min}px) and (max-width:{$breakpoint_md_max}px) {
-					.fsb-flexible-spacer.is-responsive .fsb-flexible-spacer__device--lg,
-					.fsb-flexible-spacer.is-responsive .fsb-flexible-spacer__device--sm {
-						display: none;
-					}
-				}
-				EOM;
-			}
-
-			$css .= <<<EOM
-			@media screen and (max-width:{$breakpoint_sm_max}px) {
-				.fsb-flexible-spacer.is-responsive .fsb-flexible-spacer__device--lg,
-				.fsb-flexible-spacer.is-responsive .fsb-flexible-spacer__device--md {
-					display: none;
-				}
-			}
-			EOM;
-		} else {
-			// Fonrt-end inline styles.
-			$css .= <<<EOM
-			.fsb-style-show-front {
-				position: relative;
-				z-index: 2;
-			}
-			EOM;
-
-			$css .= <<<EOM
-			@media screen and (min-width:{$breakpoint_lg_min}px) {
-				.fsb-flexible-spacer__device--md,
-				.fsb-flexible-spacer__device--sm {
-					display: none;
-				}
-			}
-			EOM;
-
-			if ( $breakpoint['md'] !== $breakpoint['sm'] ) {
-				$css .= <<<EOM
-				@media screen and (min-width:{$breakpoint_md_min}px) and (max-width:{$breakpoint_md_max}px) {
-					.fsb-flexible-spacer__device--lg,
-					.fsb-flexible-spacer__device--sm {
-						display: none;
-					}
-				}
-				EOM;
-			}
-
-			$css .= <<<EOM
-			@media screen and (max-width:{$breakpoint_sm_max}px) {
-				.fsb-flexible-spacer__device--lg,
-				.fsb-flexible-spacer__device--md {
-					display: none;
-				}
-			}
-			EOM;
+		if ( ! $is_editor ) {
+			$css .= '.fsb-style-show-front{position:relative;z-index:2;}';
 		}
 
-		// Minify the generated CSS.
-		$css = preg_replace( '/\s+/', ' ', $css );
-		$css = preg_replace( '/\s*([{};,])\s*/', '$1', $css );
-		$css = str_replace( ': ', ':', $css );
-		$css = trim( $css );
+		$css .= "@media screen and (min-width:{$breakpoint_lg_min}px){{$md},{$sm}{display:none;}}";
+
+		if ( $breakpoint['md'] !== $breakpoint['sm'] ) {
+			$css .= "@media screen and (min-width:{$breakpoint_md_min}px) and (max-width:{$breakpoint_md_max}px){{$lg},{$sm}{display:none;}}";
+		}
+
+		$css .= "@media screen and (max-width:{$breakpoint_sm_max}px){{$lg},{$md}{display:none;}}";
 
 		/**
 		 * Filters Generated inline styles.
@@ -219,5 +144,3 @@ class Enqueue {
 		return apply_filters( 'flexible_spacer_block_inline_css', $css, $is_editor );
 	}
 }
-
-new Enqueue();

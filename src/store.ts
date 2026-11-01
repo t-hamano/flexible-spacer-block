@@ -18,7 +18,7 @@ export const store = createReduxStore( 'flexible-spacer-block', {
 		if ( action.type === 'UPDATE_IS_RESPONSIVE' ) {
 			return {
 				...state,
-				isResponsive: ! state.isResponsive,
+				isResponsive: action.value,
 			};
 		}
 		return state;

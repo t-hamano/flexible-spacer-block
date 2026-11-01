@@ -29,7 +29,6 @@ import {
 } from '@wordpress/components';
 import { Link, Stack, SwitchControl } from '@wordpress/ui';
 import { useEffect, useState } from '@wordpress/element';
-import { View } from '@wordpress/primitives';
 import { Icon, settings, mobile, tablet, desktop } from '@wordpress/icons';
 import { addQueryArgs } from '@wordpress/url';
 import { useViewportMatch } from '@wordpress/compose';
@@ -49,7 +48,7 @@ import {
 	DEFAULT_SPACER_HEIGHT_UNIT,
 } from './constants';
 
-type HeightValue = string | number | undefined;
+type DeviceSlug = 'lg' | 'md' | 'sm';
 
 interface SpacerControl {
 	label: string;
@@ -143,7 +142,7 @@ function HeightControl( {
 
 interface SpacerDevice {
 	label: string;
-	slug: string;
+	slug: DeviceSlug;
 	icon: React.JSX.Element;
 	isNegative: boolean;
 	height: string;
@@ -165,9 +164,7 @@ export default function Edit( {
 	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
 	const heightAll = heightLg === heightMd && heightMd === heightSm ? heightLg : undefined;
 	const [ activeDevice, setActiveDevice ] = useState< string | undefined >( undefined );
-	const [ isResizingLg, setIsResizingLg ] = useState( false );
-	const [ isResizingMd, setIsResizingMd ] = useState( false );
-	const [ isResizingSm, setIsResizingSm ] = useState( false );
+	const [ resizingDevice, setResizingDevice ] = useState< DeviceSlug | undefined >( undefined );
 	// A control picks its preset or custom view when it mounts and never switches
 	// back on its own, so remount the counterpart when the other side writes a
 	// height.
@@ -179,6 +176,7 @@ export default function Edit( {
 	const isMobile = useViewportMatch( 'medium', '<' );
 
 	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
+	const breakpoints = [ fsbConf.breakpoint.sm, ...( isEnableMd ? [ fsbConf.breakpoint.md ] : [] ) ];
 	const isShowBlock = fsbConf.showBlock;
 	const defaultValue = fsbConf.defaultValue;
 
@@ -213,42 +211,11 @@ export default function Edit( {
 		} ),
 	} );
 
-	function getUpdatedHeight(
-		currentValue: HeightValue,
-		newValue: HeightValue
-	): string | undefined {
-		if ( ! newValue ) {
-			return undefined;
-		}
-
-		const [ newParsedQuantity, newParsedUnit ] = parseQuantityAndUnitFromRawValue( newValue );
-		const [ , currentParsedUnit ] = parseQuantityAndUnitFromRawValue( currentValue );
-		const newUnit = newParsedUnit || currentParsedUnit || 'px';
-		return newParsedQuantity + newUnit;
-	}
-
 	// Writing a device height leaves "All heights" on the view it mounted with,
 	// so remount it. Its own handler bumps the key in the other direction.
 	const setDeviceHeights = ( heights: Partial< BlockAttributes > ) => {
 		setAttributes( heights );
 		setAllSyncKey( ( key ) => key + 1 );
-	};
-
-	const onChangeHeightLg = ( currentValue: HeightValue, newValue: HeightValue ) => {
-		const updatedHeight = getUpdatedHeight( currentValue, newValue );
-		const newHeights = {
-			heightLg: updatedHeight,
-			...( ! isEnableMd && { heightMd: updatedHeight } ),
-		};
-		setDeviceHeights( newHeights );
-	};
-
-	const onChangeHeightMd = ( currentValue: HeightValue, newValue: HeightValue ) => {
-		setDeviceHeights( { heightMd: getUpdatedHeight( currentValue, newValue ) } );
-	};
-
-	const onChangeHeightSm = ( currentValue: HeightValue, newValue: HeightValue ) => {
-		setDeviceHeights( { heightSm: getUpdatedHeight( currentValue, newValue ) } );
 	};
 
 	const resetAll = () => {
@@ -332,48 +299,44 @@ export default function Edit( {
 	const SPACER_DEVICES: SpacerDevice[] = [
 		{
 			label: __( 'Mobile', 'flexible-spacer-block' ),
-			slug: 'sm',
+			slug: 'sm' as const,
 			icon: mobile,
 			isNegative: isNegativeSm,
-			height: heightSm || defaultValue.sm,
-			isResizing: isResizingSm,
-			setIsResizing: setIsResizingSm,
-			onChangeHeight: onChangeHeightSm,
+			height: heightSm || defaultSmValue,
 			enabled: true,
 		},
 		{
 			label: __( 'Tablet', 'flexible-spacer-block' ),
-			slug: 'md',
+			slug: 'md' as const,
 			icon: tablet,
 			isNegative: isNegativeMd,
-			height: heightMd || defaultValue.md,
-			isResizing: isResizingMd,
-			setIsResizing: setIsResizingMd,
-			onChangeHeight: onChangeHeightMd,
+			height: heightMd || defaultMdValue,
 			enabled: isEnableMd,
 		},
 		{
 			label: __( 'Desktop', 'flexible-spacer-block' ),
-			slug: 'lg',
+			slug: 'lg' as const,
 			icon: desktop,
 			isNegative: isNegativeLg,
-			height: heightLg || defaultValue.lg,
-			isResizing: isResizingLg,
-			setIsResizing: setIsResizingLg,
-			onChangeHeight: onChangeHeightLg,
+			height: heightLg || defaultLgValue,
 			enabled: true,
 		},
 	]
 		.filter( ( device ) => device.enabled )
-		.map( ( { enabled, setIsResizing, onChangeHeight, ...device } ) => ( {
-			...device,
-			onResizeStart: () => toggleSelection?.( false ),
-			onResize: () => setIsResizing( true ),
-			onResizeStop: ( _event: unknown, _direction: unknown, elt: HTMLElement ) => {
-				onChangeHeight( undefined, `${ elt.clientHeight }px` );
-				setIsResizing( false );
-			},
-		} ) );
+		.map( ( { enabled, ...device } ) => {
+			// Resizing writes the height through the same handler as the height control.
+			const control = SPACER_CONTROLS.find( ( { slug } ) => slug === device.slug );
+			return {
+				...device,
+				isResizing: resizingDevice === device.slug,
+				onResizeStart: () => toggleSelection?.( false ),
+				onResize: () => setResizingDevice( device.slug ),
+				onResizeStop: ( _event: unknown, _direction: unknown, elt: HTMLElement ) => {
+					control?.onChange( `${ elt.clientHeight }px` );
+					setResizingDevice( undefined );
+				},
+			};
+		} );
 
 	const dropdownMenuProps = ! isMobile
 		? {
@@ -443,7 +406,7 @@ export default function Edit( {
 					</Link>
 				</ToolsPanel>
 			</InspectorControls>
-			<View { ...blockProps }>
+			<div { ...blockProps }>
 				<Stack
 					direction="row"
 					gap="sm"
@@ -451,20 +414,9 @@ export default function Edit( {
 					className="fsb-flexible-spacer__inner"
 				>
 					<Stack direction="row" justify="center" className="fsb-flexible-spacer__breakpoint">
-						<Stack
-							direction="row"
-							align="center"
-							justify="center"
-							className="fsb-flexible-spacer__breakpoint-item"
-						>
-							{ sprintf(
-								/* translators: %d: Breakpoint width in pixels. */
-								__( '≤ %dpx <', 'flexible-spacer-block' ),
-								Number( fsbConf.breakpoint.sm )
-							) }
-						</Stack>
-						{ isEnableMd && (
+						{ breakpoints.map( ( breakpoint ) => (
 							<Stack
+								key={ breakpoint }
 								direction="row"
 								align="center"
 								justify="center"
@@ -473,14 +425,14 @@ export default function Edit( {
 								{ sprintf(
 									/* translators: %d: Breakpoint width in pixels. */
 									__( '≤ %dpx <', 'flexible-spacer-block' ),
-									Number( fsbConf.breakpoint.md )
+									Number( breakpoint )
 								) }
 							</Stack>
-						) }
+						) ) }
 					</Stack>
-					{ SPACER_DEVICES.map( ( device, index ) => (
+					{ SPACER_DEVICES.map( ( device ) => (
 						<div
-							key={ index }
+							key={ device.slug }
 							className={ `fsb-flexible-spacer__device fsb-flexible-spacer__device--${ device.slug }` }
 						>
 							<Stack
@@ -521,16 +473,12 @@ export default function Edit( {
 										position: 'bottom',
 										isVisible: device.isResizing,
 									} }
-								>
-									{ /* `children` is required by the type, but is not actually needed here, so render a dummy element. */ }
-									{ /* TODO: Remove this once https://github.com/WordPress/gutenberg/pull/79370 is merged. */ }
-									<></>
-								</ResizableBox>
+								/>
 							</div>
 						</div>
 					) ) }
 				</Stack>
-			</View>
+			</div>
 		</>
 	);
 }
