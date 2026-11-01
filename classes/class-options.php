@@ -137,14 +137,14 @@ class Options {
 			array(
 				'type'              => 'boolean',
 				'default'           => false,
-				'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => true,
 			)
 		);
 
 		// Values saved by older versions may lack some properties, such as the units added in 2.1.0.
-		add_filter( 'option_flexible_spacer_block_breakpoint', array( $this, 'fill_missing_values' ), 10, 2 );
-		add_filter( 'option_flexible_spacer_block_default_value', array( $this, 'fill_missing_values' ), 10, 2 );
+		add_filter( 'option_flexible_spacer_block_breakpoint', array( $this, 'merge_option_defaults' ), 10, 2 );
+		add_filter( 'option_flexible_spacer_block_default_value', array( $this, 'merge_option_defaults' ), 10, 2 );
 	}
 
 	/**
@@ -155,7 +155,7 @@ class Options {
 	 *
 	 * @return array
 	 */
-	public function fill_missing_values( $value, $option ) {
+	public function merge_option_defaults( $value, $option ) {
 		$default = get_registered_settings()[ $option ]['default'];
 
 		return is_array( $value ) ? array_merge( $default, $value ) : $default;
@@ -409,15 +409,5 @@ class Options {
 		if ( function_exists( 'add_settings_error' ) ) {
 			add_settings_error( $setting, $code, $message );
 		}
-	}
-
-	/**
-	 * Sanitizer (Chechbox)
-	 * @param string $value input value.
-	 *
-	 * @return boolean
-	 */
-	public static function sanitize_checkbox( $value ) {
-		return ! empty( $value );
 	}
 }
