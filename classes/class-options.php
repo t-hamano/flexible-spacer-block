@@ -79,14 +79,18 @@ class Options {
 
 		foreach ( $devices as $slug ) {
 			$default_value_default[ $slug ]    = FSB_DEFAULT_SPACER_HEIGHT;
-			$default_value_properties[ $slug ] = array( 'type' => 'integer' );
+			$default_value_properties[ $slug ] = array(
+				'type'     => 'integer',
+				'required' => true,
+			);
 		}
 
 		foreach ( $devices as $slug ) {
 			$default_value_default[ $slug . '_unit' ]    = FSB_DEFAULT_SPACER_HEIGHT_UNIT;
 			$default_value_properties[ $slug . '_unit' ] = array(
-				'type' => 'string',
-				'enum' => $this->units,
+				'type'     => 'string',
+				'enum'     => $this->units,
+				'required' => true,
 			);
 		}
 
@@ -103,8 +107,14 @@ class Options {
 				'show_in_rest'      => array(
 					'schema' => array(
 						'properties' => array(
-							'md' => array( 'type' => 'integer' ),
-							'sm' => array( 'type' => 'integer' ),
+							'md' => array(
+								'type'     => 'integer',
+								'required' => true,
+							),
+							'sm' => array(
+								'type'     => 'integer',
+								'required' => true,
+							),
 						),
 					),
 				),
