@@ -16,13 +16,13 @@ class Init {
 		add_filter( 'plugin_action_links_' . FSB_BASENAME, array( $this, 'add_action_links' ) );
 
 		// Load classes
-		$this->load_classes();
+		$this->init_classes();
 	}
 
 	/**
 	 * Load and instantiate classes
 	 */
-	private function load_classes() {
+	private function init_classes() {
 		require_once FSB_PATH . '/classes/class-enqueue.php';
 		require_once FSB_PATH . '/classes/class-options.php';
 
