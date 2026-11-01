@@ -67,9 +67,6 @@ class Options {
 
 	/**
 	 * Register settings
-	 *
-	 * Registering defaults lets get_option() return them when no value is saved,
-	 * and show_in_rest exposes the settings to the REST API settings endpoint.
 	 */
 	public function register_settings() {
 		$devices = array_keys( $this->get_devices() );
