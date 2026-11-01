@@ -328,7 +328,3 @@ class Options {
 		return isset( $value );
 	}
 }
-
-if ( is_admin() ) {
-	new Options();
-}

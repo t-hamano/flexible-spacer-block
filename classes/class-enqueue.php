@@ -177,5 +177,3 @@ class Enqueue {
 		return apply_filters( 'flexible_spacer_block_inline_css', $css, $is_editor );
 	}
 }
-
-new Enqueue();
