@@ -9,9 +9,6 @@ namespace Flexible_Spacer_Block;
 
 class Options {
 
-	private $breakpoints;
-	private $default_value;
-
 	private $units = array(
 		'px',
 		'%',
@@ -124,8 +121,6 @@ class Options {
 	 * Create option page
 	 */
 	public function create_options_page() {
-		$this->breakpoints   = get_option( 'flexible_spacer_block_breakpoint' );
-		$this->default_value = get_option( 'flexible_spacer_block_default_value' );
 		?>
 		<div class="wrap">
 			<h1><?php _e( 'Flexible Spacer Block', 'flexible-spacer-block' ); ?></h1>
@@ -150,9 +145,10 @@ class Options {
 	 * Display field (Responsive Setting)
 	 */
 	public function flexible_spacer_block_breakpoint_display_field() {
-		$breakpoints = array(
-			'sm' => $this->breakpoints['sm'] ?? FSB_BREAKPOINT_SM,
-			'md' => $this->breakpoints['md'] ?? FSB_BREAKPOINT_MD,
+		$saved_breakpoints = get_option( 'flexible_spacer_block_breakpoint' );
+		$breakpoints       = array(
+			'sm' => $saved_breakpoints['sm'] ?? FSB_BREAKPOINT_SM,
+			'md' => $saved_breakpoints['md'] ?? FSB_BREAKPOINT_MD,
 		);
 		?>
 		<div class="fsb-option-breakpoint">
@@ -183,12 +179,13 @@ class Options {
 	 * Display field (Default Values)
 	 */
 	public function flexible_spacer_block_default_value_display_field() {
+		$default_value = get_option( 'flexible_spacer_block_default_value' );
 		?>
 		<div class="fsb-option-default-values">
 			<?php foreach ( $this->get_devices() as $slug => $device ) : ?>
 				<?php
-				$value = $this->default_value[ $slug ] ?? FSB_DEFAULT_SPACER_HEIGHT;
-				$unit  = $this->default_value[ $slug . '_unit' ] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT;
+				$value = $default_value[ $slug ] ?? FSB_DEFAULT_SPACER_HEIGHT;
+				$unit  = $default_value[ $slug . '_unit' ] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT;
 				?>
 				<div class="fsb-option-default-values__col">
 					<div class="fsb-option-breakpoint__device">
