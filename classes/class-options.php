@@ -398,5 +398,3 @@ class Options {
 		return ! empty( $value );
 	}
 }
-
-new Options();
