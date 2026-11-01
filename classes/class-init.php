@@ -28,7 +28,6 @@ class Init {
 
 		new Enqueue();
 
-		// Settings are registered on every request so that their defaults apply on the front end and in the REST API.
 		new Options();
 	}
 
