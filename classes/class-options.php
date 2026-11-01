@@ -145,10 +145,10 @@ class Options {
 	 * Display field (Responsive Setting)
 	 */
 	public function flexible_spacer_block_breakpoint_display_field() {
-		$saved_breakpoints = get_option( 'flexible_spacer_block_breakpoint' );
-		$breakpoints       = array(
-			'sm' => $saved_breakpoints['sm'] ?? FSB_BREAKPOINT_SM,
-			'md' => $saved_breakpoints['md'] ?? FSB_BREAKPOINT_MD,
+		$breakpoints = get_option( 'flexible_spacer_block_breakpoint' );
+		$breakpoints = array(
+			'sm' => $breakpoints['sm'] ?? FSB_BREAKPOINT_SM,
+			'md' => $breakpoints['md'] ?? FSB_BREAKPOINT_MD,
 		);
 		?>
 		<div class="fsb-option-breakpoint">
@@ -231,7 +231,7 @@ class Options {
 	 * @return array
 	 */
 	public function sanitize_breakpoint( $input ) {
-		$current_breakpoints = get_option( 'flexible_spacer_block_breakpoint' );
+		$breakpoints = get_option( 'flexible_spacer_block_breakpoint' );
 
 		$new_input = array();
 
@@ -245,8 +245,8 @@ class Options {
 				__( 'Responsive Setting: Fill in both fields.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
-				'md' => $current_breakpoints['md'] ?? FSB_BREAKPOINT_MD,
-				'sm' => $current_breakpoints['sm'] ?? FSB_BREAKPOINT_SM,
+				'md' => $breakpoints['md'] ?? FSB_BREAKPOINT_MD,
+				'sm' => $breakpoints['sm'] ?? FSB_BREAKPOINT_SM,
 			);
 		} elseif ( $breakpoint_md < $breakpoint_sm ) {
 			add_settings_error(
@@ -255,8 +255,8 @@ class Options {
 				__( 'Responsive Setting: the screen width value in the left field must be equal to or smaller than the value in the right field.', 'flexible-spacer-block' )
 			);
 			$new_input = array(
-				'md' => $current_breakpoints['md'] ?? '',
-				'sm' => $current_breakpoints['sm'] ?? '',
+				'md' => $breakpoints['md'] ?? '',
+				'sm' => $breakpoints['sm'] ?? '',
 			);
 		} else {
 			$new_input = array(
@@ -274,7 +274,7 @@ class Options {
 	 * @return array
 	 */
 	public function sanitize_default_value( $input ) {
-		$current_default_value = get_option( 'flexible_spacer_block_default_value' );
+		$default_value = get_option( 'flexible_spacer_block_default_value' );
 
 		$devices   = array_keys( $this->get_devices() );
 		$values    = array();
@@ -302,13 +302,13 @@ class Options {
 
 		foreach ( $devices as $slug ) {
 			$new_input[ $slug ] = $has_empty
-				? ( $current_default_value[ $slug ] ?? FSB_DEFAULT_SPACER_HEIGHT )
+				? ( $default_value[ $slug ] ?? FSB_DEFAULT_SPACER_HEIGHT )
 				: min( max( $values[ $slug ], FSB_MIN_SPACER_HEIGHT ), FSB_MAX_SPACER_HEIGHT );
 		}
 
 		foreach ( $devices as $slug ) {
 			$new_input[ $slug . '_unit' ] = $has_empty
-				? ( $current_default_value[ $slug . '_unit' ] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT )
+				? ( $default_value[ $slug . '_unit' ] ?? FSB_DEFAULT_SPACER_HEIGHT_UNIT )
 				: $units[ $slug ];
 		}
 
