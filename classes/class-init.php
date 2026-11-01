@@ -20,11 +20,17 @@ class Init {
 	}
 
 	/**
-	 * Load classes
+	 * Load and instantiate classes
 	 */
 	private function load_classes() {
 		require_once FSB_PATH . '/classes/class-enqueue.php';
 		require_once FSB_PATH . '/classes/class-options.php';
+
+		new Enqueue();
+
+		if ( is_admin() ) {
+			new Options();
+		}
 	}
 
 	/**
