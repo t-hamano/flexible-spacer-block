@@ -16,6 +16,7 @@ import deprecated from './deprecated';
 import './store';
 import { blockIcon as icon } from './icons';
 import type { BlockAttributes } from './types';
+import './editor-style.scss';
 
 const { defaultValue } = fsbConf;
 

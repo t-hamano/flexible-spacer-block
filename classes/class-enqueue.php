@@ -13,53 +13,66 @@ class Enqueue {
 	 * Constructor
 	 */
 	public function __construct() {
-		// Enqueue front-end inline styles
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		// Register block
+		add_action( 'init', array( $this, 'register_block' ) );
 
+		// Enqueue block editor scripts
+		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_scripts' ) );
+
+		// Add block CSS to the editor style
 		if ( is_admin() ) {
-			add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_assets' ) );
+			add_action( 'enqueue_block_assets', array( $this, 'add_css_to_editor_style' ) );
 		}
+
+		// Add block CSS to the front-end style
+		add_action( 'wp_enqueue_scripts', array( $this, 'add_css_to_view_style' ) );
 
 		// Enqueue admin option page scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
-
-		// Register block
-		add_action( 'init', array( $this, 'register_block' ) );
 	}
 
 	/**
-	 * Enqueue front-end scripts
+	 * Register block
 	 */
-	public function enqueue_scripts() {
+	public function register_block() {
+		// Front-end styles have no file and are generated from the plugin settings.
 		wp_register_style( 'fsb-flexible-spacer-style', false );
-		wp_enqueue_style( 'fsb-flexible-spacer-style' );
-		wp_add_inline_style( 'fsb-flexible-spacer-style', $this->create_inline_style( false ) );
+
+		register_block_type( FSB_PATH . '/build' );
 	}
 
 	/**
-	 * Enqueue block assets
+	 * Enqueue block editor scripts
 	 */
-	public function enqueue_block_assets() {
-		$asset_file = include FSB_PATH . '/build/index.asset.php';
-
-		wp_register_style(
-			'fsb-flexible-spacer-editor',
-			FSB_URL . '/build/editor-style.css',
-			array(),
-			filemtime( FSB_PATH . '/build/editor-style.css' )
+	public function enqueue_editor_scripts() {
+		$config = array(
+			'breakpoint'   => get_option( 'flexible_spacer_block_breakpoint' ),
+			'showBlock'    => get_option( 'flexible_spacer_block_show_block' ),
+			// Block deprecations read this to reproduce the content saved by older
+			// versions, so do not change its shape.
+			'defaultValue' => get_option( 'flexible_spacer_block_default_value' ),
 		);
 
-		wp_add_inline_style( 'fsb-flexible-spacer-editor', $this->create_inline_style( true ) );
-
-		wp_register_script(
-			'fsb-flexible-spacer-editor',
-			FSB_URL . '/build/index.js',
-			$asset_file['dependencies'],
-			filemtime( FSB_PATH . '/build/index.js' )
+		$inline_script = sprintf(
+			'window.fsbConf = %s;',
+			wp_json_encode( $config )
 		);
 
-		wp_localize_script( 'fsb-flexible-spacer-editor', 'fsbConf', $this->create_editor_config() );
-		wp_set_script_translations( 'fsb-flexible-spacer-editor', 'flexible-spacer-block' );
+		wp_add_inline_script( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorScript' ), $inline_script, 'before' );
+	}
+
+	/**
+	 * Add block CSS to the editor style
+	 */
+	public function add_css_to_editor_style() {
+		wp_add_inline_style( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorStyle' ), $this->create_inline_style( true ) );
+	}
+
+	/**
+	 * Add block CSS to the front-end style
+	 */
+	public function add_css_to_view_style() {
+		wp_add_inline_style( 'fsb-flexible-spacer-style', $this->create_inline_style( false ) );
 	}
 
 	/**
@@ -70,30 +83,6 @@ class Enqueue {
 			return;
 		}
 		wp_enqueue_style( 'flexible-spacer-block-option', FSB_URL . '/build/admin-style.css', array( 'wp-theme' ) );
-	}
-
-	/**
-	 * Register block
-	 */
-	public function register_block() {
-		register_block_type( FSB_PATH . '/build' );
-	}
-
-	/**
-	 * Generate settings to be passed to the block editor
-	 *
-	 * @return array
-	 */
-	private function create_editor_config() {
-		$config = array(
-			'breakpoint'   => get_option( 'flexible_spacer_block_breakpoint' ),
-			'showBlock'    => get_option( 'flexible_spacer_block_show_block' ),
-			// Block deprecations read this to reproduce the content saved by older
-			// versions, so do not change its shape.
-			'defaultValue' => get_option( 'flexible_spacer_block_default_value' ),
-		);
-
-		return $config;
 	}
 
 	/**
