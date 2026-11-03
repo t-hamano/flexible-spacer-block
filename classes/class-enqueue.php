@@ -51,7 +51,12 @@ class Enqueue {
 	 * Add settings to the editor script
 	 */
 	public function add_config_to_editor_script() {
-		wp_localize_script( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorScript' ), 'fsbConf', $this->create_editor_config() );
+		$inline_script = sprintf(
+			'window.fsbConf = %s;',
+			wp_json_encode( $this->create_editor_config() )
+		);
+
+		wp_add_inline_script( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorScript' ), $inline_script, 'before' );
 	}
 
 	/**
