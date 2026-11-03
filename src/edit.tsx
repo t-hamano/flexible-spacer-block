@@ -177,8 +177,7 @@ export default function Edit( {
 
 	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
 	const breakpoints = [ fsbConf.breakpoint.sm, ...( isEnableMd ? [ fsbConf.breakpoint.md ] : [] ) ];
-	const isShowBlock = fsbConf.showBlock;
-	const { defaultValue } = fsbConf;
+	const { showBlock: isShowBlock, defaultValue } = fsbConf;
 
 	const defaultLgValue = defaultValue.lg + defaultValue.lg_unit;
 	const defaultMdValue = defaultValue.md + defaultValue.md_unit;
