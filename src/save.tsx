@@ -19,8 +19,6 @@ import { DEFAULT_SPACER_HEIGHT, DEFAULT_SPACER_HEIGHT_UNIT } from './constants';
 export default function save( { attributes, className }: BlockSaveProps< BlockAttributes > ) {
 	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
 
-	// Use the block defaults rather than the settings page values, so that the
-	// output does not change when the settings change.
 	const styleLg = getStyleObject(
 		heightLg,
 		isNegativeLg,
