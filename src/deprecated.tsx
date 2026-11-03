@@ -13,6 +13,7 @@ import type { BlockSaveProps } from '@wordpress/blocks';
  * Internal dependencies
  */
 import type { BlockAttributes } from './types';
+import { getStyleObject } from './utils';
 
 type V1Attributes = {
 	heightLg: number;
@@ -91,4 +92,74 @@ const v1 = {
 	},
 };
 
-export default [ v1 ];
+// An empty height was not saved, so it was parsed as `100px` on reload, while
+// the output used the default value from the settings page. Parse omitted
+// heights as empty to recover such content.
+const v2 = {
+	attributes: {
+		heightLg: {
+			type: 'string',
+		},
+		heightMd: {
+			type: 'string',
+		},
+		heightSm: {
+			type: 'string',
+		},
+		isNegativeLg: {
+			type: 'boolean',
+			default: false,
+		},
+		isNegativeMd: {
+			type: 'boolean',
+			default: false,
+		},
+		isNegativeSm: {
+			type: 'boolean',
+			default: false,
+		},
+	},
+	migrate( attributes: BlockAttributes ): BlockAttributes {
+		const { heightLg, heightMd, heightSm } = attributes;
+		const defaultValue = fsbConf.defaultValue;
+		// Keep the height that was output as an explicit value.
+		return {
+			...attributes,
+			heightLg: heightLg || defaultValue.lg + defaultValue.lg_unit,
+			heightMd: heightMd || defaultValue.md + defaultValue.md_unit,
+			heightSm: heightSm || defaultValue.sm + defaultValue.sm_unit,
+		};
+	},
+	save( { attributes, className }: BlockSaveProps< BlockAttributes > ) {
+		const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
+		const defaultValue = fsbConf.defaultValue;
+
+		const styleLg = getStyleObject( heightLg, isNegativeLg, defaultValue.lg, defaultValue.lg_unit );
+		const styleMd = getStyleObject( heightMd, isNegativeMd, defaultValue.md, defaultValue.md_unit );
+		const styleSm = getStyleObject( heightSm, isNegativeSm, defaultValue.sm, defaultValue.sm_unit );
+
+		const blockProps = useBlockProps.save( {
+			'aria-hidden': true,
+			className: clsx( 'fsb-flexible-spacer', className ),
+		} );
+
+		return (
+			<div { ...blockProps }>
+				<div
+					className="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg"
+					style={ styleLg }
+				/>
+				<div
+					className="fsb-flexible-spacer__device fsb-flexible-spacer__device--md"
+					style={ styleMd }
+				/>
+				<div
+					className="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm"
+					style={ styleSm }
+				/>
+			</div>
+		);
+	},
+};
+
+export default [ v2, v1 ];
