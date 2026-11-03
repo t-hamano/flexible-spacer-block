@@ -19,13 +19,13 @@ class Enqueue {
 		// Enqueue block editor scripts
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_scripts' ) );
 
+		// Add block CSS to the editor style
 		if ( is_admin() ) {
-			// Add block CSS to the editor style
 			add_action( 'enqueue_block_assets', array( $this, 'add_css_to_editor_style' ) );
 		}
 
-		// Enqueue front-end inline styles
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		// Add block CSS to the front-end style
+		add_action( 'wp_enqueue_scripts', array( $this, 'add_css_to_view_style' ) );
 
 		// Enqueue admin option page scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
@@ -35,6 +35,9 @@ class Enqueue {
 	 * Register block
 	 */
 	public function register_block() {
+		// Front-end styles have no file and are generated from the plugin settings.
+		wp_register_style( 'fsb-flexible-spacer-style', false );
+
 		register_block_type( FSB_PATH . '/build/js' );
 	}
 
@@ -66,11 +69,9 @@ class Enqueue {
 	}
 
 	/**
-	 * Enqueue front-end scripts
+	 * Add block CSS to the front-end style
 	 */
-	public function enqueue_scripts() {
-		wp_register_style( 'fsb-flexible-spacer-style', false );
-		wp_enqueue_style( 'fsb-flexible-spacer-style' );
+	public function add_css_to_view_style() {
 		wp_add_inline_style( 'fsb-flexible-spacer-style', $this->create_inline_style( false ) );
 	}
 
