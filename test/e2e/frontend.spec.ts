@@ -85,4 +85,19 @@ test.describe( 'Front-end', () => {
 		await expectDisplayedDevice( page, 801, 'lg' );
 		await expectDisplayedDevice( page, 800, 'sm' );
 	} );
+
+	// Block themes load block styles only on pages that contain the block.
+	test( 'should not output the styles on pages without the block', async ( {
+		page,
+		requestUtils,
+	} ) => {
+		const post = await requestUtils.createPost( {
+			content: '<!-- wp:paragraph --><p>Paragraph</p><!-- /wp:paragraph -->',
+			status: 'publish',
+			date_gmt: new Date().toISOString(),
+		} );
+		await page.goto( post.link );
+
+		await expect( page.locator( '#fsb-flexible-spacer-style-inline-css' ) ).toHaveCount( 0 );
+	} );
 } );
