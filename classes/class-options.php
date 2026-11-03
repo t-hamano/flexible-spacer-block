@@ -254,6 +254,7 @@ class Options {
 				</div>
 			<?php endforeach; ?>
 		</div>
+		<p class="description"><?php _e( 'These values are applied when a new block is inserted. They do not affect blocks that already exist in your content.', 'flexible-spacer-block' ); ?></p>
 		<?php
 	}
 

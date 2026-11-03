@@ -53,7 +53,12 @@ test.describe( 'Default value', () => {
 		} );
 
 		await admin.editPost( post.id );
-		await editor.insertBlock( { name: 'fsb/flexible-spacer' } );
+		// The default values are applied by the default block variation, which is used by
+		// the inserter but not by `createBlock()`, so insert the block through the UI.
+		await editor.insertBlock( { name: 'core/paragraph' } );
+		await page.keyboard.type( '/flexible spacer' );
+		await expect( page.getByRole( 'option', { name: 'Flexible Spacer' } ) ).toBeVisible();
+		await page.keyboard.press( 'Enter' );
 
 		await expect
 			.poll( async () => ( await editor.getBlocks() ).map( ( block ) => block.attributes ) )
@@ -67,5 +72,38 @@ test.describe( 'Default value', () => {
 		await expect( page.getByRole( 'spinbutton', { name: 'Desktop height' } ) ).toHaveValue( '200' );
 		await expect( page.getByRole( 'spinbutton', { name: 'Tablet height' } ) ).toHaveValue( '10' );
 		await expect( page.getByRole( 'spinbutton', { name: 'Mobile height' } ) ).toHaveValue( '50' );
+	} );
+
+	test( 'should not change existing blocks with all heights at 100px', async ( {
+		admin,
+		editor,
+		requestUtils,
+	} ) => {
+		const existingBlock = `<!-- wp:fsb/flexible-spacer -->
+<div aria-hidden="true" class="wp-block-fsb-flexible-spacer fsb-flexible-spacer"><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--md" style="height:100px"></div><div class="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm" style="height:100px"></div></div>
+<!-- /wp:fsb/flexible-spacer -->`;
+		const post = await requestUtils.createPost( {
+			content: existingBlock,
+			status: 'draft',
+			date_gmt: new Date().toISOString(),
+		} );
+
+		await saveDefaultValues( admin, {
+			sm: [ '50', '%' ],
+			md: [ '10', 'em' ],
+			lg: [ '200', 'px' ],
+		} );
+
+		await admin.editPost( post.id );
+
+		await expect
+			.poll( () => editor.getBlocks( { full: true } ) )
+			.toMatchObject( [
+				{
+					isValid: true,
+					attributes: { heightLg: '100px', heightMd: '100px', heightSm: '100px' },
+				},
+			] );
+		expect( await editor.getEditedPostContent() ).toBe( existingBlock );
 	} );
 } );
