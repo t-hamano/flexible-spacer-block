@@ -24,20 +24,23 @@ type V1Attributes = {
 	isNegativeSm: boolean;
 };
 
-// Add unit support
-const v1 = {
+// Stop depending on the default values from the settings page in the save
+// function. This version is the same as v2 except that omitted heights are parsed
+// as `100px`, as in the block.json of that time. It recovers content that was
+// valid at that time, such as a height saved as an empty string.
+const v3 = {
 	attributes: {
 		heightLg: {
-			type: 'number',
-			default: 100,
+			type: 'string',
+			default: '100px',
 		},
 		heightMd: {
-			type: 'number',
-			default: 100,
+			type: 'string',
+			default: '100px',
 		},
 		heightSm: {
-			type: 'number',
-			default: 100,
+			type: 'string',
+			default: '100px',
 		},
 		isNegativeLg: {
 			type: 'boolean',
@@ -52,21 +55,23 @@ const v1 = {
 			default: false,
 		},
 	},
-	migrate( attributes: V1Attributes ): BlockAttributes {
+	migrate( attributes: BlockAttributes ): BlockAttributes {
 		const { heightLg, heightMd, heightSm } = attributes;
+		const { defaultValue } = fsbConf;
 		return {
 			...attributes,
-			heightLg: heightLg !== undefined ? `${ heightLg }px` : undefined,
-			heightMd: heightMd !== undefined ? `${ heightMd }px` : undefined,
-			heightSm: heightSm !== undefined ? `${ heightSm }px` : undefined,
+			heightLg: heightLg || defaultValue.lg + defaultValue.lg_unit,
+			heightMd: heightMd || defaultValue.md + defaultValue.md_unit,
+			heightSm: heightSm || defaultValue.sm + defaultValue.sm_unit,
 		};
 	},
-	save( { attributes, className }: BlockSaveProps< V1Attributes > ) {
+	save( { attributes, className }: BlockSaveProps< BlockAttributes > ) {
 		const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
+		const { defaultValue } = fsbConf;
 
-		const styleLg = isNegativeLg ? { marginBottom: -heightLg } : { height: heightLg };
-		const styleMd = isNegativeMd ? { marginBottom: -heightMd } : { height: heightMd };
-		const styleSm = isNegativeSm ? { marginBottom: -heightSm } : { height: heightSm };
+		const styleLg = getStyleObject( heightLg, isNegativeLg, defaultValue.lg, defaultValue.lg_unit );
+		const styleMd = getStyleObject( heightMd, isNegativeMd, defaultValue.md, defaultValue.md_unit );
+		const styleSm = getStyleObject( heightSm, isNegativeSm, defaultValue.sm, defaultValue.sm_unit );
 
 		const blockProps = useBlockProps.save( {
 			'aria-hidden': true,
@@ -164,26 +169,71 @@ const v2 = {
 	},
 };
 
-// Stop depending on the default values from the settings page in the save
-// function. This version is the same as v2 except that omitted heights are parsed
-// as `100px`, as in the block.json of that time. It recovers content that was
-// valid at that time, such as a height saved as an empty string.
-const v3 = {
-	...v2,
+// Add unit support
+const v1 = {
 	attributes: {
-		...v2.attributes,
 		heightLg: {
-			type: 'string',
-			default: '100px',
+			type: 'number',
+			default: 100,
 		},
 		heightMd: {
-			type: 'string',
-			default: '100px',
+			type: 'number',
+			default: 100,
 		},
 		heightSm: {
-			type: 'string',
-			default: '100px',
+			type: 'number',
+			default: 100,
 		},
+		isNegativeLg: {
+			type: 'boolean',
+			default: false,
+		},
+		isNegativeMd: {
+			type: 'boolean',
+			default: false,
+		},
+		isNegativeSm: {
+			type: 'boolean',
+			default: false,
+		},
+	},
+	migrate( attributes: V1Attributes ): BlockAttributes {
+		const { heightLg, heightMd, heightSm } = attributes;
+		return {
+			...attributes,
+			heightLg: heightLg !== undefined ? `${ heightLg }px` : undefined,
+			heightMd: heightMd !== undefined ? `${ heightMd }px` : undefined,
+			heightSm: heightSm !== undefined ? `${ heightSm }px` : undefined,
+		};
+	},
+	save( { attributes, className }: BlockSaveProps< V1Attributes > ) {
+		const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
+
+		const styleLg = isNegativeLg ? { marginBottom: -heightLg } : { height: heightLg };
+		const styleMd = isNegativeMd ? { marginBottom: -heightMd } : { height: heightMd };
+		const styleSm = isNegativeSm ? { marginBottom: -heightSm } : { height: heightSm };
+
+		const blockProps = useBlockProps.save( {
+			'aria-hidden': true,
+			className: clsx( 'fsb-flexible-spacer', className ),
+		} );
+
+		return (
+			<div { ...blockProps }>
+				<div
+					className="fsb-flexible-spacer__device fsb-flexible-spacer__device--lg"
+					style={ styleLg }
+				/>
+				<div
+					className="fsb-flexible-spacer__device fsb-flexible-spacer__device--md"
+					style={ styleMd }
+				/>
+				<div
+					className="fsb-flexible-spacer__device fsb-flexible-spacer__device--sm"
+					style={ styleSm }
+				/>
+			</div>
+		);
 	},
 };
 
