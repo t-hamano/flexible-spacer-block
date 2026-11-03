@@ -46,8 +46,8 @@ class Enqueue {
 	 */
 	public function enqueue_editor_scripts() {
 		$config = array(
-			'breakpoint'   => get_option( 'flexible_spacer_block_breakpoint' ),
-			'showBlock'    => get_option( 'flexible_spacer_block_show_block' ),
+			'breakpoint'   => $this->get_breakpoint( true ),
+			'showBlock'    => (bool) get_option( 'flexible_spacer_block_show_block' ),
 			// Block deprecations read this to reproduce the content saved by older
 			// versions, so do not change its shape.
 			'defaultValue' => get_option( 'flexible_spacer_block_default_value' ),
@@ -86,12 +86,13 @@ class Enqueue {
 	}
 
 	/**
-	 * Generate inline styles to be passed to the block editor and front-end
+	 * Get media query breakpoints
 	 *
-	 * @return string
+	 * @param bool $is_editor Whether it is rendered on the editor.
+	 *
+	 * @return array{md: int, sm: int}
 	 */
-	private function create_inline_style( $is_editor = true ) {
-		// Generate media query breakpoints.
+	private function get_breakpoint( $is_editor ) {
 		$breakpoint = get_option( 'flexible_spacer_block_breakpoint' );
 
 		/**
@@ -113,6 +114,17 @@ class Enqueue {
 			'md' => absint( $breakpoint['md'] ?? FSB_BREAKPOINT_MD ),
 			'sm' => absint( $breakpoint['sm'] ?? FSB_BREAKPOINT_SM ),
 		);
+
+		return $breakpoint;
+	}
+
+	/**
+	 * Generate inline styles to be passed to the block editor and front-end
+	 *
+	 * @return string
+	 */
+	private function create_inline_style( $is_editor = true ) {
+		$breakpoint = $this->get_breakpoint( $is_editor );
 
 		$breakpoint_lg_min = $breakpoint['md'] + 1;
 		$breakpoint_md_max = $breakpoint['md'];
