@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { test, expect, type Admin, type Editor } from '@wordpress/e2e-test-utils-playwright';
+import { test, expect, type Admin } from '@wordpress/e2e-test-utils-playwright';
 
 test.describe( 'Default value', () => {
 	const submitButton = 'input[id="submit"]';
@@ -31,16 +31,6 @@ test.describe( 'Default value', () => {
 		} );
 	} );
 
-	// The default values are applied by the default block variation, which is used by
-	// the inserter but not by `createBlock()`, so insert the block through the UI.
-	async function insertBlockFromInserter( editor: Editor ) {
-		const { page } = editor;
-		await editor.insertBlock( { name: 'core/paragraph' } );
-		await page.keyboard.type( '/flexible spacer' );
-		await expect( page.getByRole( 'option', { name: 'Flexible Spacer' } ) ).toBeVisible();
-		await page.keyboard.press( 'Enter' );
-	}
-
 	test( 'should be applied to a new block without changing existing blocks', async ( {
 		admin,
 		editor,
@@ -63,7 +53,12 @@ test.describe( 'Default value', () => {
 		} );
 
 		await admin.editPost( post.id );
-		await insertBlockFromInserter( editor );
+		// The default values are applied by the default block variation, which is used by
+		// the inserter but not by `createBlock()`, so insert the block through the UI.
+		await editor.insertBlock( { name: 'core/paragraph' } );
+		await page.keyboard.type( '/flexible spacer' );
+		await expect( page.getByRole( 'option', { name: 'Flexible Spacer' } ) ).toBeVisible();
+		await page.keyboard.press( 'Enter' );
 
 		await expect
 			.poll( async () => ( await editor.getBlocks() ).map( ( block ) => block.attributes ) )
