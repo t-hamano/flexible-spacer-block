@@ -51,9 +51,17 @@ class Enqueue {
 	 * Add settings to the editor script
 	 */
 	public function add_config_to_editor_script() {
+		$config = array(
+			'breakpoint'   => get_option( 'flexible_spacer_block_breakpoint' ),
+			'showBlock'    => get_option( 'flexible_spacer_block_show_block' ),
+			// Block deprecations read this to reproduce the content saved by older
+			// versions, so do not change its shape.
+			'defaultValue' => get_option( 'flexible_spacer_block_default_value' ),
+		);
+
 		$inline_script = sprintf(
 			'window.fsbConf = %s;',
-			wp_json_encode( $this->create_editor_config() )
+			wp_json_encode( $config )
 		);
 
 		wp_add_inline_script( generate_block_asset_handle( 'fsb/flexible-spacer', 'editorScript' ), $inline_script, 'before' );
@@ -74,23 +82,6 @@ class Enqueue {
 	 */
 	public function register_block() {
 		register_block_type( FSB_PATH . '/build/js' );
-	}
-
-	/**
-	 * Generate settings to be passed to the block editor
-	 *
-	 * @return array
-	 */
-	private function create_editor_config() {
-		$config = array(
-			'breakpoint'   => get_option( 'flexible_spacer_block_breakpoint' ),
-			'showBlock'    => get_option( 'flexible_spacer_block_show_block' ),
-			// Block deprecations read this to reproduce the content saved by older
-			// versions, so do not change its shape.
-			'defaultValue' => get_option( 'flexible_spacer_block_default_value' ),
-		);
-
-		return $config;
 	}
 
 	/**
