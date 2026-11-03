@@ -332,12 +332,12 @@ class Options {
 		$has_empty = false;
 
 		foreach ( $devices as $slug ) {
-			$values[ $slug ] = isset( $input[ $slug ] ) ? absint( $input[ $slug ] ) : '';
-			$units[ $slug ]  = isset( $input[ $slug . '_unit' ] ) && in_array( $input[ $slug . '_unit' ], $this->units, true ) ? $input[ $slug . '_unit' ] : 'px';
-
-			if ( 0 === $values[ $slug ] ) {
+			if ( ! isset( $input[ $slug ] ) || '' === trim( (string) $input[ $slug ] ) ) {
 				$has_empty = true;
 			}
+
+			$values[ $slug ] = isset( $input[ $slug ] ) ? absint( $input[ $slug ] ) : 0;
+			$units[ $slug ]  = isset( $input[ $slug . '_unit' ] ) && in_array( $input[ $slug . '_unit' ], $this->units, true ) ? $input[ $slug . '_unit' ] : 'px';
 		}
 
 		if ( $has_empty ) {

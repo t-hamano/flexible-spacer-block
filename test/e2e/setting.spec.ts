@@ -81,6 +81,33 @@ test.describe( 'Setting', () => {
 		await expect( page.locator( mdUnitSelector ) ).toHaveValue( 'em' );
 	} );
 
+	test( 'default values should accept 0', async ( { admin, page } ) => {
+		await admin.visitAdminPage( '/options-general.php', `page=flexible-spacer-block-option` );
+		for ( const device of [ 'sm', 'md', 'lg' ] ) {
+			await page
+				.locator( `input[name="flexible_spacer_block_default_value[${ device }]"]` )
+				.fill( '0' );
+		}
+		await page.locator( submitButton ).click();
+
+		await expect( page.locator( '#setting-error-settings_updated' ) ).toBeVisible();
+		for ( const device of [ 'sm', 'md', 'lg' ] ) {
+			await expect(
+				page.locator( `input[name="flexible_spacer_block_default_value[${ device }]"]` )
+			).toHaveValue( '0' );
+		}
+	} );
+
+	test( 'default values should show error if a field is empty', async ( { admin, page } ) => {
+		await admin.visitAdminPage( '/options-general.php', `page=flexible-spacer-block-option` );
+		await page.locator( 'input[name="flexible_spacer_block_default_value[sm]"]' ).fill( '' );
+		await page.locator( submitButton ).click();
+
+		await expect(
+			page.locator( '#setting-error-flexible-spacer-block-default-values-null' )
+		).toBeVisible();
+	} );
+
 	test( 'block editor should be toggled', async ( { admin, page } ) => {
 		const selector = `input[name="flexible_spacer_block_show_block"]`;
 		await admin.visitAdminPage( '/options-general.php', `page=flexible-spacer-block-option` );
