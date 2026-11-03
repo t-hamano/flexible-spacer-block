@@ -119,10 +119,12 @@ const v2 = {
 			default: false,
 		},
 	},
+	// The save function of this version outputs an empty height with the default
+	// value from the settings page (`fsbConf.defaultValue`). Write that value back
+	// to the empty height so that the block keeps the height it was shown with.
 	migrate( attributes: BlockAttributes ): BlockAttributes {
 		const { heightLg, heightMd, heightSm } = attributes;
 		const defaultValue = fsbConf.defaultValue;
-		// Keep the height that was output as an explicit value.
 		return {
 			...attributes,
 			heightLg: heightLg || defaultValue.lg + defaultValue.lg_unit,
