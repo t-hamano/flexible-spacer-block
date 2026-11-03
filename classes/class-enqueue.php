@@ -87,6 +87,8 @@ class Enqueue {
 	private function create_editor_config() {
 		$config = array(
 			'breakpoint'   => get_option( 'flexible_spacer_block_breakpoint' ),
+			// Block deprecations read this to reproduce the content saved by older
+			// versions, so do not change its shape.
 			'defaultValue' => get_option( 'flexible_spacer_block_default_value' ),
 			'showBlock'    => get_option( 'flexible_spacer_block_show_block' ),
 		);

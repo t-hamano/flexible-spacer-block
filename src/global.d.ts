@@ -3,6 +3,8 @@ interface FsbConf {
 		md: string;
 		sm: string;
 	};
+	// Block deprecations read this to reproduce the content saved by older
+	// versions, so do not change its shape.
 	defaultValue: {
 		lg: string;
 		md: string;
