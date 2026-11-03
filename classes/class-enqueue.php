@@ -48,6 +48,10 @@ class Enqueue {
 		$config = array(
 			'breakpoint'   => get_option( 'flexible_spacer_block_breakpoint' ),
 			'showBlock'    => get_option( 'flexible_spacer_block_show_block' ),
+			'heightRange'  => array(
+				'min' => FSB_MIN_SPACER_HEIGHT,
+				'max' => FSB_MAX_SPACER_HEIGHT,
+			),
 			// Block deprecations read this to reproduce the content saved by older
 			// versions, so do not change its shape.
 			'defaultValue' => get_option( 'flexible_spacer_block_default_value' ),

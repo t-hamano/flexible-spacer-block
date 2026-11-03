@@ -4,6 +4,10 @@ interface FsbConf {
 		sm: string;
 	};
 	showBlock: boolean;
+	heightRange: {
+		min: number;
+		max: number;
+	};
 	// Block deprecations read this to reproduce the content saved by older
 	// versions, so do not change its shape.
 	defaultValue: {

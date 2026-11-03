@@ -41,12 +41,7 @@ import { responsive } from './icons';
 import { store } from './store';
 import type { BlockAttributes } from './types';
 
-import {
-	MIN_SPACER_HEIGHT,
-	MAX_SPACER_HEIGHT,
-	DEFAULT_SPACER_HEIGHT,
-	DEFAULT_SPACER_HEIGHT_UNIT,
-} from './constants';
+import { DEFAULT_SPACER_HEIGHT, DEFAULT_SPACER_HEIGHT_UNIT } from './constants';
 
 type DeviceSlug = 'lg' | 'md' | 'sm';
 
@@ -101,8 +96,8 @@ function HeightControl( {
 				<RangeControl
 					label={ label }
 					beforeIcon={ <Icon icon={ icon } /> }
-					min={ MIN_SPACER_HEIGHT }
-					max={ MAX_SPACER_HEIGHT }
+					min={ fsbConf.heightRange.min }
+					max={ fsbConf.heightRange.max }
 					value={ parsedQuantity }
 					onChange={ ( next ) =>
 						onChange(
@@ -437,7 +432,7 @@ export default function Edit( {
 										'is-negative': !! device.isNegative,
 										'is-active': activeDevice === device.slug,
 									} ) }
-									minHeight={ MIN_SPACER_HEIGHT }
+									minHeight={ fsbConf.heightRange.min }
 									enable={ {
 										top: false,
 										right: false,
