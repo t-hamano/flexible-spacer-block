@@ -20,6 +20,7 @@
 composer.json
 composer.lock
 eslint.config.js
+webpack.config.js
 package-lock.json
 package.json
 phpcs.xml.dist
