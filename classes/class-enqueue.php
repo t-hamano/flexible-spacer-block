@@ -38,7 +38,7 @@ class Enqueue {
 		// Front-end styles have no file and are generated from the plugin settings.
 		wp_register_style( 'fsb-flexible-spacer-style', false );
 
-		register_block_type( FSB_PATH . '/build/js' );
+		register_block_type( FSB_PATH . '/build' );
 	}
 
 	/**
@@ -82,7 +82,7 @@ class Enqueue {
 		if ( ! str_contains( $hook, 'flexible-spacer-block' ) ) {
 			return;
 		}
-		wp_enqueue_style( 'flexible-spacer-block-option', FSB_URL . '/build/css/admin-style.css', array( 'wp-theme' ) );
+		wp_enqueue_style( 'flexible-spacer-block-option', FSB_URL . '/build/admin-style.css', array( 'wp-theme' ) );
 	}
 
 	/**
