@@ -3,6 +3,7 @@ interface FsbConf {
 		md: string;
 		sm: string;
 	};
+	showBlock: boolean;
 	// Block deprecations read this to reproduce the content saved by older
 	// versions, so do not change its shape.
 	defaultValue: {
@@ -13,7 +14,6 @@ interface FsbConf {
 		md_unit: string;
 		sm_unit: string;
 	};
-	showBlock: boolean;
 }
 
 declare const fsbConf: FsbConf;
