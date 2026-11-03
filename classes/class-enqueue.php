@@ -40,22 +40,22 @@ class Enqueue {
 	 * Enqueue block assets
 	 */
 	public function enqueue_block_assets() {
-		$asset_file = include FSB_PATH . '/build/js/index.asset.php';
+		$asset_file = include FSB_PATH . '/build/index.asset.php';
 
 		wp_register_style(
 			'fsb-flexible-spacer-editor',
-			FSB_URL . '/build/css/editor-style.css',
+			FSB_URL . '/build/editor-style.css',
 			array(),
-			filemtime( FSB_PATH . '/build/css/editor-style.css' )
+			filemtime( FSB_PATH . '/build/editor-style.css' )
 		);
 
 		wp_add_inline_style( 'fsb-flexible-spacer-editor', $this->create_inline_style( true ) );
 
 		wp_register_script(
 			'fsb-flexible-spacer-editor',
-			FSB_URL . '/build/js/index.js',
+			FSB_URL . '/build/index.js',
 			$asset_file['dependencies'],
-			filemtime( FSB_PATH . '/build/js/index.js' )
+			filemtime( FSB_PATH . '/build/index.js' )
 		);
 
 		wp_localize_script( 'fsb-flexible-spacer-editor', 'fsbConf', $this->create_editor_config() );
@@ -69,14 +69,14 @@ class Enqueue {
 		if ( ! str_contains( $hook, 'flexible-spacer-block' ) ) {
 			return;
 		}
-		wp_enqueue_style( 'flexible-spacer-block-option', FSB_URL . '/build/css/admin-style.css', array( 'wp-theme' ) );
+		wp_enqueue_style( 'flexible-spacer-block-option', FSB_URL . '/build/admin-style.css', array( 'wp-theme' ) );
 	}
 
 	/**
 	 * Register block
 	 */
 	public function register_block() {
-		register_block_type( FSB_PATH . '/build/js' );
+		register_block_type( FSB_PATH . '/build' );
 	}
 
 	/**
