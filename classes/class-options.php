@@ -331,7 +331,6 @@ class Options {
 		$has_empty = false;
 
 		foreach ( $devices as $slug ) {
-			// 0 is a valid value, so only an empty field counts as missing.
 			if ( ! isset( $input[ $slug ] ) || '' === trim( (string) $input[ $slug ] ) ) {
 				$has_empty = true;
 			}
