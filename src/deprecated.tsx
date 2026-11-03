@@ -92,9 +92,12 @@ const v1 = {
 	},
 };
 
-// An empty height was not saved, so it was parsed as `100px` on reload, while
-// the output used the default value from the settings page. Parse omitted
-// heights as empty to recover such content.
+// When a height was cleared, it was empty and therefore not saved, while the save
+// function output it with the default value from the settings page
+// (`fsbConf.defaultValue`). On reload the height was parsed as `100px`, so the
+// block became invalid when that default value was not 100px. This version parses
+// omitted heights as empty to match such content, and writes the default value
+// back to them so that the block keeps the height it was shown with.
 const v2 = {
 	attributes: {
 		heightLg: {
@@ -119,9 +122,6 @@ const v2 = {
 			default: false,
 		},
 	},
-	// The save function of this version outputs an empty height with the default
-	// value from the settings page (`fsbConf.defaultValue`). Write that value back
-	// to the empty height so that the block keeps the height it was shown with.
 	migrate( attributes: BlockAttributes ): BlockAttributes {
 		const { heightLg, heightMd, heightSm } = attributes;
 		const defaultValue = fsbConf.defaultValue;
