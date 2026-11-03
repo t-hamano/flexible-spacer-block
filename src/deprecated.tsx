@@ -124,7 +124,7 @@ const v2 = {
 	},
 	migrate( attributes: BlockAttributes ): BlockAttributes {
 		const { heightLg, heightMd, heightSm } = attributes;
-		const defaultValue = fsbConf.defaultValue;
+		const { defaultValue } = fsbConf;
 		return {
 			...attributes,
 			heightLg: heightLg || defaultValue.lg + defaultValue.lg_unit,
@@ -134,7 +134,7 @@ const v2 = {
 	},
 	save( { attributes, className }: BlockSaveProps< BlockAttributes > ) {
 		const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
-		const defaultValue = fsbConf.defaultValue;
+		const { defaultValue } = fsbConf;
 
 		const styleLg = getStyleObject( heightLg, isNegativeLg, defaultValue.lg, defaultValue.lg_unit );
 		const styleMd = getStyleObject( heightMd, isNegativeMd, defaultValue.md, defaultValue.md_unit );

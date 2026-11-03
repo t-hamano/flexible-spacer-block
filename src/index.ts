@@ -17,7 +17,7 @@ import './store';
 import { blockIcon as icon } from './icons';
 import type { BlockAttributes } from './types';
 
-const defaultValue = fsbConf.defaultValue;
+const { defaultValue } = fsbConf;
 
 registerBlockType< BlockAttributes >( metadata as BlockConfiguration< BlockAttributes >, {
 	icon,
