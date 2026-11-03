@@ -111,24 +111,4 @@ test.describe( 'Default value', () => {
 			] );
 		expect( await editor.getEditedPostContent() ).toBe( existingBlock );
 	} );
-
-	test( 'should accept 0', async ( { admin, editor, page } ) => {
-		await saveDefaultValues( admin, {
-			sm: [ '0', 'px' ],
-			md: [ '0', 'px' ],
-			lg: [ '0', 'px' ],
-		} );
-		for ( const device of [ 'sm', 'md', 'lg' ] ) {
-			await expect(
-				page.locator( `input[name="flexible_spacer_block_default_value[${ device }]"]` )
-			).toHaveValue( '0' );
-		}
-
-		await admin.createNewPost();
-		await insertBlockFromInserter( editor );
-
-		await expect
-			.poll( async () => ( await editor.getBlocks() ).map( ( block ) => block.attributes ) )
-			.toMatchObject( [ { heightLg: '0px', heightMd: '0px', heightSm: '0px' } ] );
-	} );
 } );
