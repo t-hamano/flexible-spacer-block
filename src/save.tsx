@@ -14,15 +14,29 @@ import type { BlockSaveProps } from '@wordpress/blocks';
  */
 import type { BlockAttributes } from './types';
 import { getStyleObject } from './utils';
-
-const defaultValue = fsbConf.defaultValue;
+import { DEFAULT_SPACER_HEIGHT, DEFAULT_SPACER_HEIGHT_UNIT } from './constants';
 
 export default function save( { attributes, className }: BlockSaveProps< BlockAttributes > ) {
 	const { heightLg, heightMd, heightSm, isNegativeLg, isNegativeMd, isNegativeSm } = attributes;
 
-	const styleLg = getStyleObject( heightLg, isNegativeLg, defaultValue.lg, defaultValue.lg_unit );
-	const styleMd = getStyleObject( heightMd, isNegativeMd, defaultValue.md, defaultValue.md_unit );
-	const styleSm = getStyleObject( heightSm, isNegativeSm, defaultValue.sm, defaultValue.sm_unit );
+	const styleLg = getStyleObject(
+		heightLg,
+		isNegativeLg,
+		String( DEFAULT_SPACER_HEIGHT ),
+		DEFAULT_SPACER_HEIGHT_UNIT
+	);
+	const styleMd = getStyleObject(
+		heightMd,
+		isNegativeMd,
+		String( DEFAULT_SPACER_HEIGHT ),
+		DEFAULT_SPACER_HEIGHT_UNIT
+	);
+	const styleSm = getStyleObject(
+		heightSm,
+		isNegativeSm,
+		String( DEFAULT_SPACER_HEIGHT ),
+		DEFAULT_SPACER_HEIGHT_UNIT
+	);
 
 	const blockProps = useBlockProps.save( {
 		'aria-hidden': true,

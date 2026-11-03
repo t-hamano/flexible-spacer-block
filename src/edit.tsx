@@ -28,7 +28,7 @@ import {
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
 import { Link, Stack, SwitchControl } from '@wordpress/ui';
-import { useEffect, useState } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { Icon, settings, mobile, tablet, desktop } from '@wordpress/icons';
 import { addQueryArgs } from '@wordpress/url';
 import { useViewportMatch } from '@wordpress/compose';
@@ -177,28 +177,13 @@ export default function Edit( {
 
 	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
 	const breakpoints = [ fsbConf.breakpoint.sm, ...( isEnableMd ? [ fsbConf.breakpoint.md ] : [] ) ];
-	const isShowBlock = fsbConf.showBlock;
-	const defaultValue = fsbConf.defaultValue;
-
-	// Apply default values from the settings page when inserting a block.
-	useEffect( () => {
-		if (
-			heightLg === `${ DEFAULT_SPACER_HEIGHT }${ DEFAULT_SPACER_HEIGHT_UNIT }` &&
-			heightMd === `${ DEFAULT_SPACER_HEIGHT }${ DEFAULT_SPACER_HEIGHT_UNIT }` &&
-			heightSm === `${ DEFAULT_SPACER_HEIGHT }${ DEFAULT_SPACER_HEIGHT_UNIT }`
-		) {
-			setAttributes( {
-				heightLg: defaultValue.lg + defaultValue.lg_unit,
-				heightMd: defaultValue.md + defaultValue.md_unit,
-				heightSm: defaultValue.sm + defaultValue.sm_unit,
-			} );
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [] );
+	const { showBlock: isShowBlock, defaultValue } = fsbConf;
 
 	const defaultLgValue = defaultValue.lg + defaultValue.lg_unit;
 	const defaultMdValue = defaultValue.md + defaultValue.md_unit;
 	const defaultSmValue = defaultValue.sm + defaultValue.sm_unit;
+	// Matches the fallback used by `save` when a height is empty.
+	const fallbackHeight = `${ DEFAULT_SPACER_HEIGHT }${ DEFAULT_SPACER_HEIGHT_UNIT }`;
 
 	const settingUrl = addQueryArgs( 'options-general.php', {
 		page: 'flexible-spacer-block-option',
@@ -302,7 +287,7 @@ export default function Edit( {
 			slug: 'sm' as const,
 			icon: mobile,
 			isNegative: isNegativeSm,
-			height: heightSm || defaultSmValue,
+			height: heightSm || fallbackHeight,
 			enabled: true,
 		},
 		{
@@ -310,7 +295,7 @@ export default function Edit( {
 			slug: 'md' as const,
 			icon: tablet,
 			isNegative: isNegativeMd,
-			height: heightMd || defaultMdValue,
+			height: heightMd || fallbackHeight,
 			enabled: isEnableMd,
 		},
 		{
@@ -318,7 +303,7 @@ export default function Edit( {
 			slug: 'lg' as const,
 			icon: desktop,
 			isNegative: isNegativeLg,
-			height: heightLg || defaultLgValue,
+			height: heightLg || fallbackHeight,
 			enabled: true,
 		},
 	]
