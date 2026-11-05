@@ -170,7 +170,7 @@ export default function Edit( {
 	const { setIsResponsive } = useDispatch( store );
 	const isMobile = useViewportMatch( 'medium', '<' );
 
-	const isEnableMd = parseInt( fsbConf.breakpoint.md ) !== parseInt( fsbConf.breakpoint.sm );
+	const isEnableMd = fsbConf.breakpoint.md !== fsbConf.breakpoint.sm;
 	const breakpoints = [ fsbConf.breakpoint.sm, ...( isEnableMd ? [ fsbConf.breakpoint.md ] : [] ) ];
 	const { showBlock: isShowBlock, defaultValue } = fsbConf;
 
@@ -405,7 +405,7 @@ export default function Edit( {
 								{ sprintf(
 									/* translators: %d: Breakpoint width in pixels. */
 									__( '≤ %dpx <', 'flexible-spacer-block' ),
-									Number( breakpoint )
+									breakpoint
 								) }
 							</Stack>
 						) ) }

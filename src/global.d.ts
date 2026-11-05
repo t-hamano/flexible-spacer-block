@@ -1,7 +1,7 @@
 interface FsbConf {
 	breakpoint: {
-		md: string;
-		sm: string;
+		md: number;
+		sm: number;
 	};
 	showBlock: boolean;
 	heightRange: {
