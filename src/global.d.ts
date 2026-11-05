@@ -1,7 +1,7 @@
 interface FsbConf {
 	breakpoint: {
-		md: string;
-		sm: string;
+		md: number;
+		sm: number;
 	};
 	showBlock: boolean;
 	// Block deprecations read this to reproduce the content saved by older
