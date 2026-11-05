@@ -5,22 +5,20 @@
 
 ![Header](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/banner-1544x500.png)
 
-Flexible Spacer Block switches the height of the spacer according to the device screen width (breakpoints).
-This block has two variable breakpoints, and you can adjust the height of the spacer for smartphones, tablets, and desktops respectively.
-The height of the spacers can be changed individually or in batches.
-Also available to set "negative space (negative margin)" instead of the normal space.
-And this block supports transform from and to core spacer block.
+Flexible Spacer Block switches the height of the spacer according to the device's screen width (breakpoints). This block has two adjustable breakpoints, so you can set a separate spacer height for smartphones, tablets, and desktops. These heights can be changed individually or all at once.
+
+You can also set "negative space (negative margin)" instead of normal space. In addition, the block can be transformed from and to the core Spacer block.
 
 ## About negative space
 
-"**Negative space**" narrows the margins both blocks above and below the spacer, and it is also possible to overlap the blocks.
-If unintended overlap occurs, add a CSS class named "**fsb-style-show-front**" to the block you want to show in the front.
-To apply the CSS class to the block, click on the block on WordPress editor, and check the block settings on the right for the Advanced setting ,then enter the CSS class.
+"**Negative space**" reduces the space between the blocks above and below the spacer, and can even make them overlap.
 
-## Screenshot
+If unintended overlap occurs, add a CSS class named "**fsb-style-show-front**" to the block you want to display in front. To apply the CSS class, select the block in the WordPress editor, open the "Advanced" panel in the block settings sidebar, and enter the class in the "Additional CSS class(es)" field.
 
-![On Block Editor](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/screenshot-1.png "On Block Editor")
-![Setting page](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/screenshot-2.png "Setting page")
+## Screenshots
+
+![In the block editor](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/screenshot-1.png "In the block editor")
+![Settings page](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/screenshot-2.png "Settings page")
 ![Negative space example](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/screenshot-3.png "Negative space example")
 ![Negative space example](https://raw.githubusercontent.com/t-hamano/flexible-spacer-block/main/.wordpress-org/screenshot-4.png "Negative space example")
 
@@ -41,11 +39,11 @@ Filters media query breakpoints.
 
 - `$breakpoint`
 
-*(array)* media query breakpoints ( `md` / `sm` ).
+*(array)* Media query breakpoints (`md` / `sm`).
 
 - `$is_editor`
 
-*(bool)* Whether it is rendered on the editor.
+*(bool)* Whether it is rendered in the editor.
 
 **Return:**
 
@@ -66,7 +64,7 @@ add_filter( 'flexible_spacer_block_breakpoint', 'custom_flexible_spacer_block_br
 
 ### `flexible_spacer_block_inline_css( $css, $is_editor )`
 
-Filters Generated inline styles.
+Filters generated inline styles.
 
 **Parameters:**
 
@@ -76,7 +74,7 @@ Filters Generated inline styles.
 
 - `$is_editor`
 
-*(bool)* Whether it is rendered on the editor.
+*(bool)* Whether it is rendered in the editor.
 
 **Return:**
 
@@ -86,7 +84,7 @@ Filters Generated inline styles.
 
 ```php
 function custom_flexible_spacer_block_inline_css( $css, $is_editor ) {
-	// Override z-index value for negative space on the front-end.
+	// Override z-index value for negative space on the front end.
 	if ( ! $is_editor ) {
 		return str_replace( 'z-index:2;', 'z-index:5;', $css );
 	}
@@ -97,11 +95,11 @@ add_filter( 'flexible_spacer_block_inline_css', 'custom_flexible_spacer_block_in
 
 ## Resources
 
-### Image for screenshot
+### Image used in screenshots
 
 - License: CC0 Public Domain
 - Source: <https://pxhere.com/ja/photo/245>
 
 ## Author
 
-[Aki Hamano (Github)](https://github.com/t-hamano)
+[Aki Hamano (GitHub)](https://github.com/t-hamano)
