@@ -25,7 +25,7 @@ class Enqueue {
 		}
 
 		// Add block CSS to the front-end style
-		add_action( 'wp_enqueue_scripts', array( $this, 'add_css_to_view_style' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'add_css_to_front_end_style' ) );
 
 		// Enqueue admin option page scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
@@ -36,6 +36,9 @@ class Enqueue {
 	 */
 	public function register_block() {
 		// Front-end styles have no file and are generated from the plugin settings.
+		// They are registered as `style` rather than `viewStyle` so that classic themes
+		// print them in the head even when block styles are not hoisted from the footer.
+		// The editor also enqueues this handle, but prints nothing as it has no CSS there.
 		wp_register_style( 'fsb-flexible-spacer-style', false );
 
 		register_block_type( FSB_PATH . '/build' );
@@ -71,7 +74,7 @@ class Enqueue {
 	/**
 	 * Add block CSS to the front-end style
 	 */
-	public function add_css_to_view_style() {
+	public function add_css_to_front_end_style() {
 		wp_add_inline_style( 'fsb-flexible-spacer-style', $this->create_inline_style( false ) );
 	}
 
