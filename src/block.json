@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "fsb/flexible-spacer",
-	"version": "2.9.0",
+	"version": "2.10.0",
 	"title": "Flexible Spacer",
 	"category": "design",
 	"keywords": [ "space", "responsive" ],

@@ -3,8 +3,8 @@ Contributors: wildworks
 Tags: gutenberg, block, spacer, responsive
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 7.1
-Tested up to: 7.1
-Stable tag: 2.9.0
+Tested up to: 7.2
+Stable tag: 2.10.0
 Requires PHP: 8.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -49,6 +49,18 @@ You can find a list of the available filters in the [GitHub README](https://gith
 * Source: https://pxhere.com/ja/photo/245
 
 == Changelog ==
+
+= 2.10.0 =
+* Tested up to WordPress 7.2
+* Drop support for WordPress 7.0
+* Drop support for PHP 8.0 and 8.1
+* Enhancement: Load front-end styles only on pages that contain the block
+* Enhancement: Polish editor and settings page style
+* Fix: Spacers with a height of 100px on all devices are changed to the default values when the post is opened
+* Fix: Block validation error on spacers whose height was cleared
+* Fix: 0 cannot be saved as a default value on the settings page
+* Fix: The `flexible_spacer_block_breakpoint` filter is not applied in the editor
+* Fix: Default height is not shown in the editor preview when the height is unset
 
 = 2.9.0 =
 * Tested up to WordPress 7.1

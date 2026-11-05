@@ -4,7 +4,7 @@
  * Description: Add white space between blocks and customize its height for each device.
  * Requires at least: 7.1
  * Requires PHP: 8.2
- * Version: 2.9.0
+ * Version: 2.10.0
  * Author: Aki Hamano
  * Author URI: https://github.com/t-hamano
  * License: GPL2 or later
