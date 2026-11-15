@@ -17,24 +17,24 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'FSB_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
-define( 'FSB_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
-define( 'FSB_BASENAME', plugin_basename( __FILE__ ) );
-define( 'FSB_HANDLE', 'fsb-flexible-spacer' );
+define( 'FLEXIBLE_SPACER_BLOCK_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
+define( 'FLEXIBLE_SPACER_BLOCK_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
+define( 'FLEXIBLE_SPACER_BLOCK_BASENAME', plugin_basename( __FILE__ ) );
+define( 'FLEXIBLE_SPACER_BLOCK_HANDLE', 'fsb-flexible-spacer' );
 
 // Default Breakpoint setting values
-const FSB_BREAKPOINT_MD  = 1024;
-const FSB_BREAKPOINT_SM  = 599;
-const FSB_BREAKPOINT_MIN = 200;
-const FSB_BREAKPOINT_MAX = 2000;
+const FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MD  = 1024;
+const FLEXIBLE_SPACER_BLOCK_BREAKPOINT_SM  = 599;
+const FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MIN = 200;
+const FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MAX = 2000;
 
 // Range of values
-const FSB_MIN_SPACER_HEIGHT = 0;
-const FSB_MAX_SPACER_HEIGHT = 500;
+const FLEXIBLE_SPACER_BLOCK_MIN_SPACER_HEIGHT = 0;
+const FLEXIBLE_SPACER_BLOCK_MAX_SPACER_HEIGHT = 500;
 
 // Default spacer height
-const FSB_DEFAULT_SPACER_HEIGHT      = 100;
-const FSB_DEFAULT_SPACER_HEIGHT_UNIT = 'px';
+const FLEXIBLE_SPACER_BLOCK_DEFAULT_SPACER_HEIGHT      = 100;
+const FLEXIBLE_SPACER_BLOCK_DEFAULT_SPACER_HEIGHT_UNIT = 'px';
 
 require_once __DIR__ . '/classes/class-init.php';
 new Flexible_Spacer_Block\Init();

@@ -74,8 +74,8 @@ class Options {
 		$height_defaults = array();
 
 		foreach ( $devices as $slug ) {
-			$height_defaults[ $slug ]           = FSB_DEFAULT_SPACER_HEIGHT;
-			$height_defaults[ $slug . '_unit' ] = FSB_DEFAULT_SPACER_HEIGHT_UNIT;
+			$height_defaults[ $slug ]           = FLEXIBLE_SPACER_BLOCK_DEFAULT_SPACER_HEIGHT;
+			$height_defaults[ $slug . '_unit' ] = FLEXIBLE_SPACER_BLOCK_DEFAULT_SPACER_HEIGHT_UNIT;
 		}
 
 		register_setting(
@@ -84,8 +84,8 @@ class Options {
 			array(
 				'type'              => 'object',
 				'default'           => array(
-					'md' => FSB_BREAKPOINT_MD,
-					'sm' => FSB_BREAKPOINT_SM,
+					'md' => FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MD,
+					'sm' => FLEXIBLE_SPACER_BLOCK_BREAKPOINT_SM,
 				),
 				'sanitize_callback' => array( $this, 'sanitize_breakpoint' ),
 			)
@@ -172,17 +172,17 @@ class Options {
 	public function create_options_page() {
 		?>
 		<div class="wrap">
-			<h1><?php _e( 'Flexible Spacer Block', 'flexible-spacer-block' ); ?></h1>
+			<h1><?php esc_html_e( 'Flexible Spacer Block', 'flexible-spacer-block' ); ?></h1>
 			<form class="fsb-option-form" method="post" action="options.php">
 				<?php
 				settings_fields( 'flexible-spacer-block-group' );
 				do_settings_sections( 'flexible-spacer-block-group' );
 				?>
-				<h2><?php _e( 'About Negative Space', 'flexible-spacer-block' ); ?></h2>
+				<h2><?php esc_html_e( 'About Negative Space', 'flexible-spacer-block' ); ?></h2>
 				<ul>
-					<li><?php _e( '"<strong>Negative space</strong>" narrows the margins both blocks above and below the spacer, and it is also possible to overlap the blocks.', 'flexible-spacer-block' ); ?></li>
-					<li><?php _e( 'If unintended overlap occurs, <strong>add a CSS class</strong> named <code>fsb-style-show-front</code> to the block you want to show in the front.', 'flexible-spacer-block' ); ?></li>
-					<li><?php _e( 'To apply the CSS class to the block, click on the block on WordPress editor, and check the block settings on the right for the Advanced setting ,then enter the CSS class.', 'flexible-spacer-block' ); ?></li>
+					<li><?php echo wp_kses_post( __( '"<strong>Negative space</strong>" narrows the margins both blocks above and below the spacer, and it is also possible to overlap the blocks.', 'flexible-spacer-block' ) ); ?></li>
+					<li><?php echo wp_kses_post( __( 'If unintended overlap occurs, <strong>add a CSS class</strong> named <code>fsb-style-show-front</code> to the block you want to show in the front.', 'flexible-spacer-block' ) ); ?></li>
+					<li><?php esc_html_e( 'To apply the CSS class to the block, click on the block on WordPress editor, and check the block settings on the right for the Advanced setting ,then enter the CSS class.', 'flexible-spacer-block' ); ?></li>
 				</ul>
 				<?php submit_button(); ?>
 			</form>
@@ -203,13 +203,13 @@ class Options {
 		<div class="fsb-option-breakpoint">
 			<?php foreach ( $this->get_devices() as $slug => $device ) : ?>
 				<div class="fsb-option-breakpoint__device">
-					<?php echo wp_get_icon( $device['icon'], array( 'size' => 48 ) ); ?>
+					<?php echo wp_get_icon( $device['icon'], array( 'size' => 48 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The icon is SVG markup from core. ?>
 					<?php echo esc_html( $device['label'] ); ?>
 				</div>
 				<?php if ( isset( $breakpoints[ $slug ] ) ) : ?>
 					<span class="fsb-option-breakpoint__sign">&le;</span>
 					<div class="fsb-option-breakpoint__input-wrapper">
-						<input class="fsb-option-breakpoint__input" type="number" name="flexible_spacer_block_breakpoint[<?php echo esc_attr( $slug ); ?>]" min="<?php echo FSB_BREAKPOINT_MIN; ?>" max="<?php echo FSB_BREAKPOINT_MAX; ?>" value="<?php echo esc_attr( $breakpoints[ $slug ] ); ?>">
+						<input class="fsb-option-breakpoint__input" type="number" name="flexible_spacer_block_breakpoint[<?php echo esc_attr( $slug ); ?>]" min="<?php echo esc_attr( FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MIN ); ?>" max="<?php echo esc_attr( FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MAX ); ?>" value="<?php echo esc_attr( $breakpoints[ $slug ] ); ?>">
 						<span class="fsb-option-breakpoint__unit">px</span>
 					</div>
 					<span class="fsb-option-breakpoint__sign">&lt;</span>
@@ -217,8 +217,8 @@ class Options {
 			<?php endforeach; ?>
 		</div>
 		<ul>
-			<li><?php _e( 'Enter the screen width (breakpoint) that will be the basis for switching between each device.', 'flexible-spacer-block' ); ?></li>
-			<li><?php _e( 'If both values are the same, The spacer setting for tablets will be disabled.', 'flexible-spacer-block' ); ?></li>
+			<li><?php esc_html_e( 'Enter the screen width (breakpoint) that will be the basis for switching between each device.', 'flexible-spacer-block' ); ?></li>
+			<li><?php esc_html_e( 'If both values are the same, The spacer setting for tablets will be disabled.', 'flexible-spacer-block' ); ?></li>
 		</ul>
 		<?php
 	}
@@ -238,11 +238,11 @@ class Options {
 				?>
 				<div class="fsb-option-default-values__col">
 					<div class="fsb-option-breakpoint__device">
-						<?php echo wp_get_icon( $device['icon'], array( 'size' => 48 ) ); ?>
+						<?php echo wp_get_icon( $device['icon'], array( 'size' => 48 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The icon is SVG markup from core. ?>
 						<?php echo esc_html( $device['label'] ); ?>
 					</div>
 					<div class="fsb-option-default-values__input-wrapper">
-						<input class="fsb-option-default-values__input" type="number" name="flexible_spacer_block_default_value[<?php echo esc_attr( $slug ); ?>]" min="<?php echo FSB_MIN_SPACER_HEIGHT; ?>" max="<?php echo FSB_MAX_SPACER_HEIGHT; ?>" value="<?php echo esc_attr( $value ); ?>">
+						<input class="fsb-option-default-values__input" type="number" name="flexible_spacer_block_default_value[<?php echo esc_attr( $slug ); ?>]" min="<?php echo esc_attr( FLEXIBLE_SPACER_BLOCK_MIN_SPACER_HEIGHT ); ?>" max="<?php echo esc_attr( FLEXIBLE_SPACER_BLOCK_MAX_SPACER_HEIGHT ); ?>" value="<?php echo esc_attr( $value ); ?>">
 						<select class="fsb-option-default-values__unit" name="flexible_spacer_block_default_value[<?php echo esc_attr( $slug ); ?>_unit]">
 							<?php
 							foreach ( $this->units as $option_unit ) {
@@ -254,7 +254,7 @@ class Options {
 				</div>
 			<?php endforeach; ?>
 		</div>
-		<p class="description"><?php _e( 'These values are applied when a new block is inserted. They do not affect blocks that already exist in your content.', 'flexible-spacer-block' ); ?></p>
+		<p class="description"><?php esc_html_e( 'These values are applied when a new block is inserted. They do not affect blocks that already exist in your content.', 'flexible-spacer-block' ); ?></p>
 		<?php
 	}
 
@@ -267,9 +267,9 @@ class Options {
 		<fieldset>
 			<label>
 				<input type="checkbox" name="flexible_spacer_block_show_block" value="1" <?php checked( get_option( 'flexible_spacer_block_show_block' ) ); ?>>
-				<?php _e( 'Always show blocks in the block editor', 'flexible-spacer-block' ); ?>
+				<?php esc_html_e( 'Always show blocks in the block editor', 'flexible-spacer-block' ); ?>
 			</label>
-			<p class="description"><?php _e( 'The block will always be visible even when it is not selected.', 'flexible-spacer-block' ); ?></p>
+			<p class="description"><?php esc_html_e( 'The block will always be visible even when it is not selected.', 'flexible-spacer-block' ); ?></p>
 		</fieldset>
 		<?php
 	}
@@ -310,8 +310,8 @@ class Options {
 			);
 		} else {
 			$new_input = array(
-				'md' => min( max( $breakpoint_md, FSB_BREAKPOINT_MIN ), FSB_BREAKPOINT_MAX ),
-				'sm' => min( max( $breakpoint_sm, FSB_BREAKPOINT_MIN ), FSB_BREAKPOINT_MAX ),
+				'md' => min( max( $breakpoint_md, FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MIN ), FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MAX ),
+				'sm' => min( max( $breakpoint_sm, FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MIN ), FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MAX ),
 			);
 		}
 		return $new_input;
@@ -353,7 +353,7 @@ class Options {
 		foreach ( $devices as $slug ) {
 			$new_input[ $slug ] = $has_empty
 				? $default_value[ $slug ]
-				: min( max( $values[ $slug ], FSB_MIN_SPACER_HEIGHT ), FSB_MAX_SPACER_HEIGHT );
+				: min( max( $values[ $slug ], FLEXIBLE_SPACER_BLOCK_MIN_SPACER_HEIGHT ), FLEXIBLE_SPACER_BLOCK_MAX_SPACER_HEIGHT );
 		}
 
 		foreach ( $devices as $slug ) {

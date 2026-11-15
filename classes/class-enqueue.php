@@ -39,9 +39,10 @@ class Enqueue {
 		// They are registered as `style` rather than `viewStyle` so that classic themes
 		// print them in the head even when block styles are not hoisted from the footer.
 		// The editor also enqueues this handle, but prints nothing as it has no CSS there.
-		wp_register_style( 'fsb-flexible-spacer-style', false );
+		// It has no file, so there is no version to bust the cache for.
+		wp_register_style( 'fsb-flexible-spacer-style', false ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 
-		register_block_type( FSB_PATH . '/build' );
+		register_block_type( FLEXIBLE_SPACER_BLOCK_PATH . '/build' );
 	}
 
 	/**
@@ -85,7 +86,13 @@ class Enqueue {
 		if ( ! str_contains( $hook, 'flexible-spacer-block' ) ) {
 			return;
 		}
-		wp_enqueue_style( 'flexible-spacer-block-option', FSB_URL . '/build/admin-style.css', array( 'wp-theme' ) );
+		$asset_file = include FLEXIBLE_SPACER_BLOCK_PATH . '/build/admin-style.asset.php';
+		wp_enqueue_style(
+			'flexible-spacer-block-option',
+			FLEXIBLE_SPACER_BLOCK_URL . '/build/admin-style.css',
+			array( 'wp-theme' ),
+			$asset_file['version']
+		);
 	}
 
 	/**
@@ -114,8 +121,8 @@ class Enqueue {
 		$breakpoint = apply_filters( 'flexible_spacer_block_breakpoint', $breakpoint, $is_editor );
 
 		$breakpoint = array(
-			'md' => absint( $breakpoint['md'] ?? FSB_BREAKPOINT_MD ),
-			'sm' => absint( $breakpoint['sm'] ?? FSB_BREAKPOINT_SM ),
+			'md' => absint( $breakpoint['md'] ?? FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MD ),
+			'sm' => absint( $breakpoint['sm'] ?? FLEXIBLE_SPACER_BLOCK_BREAKPOINT_SM ),
 		);
 
 		return $breakpoint;
