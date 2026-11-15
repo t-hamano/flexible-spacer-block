@@ -74,8 +74,8 @@ class Options {
 		$height_defaults = array();
 
 		foreach ( $devices as $slug ) {
-			$height_defaults[ $slug ]           = FSB_DEFAULT_SPACER_HEIGHT;
-			$height_defaults[ $slug . '_unit' ] = FSB_DEFAULT_SPACER_HEIGHT_UNIT;
+			$height_defaults[ $slug ]           = FLEXIBLE_SPACER_BLOCK_DEFAULT_SPACER_HEIGHT;
+			$height_defaults[ $slug . '_unit' ] = FLEXIBLE_SPACER_BLOCK_DEFAULT_SPACER_HEIGHT_UNIT;
 		}
 
 		register_setting(
@@ -84,8 +84,8 @@ class Options {
 			array(
 				'type'              => 'object',
 				'default'           => array(
-					'md' => FSB_BREAKPOINT_MD,
-					'sm' => FSB_BREAKPOINT_SM,
+					'md' => FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MD,
+					'sm' => FLEXIBLE_SPACER_BLOCK_BREAKPOINT_SM,
 				),
 				'sanitize_callback' => array( $this, 'sanitize_breakpoint' ),
 			)
@@ -209,7 +209,7 @@ class Options {
 				<?php if ( isset( $breakpoints[ $slug ] ) ) : ?>
 					<span class="fsb-option-breakpoint__sign">&le;</span>
 					<div class="fsb-option-breakpoint__input-wrapper">
-						<input class="fsb-option-breakpoint__input" type="number" name="flexible_spacer_block_breakpoint[<?php echo esc_attr( $slug ); ?>]" min="<?php echo esc_attr( FSB_BREAKPOINT_MIN ); ?>" max="<?php echo esc_attr( FSB_BREAKPOINT_MAX ); ?>" value="<?php echo esc_attr( $breakpoints[ $slug ] ); ?>">
+						<input class="fsb-option-breakpoint__input" type="number" name="flexible_spacer_block_breakpoint[<?php echo esc_attr( $slug ); ?>]" min="<?php echo esc_attr( FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MIN ); ?>" max="<?php echo esc_attr( FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MAX ); ?>" value="<?php echo esc_attr( $breakpoints[ $slug ] ); ?>">
 						<span class="fsb-option-breakpoint__unit">px</span>
 					</div>
 					<span class="fsb-option-breakpoint__sign">&lt;</span>
@@ -242,7 +242,7 @@ class Options {
 						<?php echo esc_html( $device['label'] ); ?>
 					</div>
 					<div class="fsb-option-default-values__input-wrapper">
-						<input class="fsb-option-default-values__input" type="number" name="flexible_spacer_block_default_value[<?php echo esc_attr( $slug ); ?>]" min="<?php echo esc_attr( FSB_MIN_SPACER_HEIGHT ); ?>" max="<?php echo esc_attr( FSB_MAX_SPACER_HEIGHT ); ?>" value="<?php echo esc_attr( $value ); ?>">
+						<input class="fsb-option-default-values__input" type="number" name="flexible_spacer_block_default_value[<?php echo esc_attr( $slug ); ?>]" min="<?php echo esc_attr( FLEXIBLE_SPACER_BLOCK_MIN_SPACER_HEIGHT ); ?>" max="<?php echo esc_attr( FLEXIBLE_SPACER_BLOCK_MAX_SPACER_HEIGHT ); ?>" value="<?php echo esc_attr( $value ); ?>">
 						<select class="fsb-option-default-values__unit" name="flexible_spacer_block_default_value[<?php echo esc_attr( $slug ); ?>_unit]">
 							<?php
 							foreach ( $this->units as $option_unit ) {
@@ -310,8 +310,8 @@ class Options {
 			);
 		} else {
 			$new_input = array(
-				'md' => min( max( $breakpoint_md, FSB_BREAKPOINT_MIN ), FSB_BREAKPOINT_MAX ),
-				'sm' => min( max( $breakpoint_sm, FSB_BREAKPOINT_MIN ), FSB_BREAKPOINT_MAX ),
+				'md' => min( max( $breakpoint_md, FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MIN ), FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MAX ),
+				'sm' => min( max( $breakpoint_sm, FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MIN ), FLEXIBLE_SPACER_BLOCK_BREAKPOINT_MAX ),
 			);
 		}
 		return $new_input;
@@ -353,7 +353,7 @@ class Options {
 		foreach ( $devices as $slug ) {
 			$new_input[ $slug ] = $has_empty
 				? $default_value[ $slug ]
-				: min( max( $values[ $slug ], FSB_MIN_SPACER_HEIGHT ), FSB_MAX_SPACER_HEIGHT );
+				: min( max( $values[ $slug ], FLEXIBLE_SPACER_BLOCK_MIN_SPACER_HEIGHT ), FLEXIBLE_SPACER_BLOCK_MAX_SPACER_HEIGHT );
 		}
 
 		foreach ( $devices as $slug ) {

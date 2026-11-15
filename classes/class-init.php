@@ -13,7 +13,7 @@ class Init {
 	 */
 	public function __construct() {
 		// Add a link to this plugin settings page in plugin list
-		add_filter( 'plugin_action_links_' . FSB_BASENAME, array( $this, 'add_action_links' ) );
+		add_filter( 'plugin_action_links_' . FLEXIBLE_SPACER_BLOCK_BASENAME, array( $this, 'add_action_links' ) );
 
 		// Load and instantiate classes
 		$this->init_classes();
@@ -23,8 +23,8 @@ class Init {
 	 * Load and instantiate classes
 	 */
 	private function init_classes() {
-		require_once FSB_PATH . '/classes/class-enqueue.php';
-		require_once FSB_PATH . '/classes/class-options.php';
+		require_once FLEXIBLE_SPACER_BLOCK_PATH . '/classes/class-enqueue.php';
+		require_once FLEXIBLE_SPACER_BLOCK_PATH . '/classes/class-options.php';
 
 		new Enqueue();
 		new Options();
