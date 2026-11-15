@@ -87,7 +87,12 @@ class Enqueue {
 			return;
 		}
 		$asset_file = include FLEXIBLE_SPACER_BLOCK_PATH . '/build/admin-style.asset.php';
-		wp_enqueue_style( 'flexible-spacer-block-option', FLEXIBLE_SPACER_BLOCK_URL . '/build/admin-style.css', array( 'wp-theme' ), $asset_file['version'] );
+		wp_enqueue_style(
+			'flexible-spacer-block-option',
+			FLEXIBLE_SPACER_BLOCK_URL . '/build/admin-style.css',
+			array( 'wp-theme' ),
+			$asset_file['version']
+		);
 	}
 
 	/**
